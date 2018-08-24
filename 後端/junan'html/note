@@ -1,0 +1,56 @@
+--how to get workgroup member personal data 
+--and update dir for each member
+
+----[done]use google form to let member fill data
+
+----[done]generate a file(csv) ?
+
+----[done]separate with year
+ 
+----[done]check if drive has folder for each position
+------[done]if not, create
+------[done]if got, use it
+------[done]judge and sepa
+----custom ui(check box permission)to run dir permission at backend
+------[done]create permission
+------[done]one user may in multiple position
+
+----[done]separate multiple position in data cell ex:11111,22222,33333
+
+----[done]use this file 
+
+----member 
+
+----[]separate the user and admin interface
+------[done]when user login, show only the workgroup shared folder
+
+----[done]create google file
+----[done]folder in folder
+
+----[]independent member sheet in subfolder(position)
+
+[sam gor]
+1 admin > 1, instruc teacher, owner
+2 file system structure customization
+3 activity period time link to calendar
+4 new record file & folder by activity
+5 member system[db]
+6 code table
+7 activity status chase, dashboard anually and analysis
+8 input custom
+9 role 0 1 2
+
+
+----[] need database
+------[ok] record member data
+------[] record group data
+------[] record worker work in which group
+------[] access db and select which is worker, and send list to member sheet(google)
+
+[] customization dir by sheet, and selectable place
+
+當使用者發文並附帶event 或 單純想加event
+功能：
+	新增event
+	能在帖文中attach 是哪個event、
+	event中能夠attach 文件（google drive中的文件）
