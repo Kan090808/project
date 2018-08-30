@@ -57,5 +57,5 @@
 	event中能夠attach 文件（google drive中的文件）
 
 problem :
---if share 104 folder to a user, that mean this user has all the folder permission under 104 folder
+--if share 104 folder to a user, that mean this user has all the folder permission[can set r or rw] under 104 folder
 --get shared,filter by id, not specific name

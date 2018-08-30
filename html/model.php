@@ -122,7 +122,6 @@ function getDb($sql,$type){
             <input type='hidden' name='type' value='2'>
             <input type='submit' value = 'go to your god damn group shared folder'>
           </form>";
-        // array_push($temp,$row["groupID"]);
       }
     } else {
       echo "0 results";
@@ -414,11 +413,12 @@ function checkYearFolderExist(){
 }
 function checkYearFolderExist2($fileId)
 {
+  // this function is called with a sheet file id
   // get all year by sheet
   $client        = getClientSheet();
   $service       = new Google_Service_Sheets($client);
   $spreadsheetId = $fileId;
-  // range only include the position
+  // range only include the F2:F year  
   $range         = 'F2:F';
   $response      = $service->spreadsheets_values->get($spreadsheetId, $range);
   $values        = $response->getValues();
@@ -459,6 +459,7 @@ function checkYearFolderExist2($fileId)
           $gotDirName = $new_year[$i];
           unset($notCreateYet[$i]);
         }
+        // now you had "notCreateYet" array that record which folder have not create
       }
     }
     // var_dump($notCreateYet);
@@ -469,7 +470,10 @@ function checkYearFolderExist2($fileId)
   if (count($notCreateYet) > 0) {
     for ($i = 0; $i < count($notCreateYet); $i++) {
       // echo $notCreateYet[$i];
-      createFolder($notCreateYet[$i],'root',true);
+      $folderId=createFolder($notCreateYet[$i],'root',true);
+      // echo "------".$folderId;
+      // get id of folder you had just create
+      createGroupFolderPermission('root',$folderId,$fileId);
     }
   }
 }
@@ -590,6 +594,7 @@ function createFolder($name,$folderId,$isOnRoot)
           VALUES ('$name','$driveId','$driveId')";
     insertDb($sql);
   }
+  return $results->getId();
   // if ($dbClient->query($sql) === TRUE) {
   //   echo "New record created successfully";
   // } else {
@@ -601,6 +606,7 @@ function createFolder($name,$folderId,$isOnRoot)
   // createFolderPermission($folderId);
 }
 // notice : different between update and create permission
+// createFolderPermission is for create sub/child folder permission
 function createFolderPermission($parentId,$fileId)
 {
   echo "parent id :";
@@ -624,38 +630,35 @@ function createFolderPermission($parentId,$fileId)
       // usermail == 2 , position == 4
       $userEmail      = $row[2];
       if(strpos($row[4], ',') == true){
+        // $se is the output array that split row[] with ","
         $se = explode(", ", $row[4]);
-        for($i=0;$i<count($se);$i++){
-          if (!array_key_exists($se[$i], $position)) {
-            array_push($position, $se[$i]);
-            echo "<br />";
-            echo "START to get folder ID";
-            echo "<br />";
-            $fileId         = getFolderId($se[$i],$parentId);
-            $userPermission = new Google_Service_Drive_Permission(array(
-              'type' => 'user',
-              'role' => $role,
-              'emailAddress' => $userEmail
-            ));
+        echo "createFolderPermission : okay,got you ! Below I commet it";
+        // for($i=0;$i<count($se);$i++){
+        //   if (!array_key_exists($se[$i], $position)) {
+        //     array_push($position, $se[$i]);
+        //     echo "<br />";
+        //     echo "START to get folder ID";
+        //     echo "<br />";
+        //     $fileId         = getFolderId($se[$i],$parentId);
+        //     $userPermission = new Google_Service_Drive_Permission(array(
+        //       'type' => 'user',
+        //       'role' => $role,
+        //       'emailAddress' => $userEmail
+        //     ));
 
-            $request = $service->permissions->create($fileId, $userPermission, array(
-              'fields' => 'id'
-            ));
-            // INSERT INTO `member`.`user` (email)
-            // SELECT * FROM (SELECT '$email') AS tmp
-            // WHERE NOT EXISTS (
-            //     SELECT email FROM `member`.`user` WHERE email = '$email'
-            // );
-            $sql="insert into `member`.`user` (email) 
-                  Select * from (select '$userEmail') AS tmp
-                  where not exists(select email from `member`.`user` where email = '$userEmail')";
-            $sql2="insert into `member`.`userAccessibleGroup` (email,groudID) 
-                  Select * from (select '$userEmail','$parentId') AS tmp2
-                  where not exists(select email from `member`.`userAccessibleGroup` where email = '$userEmail')";
-            insertDb($sql);
-            insertDb($sql2);
-          }
-        }
+        //     $request = $service->permissions->create($fileId, $userPermission, array(
+        //       'fields' => 'id'
+        //     ));
+        //     $sql="insert into `member`.`user` (email) 
+        //           Select * from (select '$userEmail') AS tmp
+        //           where not exists(select email from `member`.`user` where email = '$userEmail')";
+        //     $sql2="insert into `member`.`userAccessibleGroup` (email,groudID) 
+        //           Select * from (select '$userEmail','$parentId') AS tmp2
+        //           where not exists(select email from `member`.`userAccessibleGroup` where email = '$userEmail')";
+        //     insertDb($sql);
+        //     insertDb($sql2);
+        //   }
+        // }
       }else{
         // judge if repeat
         if (!array_key_exists($row[4], $position)) {
@@ -679,7 +682,45 @@ function createFolderPermission($parentId,$fileId)
           insertDb($sql);
           insertDb($sql2);
         }
-      }
+      }      
+    }
+  }
+  // delete the illegal permission id come from inherit
+  // $service->permissions->delete($folderId, $permissionId);
+}
+// createGroupFolderPermission is for create father/group folder permission
+// if not create permission on father folder, unable to browser/list child folder
+// eventhought you had child folder permission 
+function createGroupFolderPermission($parentId,$folderId,$sheetId)
+{
+  $client        = getClient();
+  $client_s      = getClientSheet();
+  $service       = new Google_Service_Drive($client);
+  $service_s     = new Google_Service_Sheets($client_s);
+  $spreadsheetId = $sheetId;
+  $range         = 'A2:F';
+  // 2 & 5 , email and year
+  $response      = $service_s->spreadsheets_values->get($spreadsheetId, $range);
+  $values        = $response->getValues();
+  $role          = 'reader';
+  if (empty($values)) {
+    print "No data found.\n";
+  } else {
+    foreach ($values as $row) {
+      // usermail == 2 , year == 5
+      $userEmail      = $row[2];
+      array_push($position, "$row[5]");
+      // $fileId         = getFolderId($row[5],$parentId);
+      $role = "reader";
+      $userPermission = new Google_Service_Drive_Permission(array(
+        'type' => 'user',
+        'role' => $role,
+        'emailAddress' => $userEmail
+      ));
+
+      $request = $service->permissions->create($folderId, $userPermission, array(
+        'fields' => 'id'
+      ));
     }
   }
 }
