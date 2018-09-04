@@ -99,3 +99,11 @@
 //   // $client = getClient();
 //   return $client;
 // }
+
+<form method='post' action='control.php'>
+	<input type='hidden' name='act' value='getFolderList'>
+	<input type='hidden' name='pId' value='$fileId'>
+	<input type='hidden' name='type' value='$type'>
+	<input type='submit' value = 'go to this folder'>
+</form>
+        

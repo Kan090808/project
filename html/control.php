@@ -13,7 +13,6 @@ case 'getGroupShared':
   break;
 
 case 'getFolderList':
-  echo $location;
   $location = $_REQUEST['pId'];
   $type = $_REQUEST['type'];
   // header('Location: viewDir.php');
@@ -113,19 +112,22 @@ case 'readDb':
   break;
 
 case 'createFile':
-  getFolderList('root',2);
+  // for select a path to create file
+  getFolderList('root',1);
   break;
 
 case 'createFileToDrive':
-  echo 'get';
   createFile($_REQUEST['type'],$_REQUEST['fileName'],$_SESSION['fileId']);
   session_destroy();
-  header();
   break;
 case 'separatePermission':
   getFolderList('root',2);
   break;
 
+case 'listFolderTree':
+  $pId=$_REQUEST['pId'];
+  listFolderTree($pId,'0');
+  break;
 case 'whoami':
   $rt = getWho();
   echo $rt;

@@ -182,6 +182,7 @@ function getClient(){
   $client->setAuthConfig('webClient.json');
   $client->addScope("https://www.googleapis.com/auth/drive");
   $client->setAccessType('offline');
+  $client->setApprovalPrompt('force');
 
   if (isset($_SESSION['access_token']) && $_SESSION['access_token']) {
     $client->setAccessToken($_SESSION['access_token']);
@@ -288,45 +289,87 @@ function getParent($service,$fileId){
 
 function getFolderList($location,$type)
 {
+  // echo $location;
+  // type 1 for select folder to create file function
   $client          = getClient();
   $service         = new Google_Service_Drive($client);
   $parameters['q'] = "'$location' in parents and trashed=false";
   $results         = $service->files->listFiles($parameters);
   if (count($results->getFiles()) == 0) {
-    print "getFolderList : No files found.\n";
-  } else {
-    // $preLoc = "root";
+    // print "getFolderList : No files found.\n";
+    echo "this dir has no folder";
     $preLoc = getParent($service,$location);
     echo "
     <form method='post' action='control.php'>
       <input type='hidden' name='act' value='getFolderList'>
+      <input type='hidden' name='type' value='$type'>
       <input type='hidden' name='pId' value='$preLoc'>
       <input type='submit' value = 'back to previous'>
     </form>";
-    foreach ($results->getFiles() as $file) {
-      if ($file->getMimeType() == "application/vnd.google-apps.folder") {
-        echo "<br />\n";
-        printf("%s ", $file->getName());
-        // 1jvBKzL5xKPXhCapPhfdPWes0pPr6MWFT
-        $fileId = $file->getId();
-        echo "
-        <form method='post' action='control.php'>
-          <input type='hidden' name='act' value='getFolderList'>
-          <input type='hidden' name='pId' value='$fileId'>
-          <input type='hidden' name='type' value='$type'>
-          <input type='submit' value = 'go to this folder'>
-        </form>
-        <form method='post' action='control.php'>
-          <input type='hidden' name='act' value='selectItem'>
-          <input type='hidden' name='fId' value='$fileId'>
-          <input type='hidden' name='type' value='$type'>
-          <input type='submit' value = 'select this folder'>
-        </form>";
+    echo "
+    <form method='post' action='controlMenu.php'>
+      <input type='submit' value = 'back to menu'>
+    </form>";
+  } else {
+    if($type == 1){
+      $preLoc = getParent($service,$location);
+      echo "
+      <form method='post' action='control.php'>
+        <input type='hidden' name='act' value='getFolderList'>
+        <input type='hidden' name='type' value='$type'>
+        <input type='hidden' name='pId' value='$preLoc'>
+        <input type='submit' value = 'back to previous'>
+      </form>";
+      echo "
+      <form method='post' action='controlMenu.php'>
+        <input type='submit' value = 'back to menu'>
+      </form>";
+      foreach ($results->getFiles() as $file) {
+        if ($file->getMimeType() == "application/vnd.google-apps.folder") {
+          echo "<br />\n";
+          // printf("%s ", $file->getName());
+          $fileName = $file->getName();
+          // 1jvBKzL5xKPXhCapPhfdPWes0pPr6MWFT
+          $fileId = $file->getId();
+          echo "<a href='control.php?act=selectItem&fId=$fileId&type=$type'>$fileName</a>";
+          echo "     ";
+          echo "<a href='control.php?act=getFolderList&pId=$fileId&type=$type'>get inside</a>";
+        }
       }
+    }else{
+      $preLoc = getParent($service,$location);
+      echo "
+      <form method='post' action='control.php'>
+        <input type='hidden' name='act' value='getFolderList'>
+        <input type='hidden' name='type' value='$type'>
+        <input type='hidden' name='pId' value='$preLoc'>
+        <input type='submit' value = 'back to previous'>
+      </form>";
+      echo "
+      <form method='post' action='controlMenu.php'>
+        <input type='submit' value = 'back to menu'>
+      </form>";
+      foreach ($results->getFiles() as $file) {
+        if ($file->getMimeType() == "application/vnd.google-apps.folder") {
+          echo "<br />\n";
+          // printf("%s ", $file->getName());
+          $fileName = $file->getName();
+          // 1jvBKzL5xKPXhCapPhfdPWes0pPr6MWFT
+          $fileId = $file->getId();
+          echo "<a href='control.php?act=getFolderList&pId=$fileId&type=$type'>$fileName</a>";
+          echo "
+          <form method='post' action='control.php'>
+            <input type='hidden' name='act' value='selectItem'>
+            <input type='hidden' name='fId' value='$fileId'>
+            <input type='hidden' name='type' value='$type'>
+            <input type='submit' value = 'select this folder'>
+          </form>";
+        }
+      }
+      echo "------------File in this DIR-----------";
+      echo "<br/>";
+      echo getListInDir($location,$type);
     }
-    echo "------------File in this DIR-----------";
-    echo "<br/>";
-    echo getListInDir($location,$type);
   }
 }
 
@@ -762,7 +805,8 @@ function createFile($act,$newFileName,$pid){
 function getShared(){
   $client          = getClient();
   $service         = new Google_Service_Drive($client);
-  $parameters['q'] = "mimeType='application/vnd.google-apps.folder' and trashed=false and sharedWithMe and (name contains '[project]')";
+  $parameters['q'] = "mimeType='application/vnd.google-apps.folder' and trashed=false 
+  and sharedWithMe and (name contains '[project]')";
   $results         = $service->files->listFiles($parameters);
   if (count($results->getFiles()) == 0) {
     print "getShared : No files found.\n";
@@ -809,6 +853,62 @@ function appendData2($name,$email,$phone,$position,$year,$fileId){
   $range = 'A2:F';
   $response = $service->spreadsheets_values->append($spreadsheetId, $range, $body,$params);
 }
+
+function listFolderTree($location,$type){
+  $client          = getClient();
+  $service         = new Google_Service_Drive($client);
+  $parameters['q'] = "'$location' in parents and trashed=false";
+  $results         = $service->files->listFiles($parameters);
+  $preLoc = getParent($service,$location);
+  // judge is on top ?
+  // 1 getParent return null 
+  // 2 
+  // problem : below if judge ,$preLoc == null when first access(the pid is'root', so $preLoc will be getting null), must have 2nd jugde
+  if($preLoc == null && $location != 'root'){
+    header('Location: controlMenu.php');
+  }else{
+    if (count($results->getFiles()) == 0) {
+      // print "getFolderList : No files found.\n";
+      echo "this dir has no folder";
+      echo "
+      <form method='post' action='control.php'>
+        <input type='hidden' name='act' value='listFolderTree'>
+        <input type='hidden' name='type' value='$type'>
+        <input type='hidden' name='pId' value='$preLoc'>
+        <input type='submit' value = 'back to previous'>
+      </form>";
+      echo "
+      <form method='post' action='controlMenu.php'>
+        <input type='submit' value = 'back to menu'>
+      </form>";
+    } else {
+      // $preLoc = "root";
+      // $preLoc = getParent($service,$location);
+      echo "
+      <form method='post' action='control.php'>
+        <input type='hidden' name='act' value='listFolderTree'>
+        <input type='hidden' name='type' value='$type'>
+        <input type='hidden' name='pId' value='$preLoc'>
+        <input type='submit' value = 'back to previous'>
+      </form>";
+      echo "
+      <form method='post' action='controlMenu.php'>
+        <input type='submit' value = 'back to menu'>
+      </form>";
+      foreach ($results->getFiles() as $file) {
+        if ($file->getMimeType() == "application/vnd.google-apps.folder") {
+          echo "<br />\n";
+          // printf("%s ", $file->getName());
+          $fileName = $file->getName();
+          // 1jvBKzL5xKPXhCapPhfdPWes0pPr6MWFT
+          $fileId = $file->getId();
+          echo "<a href='control.php?act=listFolderTree&pId=$fileId&type=$type'>$fileName</a>";
+        }
+      }
+    }
+  }
+}
+
 
 function getWho()
 {

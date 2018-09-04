@@ -11,6 +11,7 @@ if(checkLogin()=="true"){
   explorer 
   
 <input type="hidden" name="pId" value="root">
+<input type="hidden" name="type" value="0">
 <input type="submit" name="act" value="getFolderList"><br/>
   
   get shared folder list 
@@ -43,9 +44,13 @@ year
 
   create separate permission under a folder
 <input type="submit" name="act" value="separatePermission"><br/>
+  test left panel (the folder list view)
+<input type="hidden" name="pId" value="root">
+<input type="submit" name="act" value="listFolderTree"><br/>
   get apache run-charc in process
 <input type="submit" name="act" value="whoami"><br/>
 <iframe src="https://calendar.google.com/calendar/embed?title=Test%20calendar&amp;showTabs=0&amp;showTz=0&amp;height=400&amp;wkst=2&amp;bgcolor=%23666666&amp;src=junanbackup%40gmail.com&amp;color=%231B887A&amp;ctz=Asia%2FTaipei" style="border-width:0" width="400" height="400" frameborder="0" scrolling="no"></iframe></form>';
+
 }else{
   header('Location: index.php');
 }
