@@ -311,7 +311,9 @@ function getFolderList($location,$type)
       <input type='submit' value = 'back to menu'>
     </form>";
   } else {
-    if($type == 1){
+    listFolderTree($location,1);
+    echo "<br/>"."上面是當前list，你可以呼叫在左邊當導航欄";
+    if($type == 1){;
       $preLoc = getParent($service,$location);
       echo "
       <form method='post' action='control.php'>
@@ -870,40 +872,38 @@ function listFolderTree($location,$type){
     if (count($results->getFiles()) == 0) {
       // print "getFolderList : No files found.\n";
       echo "this dir has no folder";
-      echo "
-      <form method='post' action='control.php'>
-        <input type='hidden' name='act' value='listFolderTree'>
-        <input type='hidden' name='type' value='$type'>
-        <input type='hidden' name='pId' value='$preLoc'>
-        <input type='submit' value = 'back to previous'>
-      </form>";
-      echo "
-      <form method='post' action='controlMenu.php'>
-        <input type='submit' value = 'back to menu'>
-      </form>";
+      // echo "
+      // <form method='post' action='control.php'>
+      //   <input type='hidden' name='act' value='listFolderTree'>
+      //   <input type='hidden' name='type' value='$type'>
+      //   <input type='hidden' name='pId' value='$preLoc'>
+      //   <input type='submit' value = 'back to previous'>
+      // </form>";
+      // echo "
+      // <form method='post' action='controlMenu.php'>
+      //   <input type='submit' value = 'back to menu'>
+      // </form>";
     } else {
       // $preLoc = "root";
       // $preLoc = getParent($service,$location);
-      echo "
-      <form method='post' action='control.php'>
-        <input type='hidden' name='act' value='listFolderTree'>
-        <input type='hidden' name='type' value='$type'>
-        <input type='hidden' name='pId' value='$preLoc'>
-        <input type='submit' value = 'back to previous'>
-      </form>";
-      echo "
-      <form method='post' action='controlMenu.php'>
-        <input type='submit' value = 'back to menu'>
-      </form>";
+      // echo "
+      // <form method='post' action='control.php'>
+      //   <input type='hidden' name='act' value='listFolderTree'>
+      //   <input type='hidden' name='type' value='$type'>
+      //   <input type='hidden' name='pId' value='$preLoc'>
+      //   <input type='submit' value = 'back to previous'>
+      // </form>";
+      // echo "
+      // <form method='post' action='controlMenu.php'>
+      //   <input type='submit' value = 'back to menu'>
+      // </form>";
       foreach ($results->getFiles() as $file) {
-        if ($file->getMimeType() == "application/vnd.google-apps.folder") {
-          echo "<br />\n";
-          // printf("%s ", $file->getName());
-          $fileName = $file->getName();
-          // 1jvBKzL5xKPXhCapPhfdPWes0pPr6MWFT
-          $fileId = $file->getId();
-          echo "<a href='control.php?act=listFolderTree&pId=$fileId&type=$type'>$fileName</a>";
-        }
+        echo "<br />\n";
+        // printf("%s ", $file->getName());
+        $fileName = $file->getName();
+        // 1jvBKzL5xKPXhCapPhfdPWes0pPr6MWFT
+        $fileId = $file->getId();
+        echo "<a href='control.php?act=getFolderList&pId=$fileId&type=$type'>$fileName</a>";
       }
     }
   }
