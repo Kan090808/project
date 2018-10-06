@@ -199,7 +199,7 @@
         </nav>
       </header>
       <!-- Side-Nav-->
-      <?php include("sidebar.php"); ?>
+      <?php include("csidebar.php"); ?>
       <!-- Sidebar chat start -->
       <?php include("chatbar.php"); ?>
       <?php include("showchat.php"); ?>

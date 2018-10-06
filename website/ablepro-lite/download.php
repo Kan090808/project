@@ -5,9 +5,6 @@
         <div class="col-sm-2">
           <h1 class="card-title mb-0" style="font-weight:bold">檔案專區</h1>
         </div>
-        <div class="col-sm-8">
-          <a class="btn btn-success" href="#" style="margin-left:-40px">新增</a>
-        </div>
       </div>
       <div class="card-body post-area">
         <div class="container" style="margin-top:20px">

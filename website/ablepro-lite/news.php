@@ -3,10 +3,7 @@
     <div class="card">
       <div class="card-header">
         <div class="col-sm-2">
-          <h1 class="card-title mb-0" style="font-weight:bold">貼文專區</h1>
-        </div>
-        <div class="col-sm-8">
-          <a class="btn btn-success" href="#" style="margin-left:-40px">新增</a>
+          <h1 class="card-title mb-0" style="font-weight:bold">最新消息</h1>
         </div>
       </div>
       <div class="card-body post-area">
