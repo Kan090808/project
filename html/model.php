@@ -4,11 +4,10 @@ require __DIR__ . '/vendor/autoload.php';
 if(isset($_POST['verCode'])){ //check if form was submitted
   $input = $_POST['verCode']; //get input text
   echo '<h1>'.$input.'</h1>';
-
 }
 function getGroupShared($folderId){
   // folderId is "104" id
-  $client          = getClient();
+  $client          = getClient(0);
   $service         = new Google_Service_Drive($client);
   // $parameters['q'] = "mimeType='application/vnd.google-apps.folder' and '$folderId' in parents and trashed=false ";
   $parameters['q'] = "mimeType='application/vnd.google-apps.folder' and sharedWithMe and trashed=false ";
@@ -59,7 +58,7 @@ function ifInFolder($service,$folderId,$fileId){
   }
 }
 function getJoinedGroup(){
-  $client          = getClient();
+  $client          = getClient(0);
   $service         = new Google_Service_Drive($client);
   $optParams = array(
     'fields' => 'user(emailAddress)'
@@ -176,7 +175,8 @@ function checkLogin(){
     return "false";
   }
 }
-function getClient(){
+
+function getClient($type){
   $client = new Google_Client();
   $client->setApplicationName('project108 ');
   $client->setAuthConfig('webClient.json');
@@ -190,7 +190,7 @@ function getClient(){
     if($_SERVER['HTTP_HOST']=="163.22.17.92"){
       $redirect_uri = 'http://' . $_SERVER['HTTP_HOST'] . '.nip.io/oauth2callback.php';
     }else{
-      $redirect_uri = 'http://' . $_SERVER['HTTP_HOST'] . '/oauth2callback.php';
+      $redirect_uri = 'http://' . $_SERVER['HTTP_HOST'] . '/html/oauth2callback.php';
     }
       header('Location: ' . filter_var($redirect_uri, FILTER_SANITIZE_URL));
   }
@@ -198,7 +198,15 @@ function getClient(){
     $client->fetchAccessTokenWithRefreshToken($client->getRefreshToken());
     file_put_contents($credentialsPath, json_encode($client->getAccessToken()));
   }
-  return $client;
+  if($type == 1){
+    session_unset();
+    session_destroy();
+    session_unset();
+    $client->revokeToken();
+    header('Location: index.php');
+  }else{
+    return $client;  
+  }
 }
 
 function expandHomeDirectory($path)
@@ -212,7 +220,7 @@ function expandHomeDirectory($path)
 
 function getList()
 {
-  $client  = getClient();
+  $client  = getClient(0);
   $service = new Google_Service_Drive($client);
 
   $optParams = array(
@@ -251,7 +259,7 @@ function selectFirstSheet($fileId,$type){
 }
 
 function getListInDir($location,$type){
-  $client          = getClient();
+  $client          = getClient(0);
   $service         = new Google_Service_Drive($client);
   $parameters['q'] = "mimeType!='application/vnd.google-apps.folder' and '$location' in parents and trashed=false";
   $results         = $service->files->listFiles($parameters);
@@ -291,7 +299,7 @@ function getFolderList($location,$type)
 {
   // echo $location;
   // type 1 for select folder to create file function
-  $client          = getClient();
+  $client          = getClient(0);
   $service         = new Google_Service_Drive($client);
   $parameters['q'] = "'$location' in parents and trashed=false";
   $results         = $service->files->listFiles($parameters);
@@ -379,7 +387,7 @@ function getMemberSheet($type)
 // use to find memberSheet file in drive
 {
   echo $type;
-  $client          = getClient();
+  $client          = getClient(0);
   $service         = new Google_Service_Drive($client);
   $parameters['q'] = "mimeType='application/vnd.google-apps.spreadsheet' and trashed=false";
   $results         = $service->files->listFiles($parameters);
@@ -407,7 +415,7 @@ function getFolderId($name,$folderId)
 {
   echo "<br />";
   echo $name;
-  $client          = getClient();
+  $client          = getClient(0);
   $service         = new Google_Service_Drive($client);
   $parameters['q'] = "mimeType='application/vnd.google-apps.folder' and '$folderId' in parents and trashed=false and (name contains '$name')";
   $results         = $service->files->listFiles($parameters);
@@ -487,7 +495,7 @@ function checkYearFolderExist2($fileId)
   }
   // now had year data in $position
   $notCreateYet    = $new_year;
-  $client          = getClient();
+  $client          = getClient(0);
   $service         = new Google_Service_Drive($client);
   $parameters['q'] = "mimeType='application/vnd.google-apps.folder' and 'root' in parents and trashed=false";
   $results         = $service->files->listFiles($parameters);
@@ -582,7 +590,7 @@ function checkPositionFolderExist2($fileId)
   }
   // now had position data in $position
   $notCreateYet    = $new_position;
-  $client          = getClient();
+  $client          = getClient(0);
   $service         = new Google_Service_Drive($client);
   // parendId in here should not be root, should be "104"folrderID
   // this para is used for get list of folder in "104"
@@ -619,7 +627,7 @@ function checkPositionFolderExist2($fileId)
 
 function createFolder($name,$folderId,$isOnRoot)
 {
-  $client       = getClient();
+  $client       = getClient(0);
   $service      = new Google_Service_Drive($client);
   $fileMetadata = new Google_Service_Drive_DriveFile(array(
     'name' => $name,
@@ -656,7 +664,7 @@ function createFolderPermission($parentId,$fileId)
 {
   echo "parent id :";
   echo $parentId;
-  $client        = getClient();
+  $client        = getClient(0);
   $client_s      = getClientSheet();
   $service       = new Google_Service_Drive($client);
   $service_s     = new Google_Service_Sheets($client_s);
@@ -738,7 +746,7 @@ function createFolderPermission($parentId,$fileId)
 // eventhought you had child folder permission 
 function createGroupFolderPermission($parentId,$folderId,$sheetId)
 {
-  $client        = getClient();
+  $client        = getClient(0);
   $client_s      = getClientSheet();
   $service       = new Google_Service_Drive($client);
   $service_s     = new Google_Service_Sheets($client_s);
@@ -770,7 +778,7 @@ function createGroupFolderPermission($parentId,$folderId,$sheetId)
   }
 }
 function createFile($act,$newFileName,$pid){
-  $client = getClient();
+  $client = getClient(0);
   $service = new Google_Service_Drive($client);
   // $pid = '1KFFRE62gtj2sdkSXjm17aMChz31-qH4b';
   if($act=="doc"){
@@ -805,7 +813,7 @@ function createFile($act,$newFileName,$pid){
 }
 
 function getShared(){
-  $client          = getClient();
+  $client          = getClient(0);
   $service         = new Google_Service_Drive($client);
   $parameters['q'] = "mimeType='application/vnd.google-apps.folder' and trashed=false 
   and sharedWithMe and (name contains '[project]')";
@@ -827,7 +835,7 @@ function appendData(){
 }
 
 function appendData2($name,$email,$phone,$position,$year,$fileId){
-  $client = getClient();
+  $client = getClient(0);
   $service = new Google_Service_Sheets($client);
   // DATE_RFC28222
   $time = date(DATE_RFC2822);
@@ -857,7 +865,7 @@ function appendData2($name,$email,$phone,$position,$year,$fileId){
 }
 
 function listFolderTree($location,$type){
-  $client          = getClient();
+  $client          = getClient(0);
   $service         = new Google_Service_Drive($client);
   $parameters['q'] = "'$location' in parents and trashed=false";
   $results         = $service->files->listFiles($parameters);

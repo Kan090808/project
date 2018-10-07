@@ -2,6 +2,15 @@
 require('model.php');
 $action =$_REQUEST['act'];
 switch ($action) {
+
+case 'logout':
+  // logout();
+  getClient(1);
+  break;
+
+case 'getClient':
+  getClient(0);
+  break;
 case 'getlist':
   $rt = getList();
   echo $rt;

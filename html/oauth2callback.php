@@ -5,7 +5,7 @@ session_start();
 
 $client = new Google_Client();
 $client->setAuthConfigFile('webClient.json');
-$client->setRedirectUri('http://' . $_SERVER['HTTP_HOST'] . '/oauth2callback.php');
+$client->setRedirectUri('http://' . $_SERVER['HTTP_HOST'] . '/html/oauth2callback.php');
 // $client->addScope(Google_Service_Drive::DRIVE);
 $client->addScope("https://www.googleapis.com/auth/drive");
 
@@ -15,7 +15,7 @@ if (! isset($_GET['code'])) {
 } else {
   $client->authenticate($_GET['code']);
   $_SESSION['access_token'] = $client->getAccessToken();
-  $redirect_uri = 'http://' . $_SERVER['HTTP_HOST'] . '/';
+  $redirect_uri = 'http://' . $_SERVER['HTTP_HOST'] . '/html/';
   header('Location: ' . filter_var($redirect_uri, FILTER_SANITIZE_URL));
 }
 ?>
