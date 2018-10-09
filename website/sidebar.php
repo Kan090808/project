@@ -5,8 +5,12 @@
     <div class="user-panel">
       <div class="f-left image"><img src="assets/images/avatar-1.png" alt="User Image" class="img-circle"></div>
       <div class="f-left info">
-        <p>簡靖騰</p>
-        <p class="designation">三聯會會長 <i class="icofont icofont-caret-down m-l-5"></i></p>
+        <?php if ($name == "未登入") {
+          echo '<p class="col-sm-8">' . $name . '</p><button class="btn btn-sm">登入</button>';
+        } else {
+          echo '<p>' . $name . '</p><p class="designation">三聯會會長 <i class="icofont icofont-caret-down m-l-5"></i></p>';
+        }
+        ?>
       </div>
     </div>
     <!-- sidebar profile Menu-->
