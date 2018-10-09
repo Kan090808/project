@@ -11,7 +11,7 @@ if ($_SESSION["status"] == "false") {
   echo "user : " . $name;
   echo "<br/>";
   echo "login First";
-  echo '<form action="control.php" method="post">
+  echo '<form action="../html/control.php" method="post">
 			<input type="submit" name="act" value="getClient"><br/>
 		</form>
 		';

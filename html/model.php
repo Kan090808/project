@@ -213,7 +213,7 @@ function getClient($type)
     session_destroy();
     session_unset();
     $client->revokeToken();
-    header('Location: index.php');
+    header('Location: ../website/index.php');
   } else {
     return $client;
   }

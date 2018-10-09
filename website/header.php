@@ -142,7 +142,13 @@
                     <div class="dropdown-divider m-0"></div>
                   </li>
                   <li><a href="lock-screen.html"><i class="icon-lock"></i> Lock Screen</a></li>
-                  <li><a href="#!"><i class="icon-logout"></i> Logout</a></li>
+                  <li>
+                    <a href="../html/control.php?act=logout" method="post">
+                      <i class="icon-logout"></i> Logout 
+                    </a>
+                  </li>
+                  </form>
+
                 </ul>
               </li>
             </ul>
