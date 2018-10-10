@@ -198,7 +198,7 @@ function getClient($type)
     $client->setAccessToken($_SESSION['access_token']);
   } else {
     if ($_SERVER['HTTP_HOST'] == "163.22.17.92") {
-      $redirect_uri = 'http://' . $_SERVER['HTTP_HOST'] . '.nip.io/oauth2callback.php';
+      $redirect_uri = 'http://' . $_SERVER['HTTP_HOST'] . '.nip.io/project/html/oauth2callback.php';
     } else {
       $redirect_uri = 'http://' . $_SERVER['HTTP_HOST'] . '/project/html/oauth2callback.php';
     }
