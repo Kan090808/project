@@ -20,7 +20,7 @@ if (!isset($_GET['code'])) {
 } else {
   $client->authenticate($_GET['code']);
   $_SESSION['access_token'] = $client->getAccessToken();
-  $redirect_uri = 'http://' . $_SERVER['HTTP_HOST'] . '/project/website/';
+  $redirect_uri = 'http://' . $_SERVER['HTTP_HOST'] . '/website/';
   header('Location: ' . filter_var($redirect_uri, FILTER_SANITIZE_URL));
 }
 ?>
