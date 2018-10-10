@@ -167,7 +167,11 @@ function getClientSheet()
   if (isset($_SESSION['access_token']) && $_SESSION['access_token']) {
     $client->setAccessToken($_SESSION['access_token']);
   } else {
-    $redirect_uri = 'http://' . $_SERVER['HTTP_HOST'] . '.nip.io/oauth2callback.php';
+    if ($_SERVER['HTTP_HOST'] == "163.22.17.92") {
+      $redirect_uri = 'http://' . $_SERVER['HTTP_HOST'] . '.nip.io/html/oauth2callback.php';
+    } else {
+      $redirect_uri = 'http://' . $_SERVER['HTTP_HOST'] . '/project/html/oauth2callback.php';
+    }
     header('Location: ' . filter_var($redirect_uri, FILTER_SANITIZE_URL));
   }
   if ($client->isAccessTokenExpired()) {
