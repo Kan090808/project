@@ -59,6 +59,24 @@ function ifInFolder($service, $folderId, $fileId)
     // echo "null";
   }
 }
+function getName(){
+  $client = getClient(0);
+  $service = new Google_Service_Drive($client);
+  $optParams = array(
+    'fields' => 'user(displayName)'
+  );
+  try {
+    $about = $service->about->get($optParams);
+    // var_dump($about);
+    $about = json_encode($about, true);
+    $json = json_decode($about, true);
+    $name = $json['user']['displayName'];
+    return $name;
+  } catch (Exception $e) {
+    echo "error";
+    print "An error occurred: " . $e->getMessage();
+  }
+}
 function getEmail(){
   $client = getClient(0);
   $service = new Google_Service_Drive($client);
@@ -92,6 +110,7 @@ function getJoinedGroup($email)
   $sql2 = "select * from `member`.`group` where groupID in '$accessible'";
   getDb($sql2,2);
 }
+
 function getDb($sql, $type)
 {
  //  echo $sql.$type;
