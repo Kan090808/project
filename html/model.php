@@ -59,8 +59,7 @@ function ifInFolder($service, $folderId, $fileId)
     // echo "null";
   }
 }
-function getJoinedGroup()
-{
+function getEmail(){
   $client = getClient(0);
   $service = new Google_Service_Drive($client);
   $optParams = array(
@@ -71,24 +70,27 @@ function getJoinedGroup()
     $about = json_encode($about, true);
     $json = json_decode($about, true);
     $email = $json['user']['emailAddress'];
-    //echo $email;
-
-
+    return $email;
   } catch (Exception $e) {
     echo "error";
     print "An error occurred: " . $e->getMessage();
   }
+}
+
+function getJoinedGroup($email)
+{
   $sql = "Select * from `member`.`userAccessibleGroup` where email='$email'; ";
   $accessible = array();
   $accessible = getDb($sql, 1);
-  for ($i = 0; $i < count($accessible); $i++) {
-    $value = $accessible[$i];
-    $sql2 = "select * from `member`.`group` where groupID='$value'";
-    getDb($sql2, 2);
+  if(count($accessible)!=0){
+    for ($i = 0; $i < count($accessible); $i++) {
+      $value = $accessible[$i];
+      $sql2 = "select * from `member`.`group` where groupID='$value'";
+      getDb($sql2, 2);
+    }
   }
-  // $sql2 = "select * from `member`.`group` where groupID in '$accessible'";
-  // getDb($sql2,2);
-  return $email;
+  $sql2 = "select * from `member`.`group` where groupID in '$accessible'";
+  getDb($sql2,2);
 }
 function getDb($sql, $type)
 {
