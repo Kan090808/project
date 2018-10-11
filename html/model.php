@@ -73,6 +73,7 @@ function getJoinedGroup()
     $email = $json['user']['emailAddress'];
     //echo $email;
 
+
   } catch (Exception $e) {
     echo "error";
     print "An error occurred: " . $e->getMessage();
@@ -94,7 +95,7 @@ function getDb($sql, $type)
  //  echo $sql.$type;
   $servername = "localhost";
   $username = "kan";
-  $password = "151102";
+  $password = "15110215";
   $conn = new mysqli($servername, $username, $password);
   $temp = array();
   $result = $conn->query($sql);
@@ -138,7 +139,7 @@ function insertDb($sql)
 {
   $servername = "localhost";
   $username = "kan";
-  $password = "151102";
+  $password = "15110215";
 
   // Create connection
   $conn = new mysqli($servername, $username, $password);
@@ -193,7 +194,7 @@ function getClient($type)
 {
   $client = new Google_Client();
   $client->setApplicationName('project108 ');
-  $client->setAuthConfig('webClient.json');
+  $client->setAuthConfig('../html/webClient.json');
   $client->addScope("https://www.googleapis.com/auth/drive");
   $client->setAccessType('offline');
   $client->setApprovalPrompt('force');

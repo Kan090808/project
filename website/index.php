@@ -9,9 +9,8 @@ if ($_SESSION["status"] == "false") {
     // getClient();
   $name = "未登入";
 } else {
-  //$name = getJoinedGroup();
-
-  $name = "已登入";
+  $name = getJoinedGroup();
+  // $name = "已登入";
 	// echo '<form action="https://accounts.google.com/Logout?hl=en" method="post"><input type="submit" name="act" value="account setting"><br/></form>';
   // echo '<form action="control.php" method="post">
 	// 	<input type="submit" name="act" value="logout"><br/>
