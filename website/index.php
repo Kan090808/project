@@ -2,19 +2,9 @@
 require("../html/model.php");
 $_SESSION["status"] = checkLogin();
 if ($_SESSION["status"] == "false") {
-    // echo "Login First, please";
-    // echo "<br />";
-    // echo "jump to login page in 5 second";
-    // sleep(5);
-    // getClient();
   $name = "未登入";
 } else {
-  $name = getJoinedGroup();
-  // $name = "已登入";
-	// echo '<form action="https://accounts.google.com/Logout?hl=en" method="post"><input type="submit" name="act" value="account setting"><br/></form>';
-  // echo '<form action="control.php" method="post">
-	// 	<input type="submit" name="act" value="logout"><br/>
-	// </form>';
+  $name = getEmail();
 }
 ?>
 <?php include("header.php"); ?>
@@ -22,7 +12,8 @@ if ($_SESSION["status"] == "false") {
 <div class="content-wrapper">
   <!-- Container-fluid starts -->
   <!-- Main content starts -->
-  <div class="container">
+  <?php if($_SESSION["status"] == "true"){
+  echo '<div class="container">
     <div class="row">
       <div class="main-header ">
         <h1 class="col-sm-10"style="font-weight:bold">暨馬同學會</h1>
@@ -41,18 +32,18 @@ if ($_SESSION["status"] == "false") {
         </li>
       </ul>
       <div class="tab-content tabs">
-        <div class="tab-pane active" id="news" role="tabpanel">
-          <?php include("news.php"); ?>
-        </div>
-        <div class="tab-pane" id="download" role="tabpanel">
-          <?php include("download.php"); ?>
-        </div>
-        <div class="tab-pane" id="intro" role="tabpanel">
-          <?php include("intro.php"); ?>
-        </div>
+        <div class="tab-pane active" id="news" role="tabpanel">';
+          include("news.php");
+        echo '</div>
+        <div class="tab-pane" id="download" role="tabpanel">';
+          include("download.php");
+        echo '</div>
+        <div class="tab-pane" id="intro" role="tabpanel">';
+          include("intro.php");
+        echo '</div>
       </div>
     </div>
-  </div>
+  </div>';}?>
   <!-- Required Jqurey -->
   <script src="assets/plugins/jquery/dist/jquery.min.js"></script>
   <script src="assets/plugins/jquery-ui/jquery-ui.min.js"></script>
