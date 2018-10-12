@@ -68,11 +68,6 @@
         <div class="navbar-custom-menu f-right">
           <ul class="top-nav">
             <!--Notification Menu-->
-            <li class="dropdown pc-rheader-submenu message-notification search-toggle">
-              <a href="#!" id="morphsearch-search" class="drop icon-circle txt-white">
-                <i class="icofont icofont-search-alt-1"></i>
-              </a>
-            </li>
             <li class="dropdown notification-menu">
               <a href="#!" data-toggle="dropdown" aria-expanded="false" class="dropdown-toggle">
                 <i class="icon-bell"></i>
@@ -121,12 +116,6 @@
                 <span class="badge badge-danger header-badge blink">5</span>
               </a>
 
-            </li>
-            <!-- window screen -->
-            <li class="pc-rheader-submenu">
-              <a href="#!" class="drop icon-circle" onclick="javascript:toggleFullScreen()">
-                <i class="icon-size-fullscreen"></i>
-              </a>
             </li>
             <!-- User Menu-->
             <li class="dropdown">
