@@ -58,8 +58,8 @@
 </div> -->
     <!-- Navbar-->
     <header class="main-header-top hidden-print">
-      <a href="index.html" class="logo">
-        <h1 class="img-fluid able-logo">社團管理平台</h1>
+      <a href="index.php" class="logo">
+        <h5 class="img-fluid able-logo">社團管理平台</h5>
       </a>
       <nav class="navbar navbar-static-top">
         <!-- toggle button -->

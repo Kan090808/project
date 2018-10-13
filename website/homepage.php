@@ -6,7 +6,7 @@
     </div>
   </div>
   <div class="row" style="margin-top:25px">
-    <ul class="col-sm-4 nav nav-tabs tabs" role="tablist">
+    <ul class="col-sm-12 nav nav-tabs tabs" role="tablist">
       <li class="nav-item">
         <a class="nav-link active" data-toggle="tab" href="#news" role="tab" aria-expanded="true">最新消息</a>
       </li>

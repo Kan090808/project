@@ -4,17 +4,7 @@ $_SESSION["status"] = checkLogin();
 if ($_SESSION["status"] == "false") {
   $name = "未登入";
 } else {
-<<<<<<< Updated upstream
   $name = getEmail();
-=======
-  $email = getEmail();
-  $name = getName();
-  // $name = "已登入";
-	// echo '<form action="https://accounts.google.com/Logout?hl=en" method="post"><input type="submit" name="act" value="account setting"><br/></form>';
-  // echo '<form action="control.php" method="post">
-	// 	<input type="submit" name="act" value="logout"><br/>
-	// </form>';
->>>>>>> Stashed changes
 }
 ?>
 <?php include("header.php"); ?>

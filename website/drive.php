@@ -16,7 +16,6 @@
               <table class="table table-striped">
                 <thead>
                   <tr>
-                    <th>#</th>
                     <th>檔名</th>
                     <th>類型</th>
                     <th>大小</th>
@@ -25,56 +24,48 @@
                 </thead>
                 <tbody>
                   <tr>
-                    <td>1</td>
                     <td><a href="#">Mark</a></td>
                     <td>Otto</td>
                     <td>@mdo</td>
                     <td>Ducky</td>
                   </tr>
                   <tr>
-                    <td>1</td>
                     <td><a href="#">Mark</a></td>
                     <td>Otto</td>
                     <td>@mdo</td>
                     <td>Ducky</td>
                   </tr>
                   <tr>
-                    <td>1</td>
                     <td><a href="#">Mark</a></td>
                     <td>Otto</td>
                     <td>@mdo</td>
                     <td>Ducky</td>
                   </tr>
                   <tr>
-                    <td>1</td>
                     <td><a href="#">Mark</a></td>
                     <td>Otto</td>
                     <td>@mdo</td>
                     <td>Ducky</td>
                   </tr>
                   <tr>
-                    <td>1</td>
                     <td><a href="#">Mark</a></td>
                     <td>Otto</td>
                     <td>@mdo</td>
                     <td>Ducky</td>
                   </tr>
                   <tr>
-                    <td>1</td>
                     <td><a href="#">Mark</a></td>
                     <td>Otto</td>
                     <td>@mdo</td>
                     <td>Ducky</td>
                   </tr>
                   <tr>
-                    <td>1</td>
                     <td><a href="#">Mark</a></td>
                     <td>Otto</td>
                     <td>@mdo</td>
                     <td>Ducky</td>
                   </tr>
                   <tr>
-                    <td>1</td>
                     <td><a href="#">Mark</a></td>
                     <td>Otto</td>
                     <td>@mdo</td>
