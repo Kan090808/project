@@ -18,9 +18,10 @@ if ($_SESSION["status"] == "false") {
 } else {
   $email = getEmail();
   echo $email;
+  echo "<br/>";
 	$name = getName();
   echo $name;
-  // echo '<form action="https://accounts.google.com/Logout?hl=en" method="post"><input type="submit" name="act" value="account setting"><br/></form>';
+  echo "<br/>";
   getJoinedGroup($email);
 
   echo '

@@ -104,11 +104,21 @@ function getJoinedGroup($email)
     for ($i = 0; $i < count($accessible); $i++) {
       $value = $accessible[$i];
       $sql2 = "select * from `member`.`group` where groupID='$value'";
-      getDb($sql2, 2);
+      // $return = getDb($sql2, 2);
+      list($f,$s) = getDb($sql2,2);
+      // $groupName = serialize($return[0]);
+      // $groupId = $return[1];
+      // var_dump($return);
+    }
+    for($i = 0 ;$i < count($f) ; $i++){
+      echo "<br/>";
+      
+      echo $f[$i];
+      // echo $s[$i];
+      // echo "<br/>";
+      listFolderTree($s[$i],2);
     }
   }
-  $sql2 = "select * from `member`.`group` where groupID in '$accessible'";
-  getDb($sql2,2);
 }
 
 function getDb($sql, $type)
@@ -135,21 +145,16 @@ function getDb($sql, $type)
       echo "0 results";
     }
   } else if ($type == 2) {
+    $groupName = array();
+    $groupId = array();
     if ($result->num_rows > 0) {
       // output data of each row
       while ($row = $result->fetch_assoc()) {
-        echo "<br>" . "in group: " . $row["groupName"];
-        $gID = $row["groupID"];
-        // instead of : direct user to folder by gid
-        // show folder list to user by gid
-        echo "
-          <form method='post' action='control.php'>
-            <input type='hidden' name='act' value='getFolderList'>
-            <input type='hidden' name='pId' value='$gID'>
-            <input type='hidden' name='type' value='2'>
-            <input type='submit' value = 'go to your god damn group shared folder'>
-          </form>";
+        // echo "<br>" . "in group: " . $row["groupName"];
+        array_push($groupName,$row["groupName"]);
+        array_push($groupId,$row["groupID"]);
       }
+      return array($groupName,$groupId);
     } else {
       echo "0 results";
     }
@@ -230,9 +235,16 @@ function getClient($type)
     }
     header('Location: ' . filter_var($redirect_uri, FILTER_SANITIZE_URL));
   }
+  // if ($client->isAccessTokenExpired()) {
+  //   $client->fetchAccessTokenWithRefreshToken($client->getRefreshToken());
+  //   file_put_contents($credentialsPath, json_encode($client->getAccessToken()));
+  // }
   if ($client->isAccessTokenExpired()) {
-    $client->fetchAccessTokenWithRefreshToken($client->getRefreshToken());
-    file_put_contents($credentialsPath, json_encode($client->getAccessToken()));
+    $refreshToken = $client->getRefreshToken();
+    $client->refreshToken($refreshToken);
+    $newAccessToken = $client->getAccessToken();
+    $newAccessToken['refresh_token'] = $refreshToken;
+    file_put_contents($credentialsPath, json_encode($newAccessToken));
   }
   if ($type == 1) {
     session_unset();
@@ -914,55 +926,26 @@ function appendData2($name, $email, $phone, $position, $year, $fileId)
   $response = $service->spreadsheets_values->append($spreadsheetId, $range, $body, $params);
 }
 
-function listFolderTree($location, $type)
+function listFolderTree($location)
 {
   $client = getClient(0);
   $service = new Google_Service_Drive($client);
   $parameters['q'] = "'$location' in parents and trashed=false";
   $results = $service->files->listFiles($parameters);
-  $preLoc = getParent($service, $location);
-  // judge is on top ?
-  // 1 getParent return null 
-  // 2 
-  // problem : below if judge ,$preLoc == null when first access(the pid is'root', so $preLoc will be getting null), must have 2nd jugde
-  if ($preLoc == null && $location != 'root') {
-    header('Location: controlMenu.php');
+  if (count($results->getFiles()) == 0) {
+    print "No files found.\n";
   } else {
-    if (count($results->getFiles()) == 0) {
-      // print "getFolderList : No files found.\n";
-      echo "this dir has no folder";
-      // echo "
-      // <form method='post' action='control.php'>
-      //   <input type='hidden' name='act' value='listFolderTree'>
-      //   <input type='hidden' name='type' value='$type'>
-      //   <input type='hidden' name='pId' value='$preLoc'>
-      //   <input type='submit' value = 'back to previous'>
-      // </form>";
-      // echo "
-      // <form method='post' action='controlMenu.php'>
-      //   <input type='submit' value = 'back to menu'>
-      // </form>";
-    } else {
-      // $preLoc = "root";
-      // $preLoc = getParent($service,$location);
-      // echo "
-      // <form method='post' action='control.php'>
-      //   <input type='hidden' name='act' value='listFolderTree'>
-      //   <input type='hidden' name='type' value='$type'>
-      //   <input type='hidden' name='pId' value='$preLoc'>
-      //   <input type='submit' value = 'back to previous'>
-      // </form>";
-      // echo "
-      // <form method='post' action='controlMenu.php'>
-      //   <input type='submit' value = 'back to menu'>
-      // </form>";
-      foreach ($results->getFiles() as $file) {
+    foreach ($results->getFiles() as $file) {
+      $type = $file->getMimetype();
+      if($type='application/vnd.google-apps.folder'){
         echo "<br />\n";
-        // printf("%s ", $file->getName());
+        // printf("%s", $file->getName());
         $fileName = $file->getName();
-        // 1jvBKzL5xKPXhCapPhfdPWes0pPr6MWFT
         $fileId = $file->getId();
-        echo "<a href='control.php?act=getFolderList&pId=$fileId&type=$type'>$fileName</a>";
+        echo '<a href="control.php?act=listFolderTree&pId='.$fileId.'">'.$fileName.'</a>';
+      }else{
+        $fileName = $file->getName();
+        echo "FILE".$fileName;
       }
     }
   }
