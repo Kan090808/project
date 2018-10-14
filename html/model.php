@@ -112,12 +112,17 @@ function getJoinedGroup($email)
     }
     for($i = 0 ;$i < count($f) ; $i++){
       echo "<br/>";
-      
       echo $f[$i];
+      $test = $s[$i];
+      // echo '<a href="control.php?act=getFolderList&pId='.$test.'&type=2">  GOTO THIS FOLDER</a>';
       // echo $s[$i];
       // echo "<br/>";
       listFolderTree($s[$i],2);
     }
+    return $test;
+    // $result = getFolderList($test,2);
+  }else{
+    $_SESSION['notCrew'] = "true";
   }
 }
 
@@ -352,8 +357,14 @@ function getFolderList($location, $type)
   // type 1 for select folder to create file function
   $client = getClient(0);
   $service = new Google_Service_Drive($client);
-  $parameters['q'] = "'$location' in parents and trashed=false";
-  $results = $service->files->listFiles($parameters);
+  // $parameters['q'] = "'$location' in parents and trashed=false";
+  // $results = $service->files->listFiles($parameters);
+   $optParams = array(
+        'pageSize' => 50,
+        'fields' => "nextPageToken, files(id,name,size,mimeType,modifiedTime)",
+        'q' => "'".$location."' in parents"
+        );
+  $results = $service->files->listFiles($optParams);
   if (count($results->getFiles()) == 0) {
     // print "getFolderList : No files found.\n";
     echo "this dir has no folder";
@@ -370,33 +381,37 @@ function getFolderList($location, $type)
       <input type='submit' value = 'back to menu'>
     </form>";
   } else {
-    listFolderTree($location, 1);
-    echo "<br/>" . "上面是當前list，你可以呼叫在左邊當導航欄";
-    if ($type == 1) {;
-      $preLoc = getParent($service, $location);
-      echo "
-      <form method='post' action='control.php'>
-        <input type='hidden' name='act' value='getFolderList'>
-        <input type='hidden' name='type' value='$type'>
-        <input type='hidden' name='pId' value='$preLoc'>
-        <input type='submit' value = 'back to previous'>
-      </form>";
-      echo "
-      <form method='post' action='controlMenu.php'>
-        <input type='submit' value = 'back to menu'>
-      </form>";
+    // listFolderTree($location, 1);
+    // echo "<br/>" . "上面是當前list，你可以呼叫在左邊當導航欄";
+    if ($type == 1) {
       foreach ($results->getFiles() as $file) {
+        // printf("%s ", $file->getName());
+        $fileName = $file->getName();
+        // 1jvBKzL5xKPXhCapPhfdPWes0pPr6MWFT
+        $fileId = $file->getId();
         if ($file->getMimeType() == "application/vnd.google-apps.folder") {
           echo "<br />\n";
-          // printf("%s ", $file->getName());
-          $fileName = $file->getName();
-          // 1jvBKzL5xKPXhCapPhfdPWes0pPr6MWFT
-          $fileId = $file->getId();
-          echo "<a href='control.php?act=selectItem&fId=$fileId&type=$type'>$fileName</a>";
-          echo "     ";
-          echo "<a href='control.php?act=getFolderList&pId=$fileId&type=$type'>get inside</a>";
+          echo "<a href='control.php?act=getFolderList&pId=$fileId&type=$type'>$fileName</a>";
+        }else{
+          echo "<br />\n";
+          echo $fileName;
+          echo "<a href='control.php'>this is file, openIt</a>";
         }
       }
+    } else if ($type == 2) {
+      $fileName=array();
+      $fileId=array();
+      $fileType=array();
+      $fileLastMod=array();
+      $fileSize=array();
+      foreach ($results->getFiles() as $file) {
+        array_push($fileName,$file->getName());
+        array_push($fileId,$file->getId());
+        array_push($fileType,$file->getMimetype());
+        array_push($fileLastMod,$file->getModifiedTime());
+        array_push($fileSize,$file->getSize());
+      }
+      return array($fileName,$fileId,$fileType,$fileLastMod,$fileSize);
     } else {
       $preLoc = getParent($service, $location);
       echo "
@@ -575,7 +590,7 @@ function checkYearFolderExist2($fileId)
   if (count($notCreateYet) > 0) {
     for ($i = 0; $i < count($notCreateYet); $i++) {
       // echo $notCreateYet[$i];
-      $folderId = createFolder($notCreateYet[$i], 'root', true);
+      $folderId = createFolder($notCreateYet[$i], 'root', true,$spreadsheetId);
       // echo "------".$folderId;
       // get id of folder you had just create
       createGroupFolderPermission('root', $folderId, $fileId);
@@ -672,13 +687,13 @@ function checkPositionFolderExist2($fileId)
   if (count($notCreateYet) > 0) {
     for ($i = 0; $i < count($notCreateYet); $i++) {
       // echo $notCreateYet [$i];
-      createFolder($notCreateYet[$i], $yearId, false);
+      createFolder($notCreateYet[$i], $yearId, false,$spreadsheetId);
     }
     createFolderPermission($yearId, $fileId);
   }
 }
 
-function createFolder($name, $folderId, $isOnRoot)
+function createFolder($name, $folderId, $isOnRoot, $spreadsheetId)
 {
   $client = getClient(0);
   $service = new Google_Service_Drive($client);
@@ -697,8 +712,10 @@ function createFolder($name, $folderId, $isOnRoot)
   $driveId = $results->getId();
   if ($isOnRoot == true) {
     $sql = "insert into `member`.`group` (groupName, groupID, drive_folder_id) 
-          VALUES ('$name','$driveId','$driveId')";
+          VALUES ('$name','$driveId','$spreadsheetId')";
     insertDb($sql);
+  }else if($isOnRoot==false){
+    ;
   }
   return $results->getId();
   // if ($dbClient->query($sql) === TRUE) {
