@@ -808,9 +808,9 @@ function createFolderPermission($parentId, $fileId)
           $sql = "insert into `member`.`user` (email) 
                 Select * from (select '$userEmail') AS tmp
                 where not exists(select email from `member`.`user` where email = '$userEmail')";
-          $sql2 = "insert into `member`.`userAccessibleGroup` (email,groupID) 
+          $sql2 = "insert into `member`.`useraccessiblegroup` (email,groupID) 
                 Select * from (select '$userEmail','$parentId') AS tmp2
-                where not exists(select email from `member`.`userAccessibleGroup` where email = '$userEmail')";
+                where not exists(select email from `member`.`useraccessiblegroup` where email = '$userEmail')";
           insertDb($sql);
           insertDb($sql2);
         }
