@@ -136,9 +136,15 @@ case 'listFolderTree':
   $pId=$_REQUEST['pId'];
   listFolderTree($pId,'0');
   break;
+
 case 'whoami':
   $rt = getWho();
   echo $rt;
+  break;
+
+case 'settingGroup':
+  $gId=$_REQUEST['gId'];
+  settingGroup($gId);
   break;
 
 default :

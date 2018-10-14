@@ -135,8 +135,6 @@ function getDb($sql, $type)
   $conn = new mysqli($servername, $username, $password);
   $temp = array();
   $result = $conn->query($sql);
-  // $test = $result->fetch_assoc();
-  // var_export($test);
   if ($type == 1) {
     if ($result->num_rows > 0) {
       // output data of each row
@@ -162,6 +160,18 @@ function getDb($sql, $type)
       return array($groupName,$groupId);
     } else {
       echo "0 results";
+    }
+  } else if ($type == 3){
+    if (!$result) {
+      trigger_error('Invalid query: ' . $conn->error);
+    }
+    if ($result->num_rows > 0) {
+    // output data of each row
+      while($row = $result->fetch_assoc()) {
+        $sheetId = $row["drive_folder_id"];
+      }
+    } else {
+        echo "0 results";
     }
   }
   $conn->close();
@@ -549,7 +559,7 @@ function checkYearFolderExist2($fileId)
     foreach ($values as $row) {
       // judge if repeat
       if (!array_key_exists($row[0], $year)) {
-        $temp = "[project]" . "$row[0]";
+        $temp = "$row[0]";
         array_push($year, "$temp");
       }
     }
@@ -624,8 +634,7 @@ function checkPositionFolderExist2($fileId)
     // name,folderid;
     foreach ($values as $row) {
       // row[1] == year
-      // [project]104
-      $parent = "[project]" . $row[1];
+      $parent = $row[1];
       // get [project]104 fileID
       $yearId = getFolderId($parent, 'root');
       // multiple job in one cell
@@ -633,14 +642,14 @@ function checkPositionFolderExist2($fileId)
         $se = explode(", ", $row[0]);
         for ($i = 0; $i < count($se); $i++) {
           if (!array_key_exists($se[$i], $position)) {
-            $temp = "[project]" . "$se[$i]";
+            $temp = "$se[$i]";
             array_push($position, "$temp");
           }
         }
       } else {
         // judge if repeat
         if (!array_key_exists($row[0], $position)) {
-          $temp = "[project]" . "$row[0]";
+          $temp = "$row[0]";
           array_push($position, "$temp");
         }
       }
@@ -968,6 +977,10 @@ function listFolderTree($location)
   }
 }
 
+function settingGroup($groupId){
+  $sql = "select * from `member`.`group` where groupID='".$groupId."'";
+  getDb($sql,3);
+}
 
 function getWho()
 {

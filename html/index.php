@@ -23,9 +23,13 @@ if ($_SESSION["status"] == "false") {
   echo $name;
   echo "<br/>";
   $rt = getJoinedGroup($email);
+  echo "<br/>";
+  echo '<a href = "control.php?act=settingGroup&gId='.$rt.'">setting this group</a>';
   if(isset($_SESSION['notCrew'])){
+    echo "<br/>";
     echo "YOU ARE NOT CREW";
   }else{
+    echo "<br/>";
     echo "YOU ARE CREW";
   }
   list($fileName,$fileId,$fileType,$lastMod,$fileSize)=getFolderList($rt,2);

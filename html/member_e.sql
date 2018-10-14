@@ -1,102 +1,135 @@
--- MySQL dump 10.13  Distrib 5.7.23, for Linux (x86_64)
+-- phpMyAdmin SQL Dump
+-- version 4.8.3
+-- https://www.phpmyadmin.net/
 --
--- Host: localhost    Database: member
--- ------------------------------------------------------
--- Server version	5.7.23-0ubuntu0.16.04.1
+-- Host: 127.0.0.1
+-- Generation Time: Oct 14, 2018 at 10:38 AM
+-- Server version: 10.1.35-MariaDB
+-- PHP Version: 7.2.9
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
+START TRANSACTION;
+SET time_zone = "+00:00";
+
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
-/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
-/*!40103 SET TIME_ZONE='+00:00' */;
-/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+/*!40101 SET NAMES utf8mb4 */;
+
+--
+-- Database: `member`
+--
+
+-- --------------------------------------------------------
 
 --
 -- Table structure for table `group`
 --
 
-DROP TABLE IF EXISTS `group`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `group` (
-  `id_group` int(11) NOT NULL AUTO_INCREMENT,
+  `id_group` int(11) NOT NULL,
   `groupName` varchar(45) NOT NULL,
   `groupID` varchar(45) NOT NULL,
-  `drive_folder_id` varchar(45) NOT NULL,
-  PRIMARY KEY (`id_group`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
+  `drive_folder_id` varchar(45) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `group`
 --
 
-LOCK TABLES `group` WRITE;
-/*!40000 ALTER TABLE `group` DISABLE KEYS */;
-INSERT INTO `group` VALUES (9,'[project]104','1lO1NaFst37T_qQ0OyWrcOHt8jGQLbRD8','1lO1NaFst37T_qQ0OyWrcOHt8jGQLbRD8');
-/*!40000 ALTER TABLE `group` ENABLE KEYS */;
-UNLOCK TABLES;
+INSERT INTO `group` (`id_group`, `groupName`, `groupID`, `drive_folder_id`) VALUES
+(17, '[project]104', '1NbEH9cTWg3i3gVyC8y-Sz-0Q3dxw2l1G', '1jRQ1jr6DlxAv8VbM5z-NopMTcB0DpT1oqHVzM4BYC1o');
+
+-- --------------------------------------------------------
 
 --
 -- Table structure for table `user`
 --
 
-DROP TABLE IF EXISTS `user`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `user` (
-  `id_user_group` int(11) NOT NULL AUTO_INCREMENT,
-  `email` varchar(320) NOT NULL,
-  PRIMARY KEY (`id_user_group`,`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
+  `id_user_group` int(11) NOT NULL,
+  `email` varchar(320) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `user`
 --
 
-LOCK TABLES `user` WRITE;
-/*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (9,'junanyeap@gmail.com'),(10,'s104213070@mail1.ncnu.edu.tw');
-/*!40000 ALTER TABLE `user` ENABLE KEYS */;
-UNLOCK TABLES;
+INSERT INTO `user` (`id_user_group`, `email`) VALUES
+(23, 'junanyeap@gmail.com'),
+(24, 's104213070@mail1.ncnu.edu.tw'),
+(25, 'junanbackup@gmail.com'),
+(26, 's104213059@mail1.ncnu.edu.tw');
+
+-- --------------------------------------------------------
 
 --
--- Table structure for table `userAccessibleGroup`
+-- Table structure for table `useraccessiblegroup`
 --
 
-DROP TABLE IF EXISTS `userAccessibleGroup`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `userAccessibleGroup` (
-  `uAG_id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `useraccessiblegroup` (
+  `uAG_id` int(11) NOT NULL,
   `email` varchar(320) NOT NULL,
-  `groupID` varchar(45) NOT NULL,
-  PRIMARY KEY (`uAG_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
+  `groupID` varchar(45) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `userAccessibleGroup`
+-- Dumping data for table `useraccessiblegroup`
 --
 
-LOCK TABLES `userAccessibleGroup` WRITE;
-/*!40000 ALTER TABLE `userAccessibleGroup` DISABLE KEYS */;
-INSERT INTO `userAccessibleGroup` VALUES (7,'junanyeap@gmail.com','1lO1NaFst37T_qQ0OyWrcOHt8jGQLbRD8'),(8,'s104213070@mail1.ncnu.edu.tw','1lO1NaFst37T_qQ0OyWrcOHt8jGQLbRD8');
-/*!40000 ALTER TABLE `userAccessibleGroup` ENABLE KEYS */;
-UNLOCK TABLES;
-/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+INSERT INTO `useraccessiblegroup` (`uAG_id`, `email`, `groupID`) VALUES
+(21, 'junanyeap@gmail.com', '1NbEH9cTWg3i3gVyC8y-Sz-0Q3dxw2l1G'),
+(22, 's104213070@mail1.ncnu.edu.tw', '1NbEH9cTWg3i3gVyC8y-Sz-0Q3dxw2l1G'),
+(23, 'junanbackup@gmail.com', '1NbEH9cTWg3i3gVyC8y-Sz-0Q3dxw2l1G'),
+(24, 's104213059@mail1.ncnu.edu.tw', '1NbEH9cTWg3i3gVyC8y-Sz-0Q3dxw2l1G');
 
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `group`
+--
+ALTER TABLE `group`
+  ADD PRIMARY KEY (`id_group`);
+
+--
+-- Indexes for table `user`
+--
+ALTER TABLE `user`
+  ADD PRIMARY KEY (`id_user_group`,`email`);
+
+--
+-- Indexes for table `useraccessiblegroup`
+--
+ALTER TABLE `useraccessiblegroup`
+  ADD PRIMARY KEY (`uAG_id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `group`
+--
+ALTER TABLE `group`
+  MODIFY `id_group` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+
+--
+-- AUTO_INCREMENT for table `user`
+--
+ALTER TABLE `user`
+  MODIFY `id_user_group` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+
+--
+-- AUTO_INCREMENT for table `useraccessiblegroup`
+--
+ALTER TABLE `useraccessiblegroup`
+  MODIFY `uAG_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+COMMIT;
+
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
-
--- Dump completed on 2018-08-28 19:42:46
