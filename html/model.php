@@ -97,9 +97,10 @@ function getEmail(){
 
 function getJoinedGroup($email)
 {
-  $sql = "Select * from `member`.`userAccessibleGroup` where email='$email'; ";
+  $sql = "Select * from `member`.`useraccessiblegroup` where email='$email'; ";
   $accessible = array();
   $accessible = getDb($sql, 1);
+  var_dump($accessible);
   if(count($accessible)!=0){
     for ($i = 0; $i < count($accessible); $i++) {
       $value = $accessible[$i];
