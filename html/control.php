@@ -58,6 +58,14 @@ case 'chosePathFile':
   echo $rt;
   break;
 
+case 'addData':
+  appendData2($_REQUEST['name'],$_REQUEST['email'],$_REQUEST['phoneNumber'],$_REQUEST['position'],$_REQUEST['group'],$_REQUEST['sheetId']);
+  $groupId = getGroupId($_REQUEST['sheetId']);
+  // echo $groupId;
+  var_dump($groupId);
+  // insertPermission($_REQUEST['email'],$_REQUEST['group'],$groupId);
+  break;
+
 case 'appendData':
   session_start();
   $_SESSION['name']=$_REQUEST['name'];
@@ -66,6 +74,9 @@ case 'appendData':
   $_SESSION['position']=$_REQUEST['position'];
   $_SESSION['year']=$_REQUEST['year'];
   $fileId = appendData();
+  break;
+case 'deleteSheetData':
+  deleteSheetData($_REQUEST['sheetId'],$_REQUEST['no']);
   break;
 
 case 'selectItem':
