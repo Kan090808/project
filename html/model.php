@@ -548,6 +548,10 @@ function checkYearFolderExist2($fileId)
   $client = getClientSheet();
   $service = new Google_Service_Sheets($client);
   $spreadsheetId = $fileId;
+  $response_title = $service->spreadsheets->get($spreadsheetId);
+  $about = json_encode($response_title, true);
+  $json = json_decode($about, true);
+  $title = $json['properties']['title'];
   // range only include the F2:F year  
   $range = 'F2:F';
   $response = $service->spreadsheets_values->get($spreadsheetId, $range);
@@ -594,16 +598,18 @@ function checkYearFolderExist2($fileId)
     }
     // var_dump($notCreateYet);
   }
+  // create first level folder
+  $firstLevelId = createFolder($title,'root',true,$spreadsheetId);
   // create folder by $notCreateYet array
   $notCreateYet = array_values($notCreateYet);
-  // var_dump($notCreateYet);
+  // create second level folder
   if (count($notCreateYet) > 0) {
     for ($i = 0; $i < count($notCreateYet); $i++) {
       // echo $notCreateYet[$i];
-      $folderId = createFolder($notCreateYet[$i], 'root', true,$spreadsheetId);
+      $folderId = createFolder($notCreateYet[$i], $firstLevelId, true,$spreadsheetId);
       // echo "------".$folderId;
       // get id of folder you had just create
-      createGroupFolderPermission('root', $folderId, $fileId);
+      createGroupFolderPermission($firstLevelId, $folderId, $fileId);
     }
   }
 }
