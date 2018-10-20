@@ -887,23 +887,30 @@ function listFolderTree($location)
   $service = new Google_Service_Drive($client);
   $parameters['q'] = "'$location' in parents and trashed=false";
   $results = $service->files->listFiles($parameters);
+  $list = array();
   if (count($results->getFiles()) == 0) {
     print "No files found.\n";
   } else {
     foreach ($results->getFiles() as $file) {
       $type = $file->getMimetype();
-      if($type='application/vnd.google-apps.folder'){
-        echo "<br />\n";
+      if ($type = 'application/vnd.google-apps.folder') {
+        //echo "<br />\n";
+
         // printf("%s", $file->getName());
         $fileName = $file->getName();
         $fileId = $file->getId();
-        echo '<a href="control.php?act=listFolderTree&pId='.$fileId.'">'.$fileName.'</a>';
-      }else{
-        $fileName = $file->getName();
-        echo "FILE".$fileName;
+        //echo '<a href="control.php?act=listFolderTree&pId=' . $fileId . '">' . $fileName . '</a>';
+        array_push($list, array($fileName, $fileId));
       }
+      // else {
+        // $fileName = $file->getName();
+        //echo "FILE" . $fileName;
+      // }
     }
+    
   }
+  //return array($fileName,$fileId);
+  return $list;
 }
 
 function getGroupSheet($groupId){

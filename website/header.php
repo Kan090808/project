@@ -63,7 +63,7 @@
       </a>
       <nav class="navbar navbar-static-top">
         <!-- toggle button -->
-        <a href="#!" data-toggle="offcanvas" class="sidebar-toggle"></a>
+        <a href="#!" data-toggle="offcanvas" class="sidebar-toggle col-xs-1"></a>
         <!-- Navbar Right Menu-->
         <div class="navbar-custom-menu f-right">
           <ul class="top-nav">
@@ -122,21 +122,21 @@
               <a href="#!" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" class="dropdown-toggle drop icon-circle drop-image">
                 <span><img class="img-circle " src="assets/images/avatar-1.png" style="width:40px;" alt="User Image"></span>
                 <span>
-                  <?php echo $name ?> 
+                  <?php echo $name?> 
               <?php 
               if($_SESSION["status"] == "true"){
                 echo '<i class=" icofont icofont-simple-down"></i>
                 </span>
               </a>
               <ul class="dropdown-menu settings-menu">
-                <li><a href="profile.html"><i class="icon-user"></i> Profile</a></li>
-                <li><a href="#!"><i class="icon-settings"></i> Settings</a></li>
+                <li><a href="profile.html"><i class="icon-user"></i> 個人資料</a></li>
+                <li><a href="#!"><i class="icon-settings"></i> 設定</a></li>
                 <li class="p-0">
                   <div class="dropdown-divider m-0"></div>
                 </li>
                 <li>
                   <a href="../html/control.php?act=logout" method="post">
-                    <i class="icon-logout"></i> Logout
+                    <i class="icon-logout"></i> 登出
                   </a>
                 </li>
                 </form>

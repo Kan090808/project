@@ -1,12 +1,12 @@
 <!-- 判斷是否是幹部，是幹部的話顯示可操作的一些按鈕-->
 <div class="container">
   <div class="row">
-    <div class="main-header ">
+    <div class="main-header">
       <h1 class="col-sm-10" style="font-weight:bold">暨馬同學會</h1>
     </div>
   </div>
   <div class="row" style="margin-top:25px">
-    <ul class="col-sm-12 nav nav-tabs tabs" role="tablist">
+    <ul class="nav nav-tabs tabs" role="tablist">
       <li class="nav-item">
         <a class="nav-link active" data-toggle="tab" href="#news" role="tab" aria-expanded="true">最新消息</a>
       </li>
@@ -29,4 +29,4 @@
       </div>
     </div>
   </div>
-</div>';}?>
+</div>

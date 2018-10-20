@@ -80,12 +80,22 @@ CREATE TABLE `useraccessiblegroup` (
 -- Dumping data for table `useraccessiblegroup`
 --
 
+<<<<<<< HEAD
+INSERT INTO `useraccessiblegroup` (`uAG_id`, `email`, `groupID`) VALUES
+(21, 'junanyeap@gmail.com', '1NbEH9cTWg3i3gVyC8y-Sz-0Q3dxw2l1G'),
+(22, 's104213070@mail1.ncnu.edu.tw', '1NbEH9cTWg3i3gVyC8y-Sz-0Q3dxw2l1G'),
+(23, 'junanbackup@gmail.com', '1NbEH9cTWg3i3gVyC8y-Sz-0Q3dxw2l1G'),
+(24, 's104213059@mail1.ncnu.edu.tw', '1NbEH9cTWg3i3gVyC8y-Sz-0Q3dxw2l1G'),
+(25, 'yranyran19@gmail.com', '1NbEH9cTWg3i3gVyC8y-Sz-0Q3dxw2l1G'),
+(26, 'kanjinterng@gmail.com', '1NbEH9cTWg3i3gVyC8y-Sz-0Q3dxw2l1G');
+=======
 INSERT INTO `useraccessiblegroup` (`uAG_id`, `email`, `groupID`, `year`) VALUES
 (39, 'junanyeap@gmail.com', '11bug-RkV_a0FirVOiNgeBhbRjFsLf3vq', '104'),
 (40, 'junanbackup@gmail.com', '11bug-RkV_a0FirVOiNgeBhbRjFsLf3vq', '105'),
 (41, 'kanjingterng@gmail.com', '11bug-RkV_a0FirVOiNgeBhbRjFsLf3vq', '105'),
 (42, 's104213070@mail1.ncnu.edu.tw', '11bug-RkV_a0FirVOiNgeBhbRjFsLf3vq', '105'),
 (43, 'junanyeap@gmail.com', '11bug-RkV_a0FirVOiNgeBhbRjFsLf3vq', '105');
+>>>>>>> 4eeb84f922d971167a969380036479b086c2ede0
 
 --
 -- Indexes for dumped tables
