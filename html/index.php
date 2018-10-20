@@ -24,7 +24,16 @@ if ($_SESSION["status"] == "false") {
     echo $groupName[$i].$currentYear[$i];
     // call this to get current year folder's id;
     $currentFolderId = getCurrentYearGroup($groupId[$i],$currentYear[$i]);
-    echo "<a href='control.php?act=getFolderList&pId=".$currentFolderId."&type=1'>  Goto current year folder</a>";
+    echo '
+      <form action = "control.php" method="post">
+        <input type="hidden" name="pId" value="$currentFolderId.">
+        <input type="hidden" name="type" value="2">
+        <input type="submit" name="act" value="getFolderList">
+      </form>
+    ';
+    // 帶1進去，從model裡面echo出來
+    // 帶2進去，回傳array
+    getFolderList($currentFolderId,1);
     $sheetId = getGroupSheet($groupId[$i]);
     // sidebar, $groupId[$i]
     // all year

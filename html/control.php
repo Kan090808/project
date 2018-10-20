@@ -24,7 +24,6 @@ case 'getGroupShared':
 case 'getFolderList':
   $location = $_REQUEST['pId'];
   $type = $_REQUEST['type'];
-  // header('Location: viewDir.php');
   getFolderList($location,$type);
   break;
 

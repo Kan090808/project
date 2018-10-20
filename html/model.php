@@ -1,19 +1,8 @@
 <?php
-/* 
-  現有功能：
-    利用sheet檔完成資料夾的創建與分配權限
-    換屆更新權限
-    界面化權限分配
-
-
-
-
-*/
 session_start();
 require __DIR__ . '/vendor/autoload.php';
 if (isset($_POST['verCode'])) { //check if form was submitted
   $input = $_POST['verCode']; //get input text
-  echo '<h1>' . $input . '</h1>';
 }
 function getGroupShared($folderId)
 {
@@ -48,6 +37,10 @@ function getGroupShared($folderId)
   }
 
 }
+function editFilePermission($fileId){
+  echo "editFilePermission";
+}
+
 function ifInFolder($service, $folderId, $fileId)
 {
   // echo $folderId;
@@ -175,7 +168,7 @@ function getDb($sql, $type)
     if ($result->num_rows > 0 && $result->num_rows < 2) {
     // output data of each row
       while($row = $result->fetch_assoc()) {
-        $sheetId = $row["drive_folder_id"];
+        $sheetId = $row["crew_sheet_id"];
         return $sheetId;
       }
     } else {
@@ -419,6 +412,8 @@ function getFolderList($location, $type)
           echo "<a href='control.php'>this is file, openIt</a>";
         }
       }
+      echo "<br />";
+      editFilePermission($location);
     } else if ($type == 2) {
       $fileName=array();
       $fileId=array();
@@ -578,10 +573,6 @@ function checkYearFolderExist2($fileId)
     }
     $year = array_unique($year);
     $new_year = array_values($year);
-    echo "<br />";
-    var_dump($new_year);
-    echo "<br />";
-
   }
   // now had year data in $position
   $notCreateYet = $new_year;
@@ -690,13 +681,9 @@ function createFolder($name, $folderId, $isOnRoot, $spreadsheetId)
   $results = $service->files->create($fileMetadata, array(
     'fields' => 'id'
   ));
-  echo "<br />";
-  echo "those folder has created";
-  echo "<br />";
-  echo $results->getId();
   $driveId = $results->getId();
   if ($isOnRoot == true) {
-    $sql = "insert into `member`.`group` (groupName, groupID, drive_folder_id) 
+    $sql = "insert into `member`.`group` (groupName, groupID, crew_sheet_id) 
           VALUES ('$name','$driveId','$spreadsheetId')";
     insertDb($sql);
   }
@@ -736,7 +723,6 @@ function createFolderPermission($parentId, $fileId)
       $request = $service->permissions->create($poId, $userPermission, array(
           'fields' => 'id'
         ));
-      echo $parentId;
       $sql = "insert into `member`.`user` (email) 
         Select * from (select '$userEmail') AS tmp
         where not exists(select email from `member`.`user` where email = '$userEmail')";
@@ -926,7 +912,7 @@ function getGroupSheet($groupId){
 }
 
 function getGroupId($sheetId){
-  $sql = "select groupID from `member`.`group` where drive_folder_id='".$sheetId."'";
+  $sql = "select groupID from `member`.`group` where crew_sheet_id='".$sheetId."'";
   return getDb($sql,4);
 }
 
