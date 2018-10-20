@@ -58,19 +58,10 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`id_user_group`, `email`) VALUES
-<<<<<<< HEAD
-(23, 'junanyeap@gmail.com'),
-(24, 's104213070@mail1.ncnu.edu.tw'),
-(25, 'junanbackup@gmail.com'),
-(26, 's104213059@mail1.ncnu.edu.tw'),
-(27, 'yranyran19@gmail.com'),
-(28, 'kanjinterng@gmail.com');
-=======
 (27, 'junanyeap@gmail.com'),
 (28, 'junanbackup@gmail.com'),
 (29, 'kanjingterng@gmail.com'),
 (30, 's104213070@mail1.ncnu.edu.tw');
->>>>>>> 4eeb84f922d971167a969380036479b086c2ede0
 
 -- --------------------------------------------------------
 

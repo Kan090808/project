@@ -907,26 +907,14 @@ function listFolderTree($location)
   } else {
     foreach ($results->getFiles() as $file) {
       $type = $file->getMimetype();
-<<<<<<< HEAD
       if ($type = 'application/vnd.google-apps.folder') {
         //echo "<br />\n";
 
-=======
-      if($type='application/vnd.google-apps.folder'){
-        echo "<br />\n";
->>>>>>> 4eeb84f922d971167a969380036479b086c2ede0
         // printf("%s", $file->getName());
         $fileName = $file->getName();
         $fileId = $file->getId();
-<<<<<<< HEAD
         //echo '<a href="control.php?act=listFolderTree&pId=' . $fileId . '">' . $fileName . '</a>';
         array_push($list, array($fileName, $fileId));
-=======
-        echo '<a href="control.php?act=listFolderTree&pId='.$fileId.'">'.$fileName.'</a>';
-      }else{
-        $fileName = $file->getName();
-        echo "FILE".$fileName;
->>>>>>> 4eeb84f922d971167a969380036479b086c2ede0
       }
       // else {
         // $fileName = $file->getName();
