@@ -17,13 +17,18 @@ if ($_SESSION["status"] == "false") {
 	$name = getName();
   echo $name;
   echo "<br/>";
-  list($groupName,$groupId)= getJoinedGroup($email);
+  list($groupName,$groupId,$currentYear)= getJoinedGroup($email);
   echo "<br/>";
 
   for($i=0;$i<count($groupName);$i++){
-    echo $groupName[$i];
+    echo $groupName[$i].$currentYear[$i];
+    // call this to get current year folder's id;
+    $currentFolderId = getCurrentYearGroup($groupId[$i],$currentYear[$i]);
+    echo "<a href='control.php?act=getFolderList&pId=".$currentFolderId."&type=1'>  Goto current year folder</a>";
     $sheetId = getGroupSheet($groupId[$i]);
     // sidebar, $groupId[$i]
+    // all year
+    echo "<br/>-------------all year-------";
     listFolderTree($groupId[$i]);
     // 檔案列出 用$groupId[$i] 達成
     list($fileName,$fileId,$fileType,$lastMod,$fileSize)=getFolderList($groupId[$i],2);

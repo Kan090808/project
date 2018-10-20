@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 14, 2018 at 10:38 AM
+-- Generation Time: Oct 20, 2018 at 09:27 AM
 -- Server version: 10.1.35-MariaDB
 -- PHP Version: 7.2.9
 
@@ -30,9 +30,9 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `group` (
   `id_group` int(11) NOT NULL,
-  `groupName` varchar(45) NOT NULL,
-  `groupID` varchar(45) NOT NULL,
-  `drive_folder_id` varchar(45) NOT NULL
+  `groupName` varchar(45) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `groupID` varchar(45) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `drive_folder_id` varchar(45) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -40,7 +40,7 @@ CREATE TABLE `group` (
 --
 
 INSERT INTO `group` (`id_group`, `groupName`, `groupID`, `drive_folder_id`) VALUES
-(17, '[project]104', '1NbEH9cTWg3i3gVyC8y-Sz-0Q3dxw2l1G', '1jRQ1jr6DlxAv8VbM5z-NopMTcB0DpT1oqHVzM4BYC1o');
+(73, '暨馬同學會', '11bug-RkV_a0FirVOiNgeBhbRjFsLf3vq', '1x3G0jigHF81fYYvgzOmjo2SUS6MoIrhXXswedQxaS-k');
 
 -- --------------------------------------------------------
 
@@ -50,7 +50,7 @@ INSERT INTO `group` (`id_group`, `groupName`, `groupID`, `drive_folder_id`) VALU
 
 CREATE TABLE `user` (
   `id_user_group` int(11) NOT NULL,
-  `email` varchar(320) NOT NULL
+  `email` varchar(300) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -58,10 +58,10 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`id_user_group`, `email`) VALUES
-(23, 'junanyeap@gmail.com'),
-(24, 's104213070@mail1.ncnu.edu.tw'),
-(25, 'junanbackup@gmail.com'),
-(26, 's104213059@mail1.ncnu.edu.tw');
+(27, 'junanyeap@gmail.com'),
+(28, 'junanbackup@gmail.com'),
+(29, 'kanjingterng@gmail.com'),
+(30, 's104213070@mail1.ncnu.edu.tw');
 
 -- --------------------------------------------------------
 
@@ -71,19 +71,21 @@ INSERT INTO `user` (`id_user_group`, `email`) VALUES
 
 CREATE TABLE `useraccessiblegroup` (
   `uAG_id` int(11) NOT NULL,
-  `email` varchar(320) NOT NULL,
-  `groupID` varchar(45) NOT NULL
+  `email` varchar(320) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `groupID` varchar(45) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `year` varchar(10) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `useraccessiblegroup`
 --
 
-INSERT INTO `useraccessiblegroup` (`uAG_id`, `email`, `groupID`) VALUES
-(21, 'junanyeap@gmail.com', '1NbEH9cTWg3i3gVyC8y-Sz-0Q3dxw2l1G'),
-(22, 's104213070@mail1.ncnu.edu.tw', '1NbEH9cTWg3i3gVyC8y-Sz-0Q3dxw2l1G'),
-(23, 'junanbackup@gmail.com', '1NbEH9cTWg3i3gVyC8y-Sz-0Q3dxw2l1G'),
-(24, 's104213059@mail1.ncnu.edu.tw', '1NbEH9cTWg3i3gVyC8y-Sz-0Q3dxw2l1G');
+INSERT INTO `useraccessiblegroup` (`uAG_id`, `email`, `groupID`, `year`) VALUES
+(39, 'junanyeap@gmail.com', '11bug-RkV_a0FirVOiNgeBhbRjFsLf3vq', '104'),
+(40, 'junanbackup@gmail.com', '11bug-RkV_a0FirVOiNgeBhbRjFsLf3vq', '105'),
+(41, 'kanjingterng@gmail.com', '11bug-RkV_a0FirVOiNgeBhbRjFsLf3vq', '105'),
+(42, 's104213070@mail1.ncnu.edu.tw', '11bug-RkV_a0FirVOiNgeBhbRjFsLf3vq', '105'),
+(43, 'junanyeap@gmail.com', '11bug-RkV_a0FirVOiNgeBhbRjFsLf3vq', '105');
 
 --
 -- Indexes for dumped tables
@@ -99,7 +101,7 @@ ALTER TABLE `group`
 -- Indexes for table `user`
 --
 ALTER TABLE `user`
-  ADD PRIMARY KEY (`id_user_group`,`email`);
+  ADD PRIMARY KEY (`id_user_group`);
 
 --
 -- Indexes for table `useraccessiblegroup`
@@ -115,19 +117,19 @@ ALTER TABLE `useraccessiblegroup`
 -- AUTO_INCREMENT for table `group`
 --
 ALTER TABLE `group`
-  MODIFY `id_group` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id_group` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=74;
 
 --
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id_user_group` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `id_user_group` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
 -- AUTO_INCREMENT for table `useraccessiblegroup`
 --
 ALTER TABLE `useraccessiblegroup`
-  MODIFY `uAG_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `uAG_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

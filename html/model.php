@@ -105,19 +105,27 @@ function getEmail(){
   }
 }
 
+function getCurrentYearGroup($groupId,$currentYear){
+  return getFolderId($currentYear,$groupId);  
+}
 function getJoinedGroup($email)
 {
   $sql = "Select * from `member`.`useraccessiblegroup` where email='$email'; ";
   $accessible = array();
-  $accessible = getDb($sql, 1);
-  if(count($accessible)!=0){
-    for ($i = 0; $i < count($accessible); $i++) {
-      $value = $accessible[$i];
+  $joinedGroupId = array();
+  $joinedGroupYear = array();
+  $accessible = getDb($sql, 4);
+  while ($row=mysqli_fetch_row($accessible)){
+    array_push($joinedGroupId,$row[2]);
+    array_push($joinedGroupYear,$row[3]);
+  }
+  if(count($joinedGroupId)!=0){
+    for ($i = 0; $i < count($joinedGroupId); $i++) {
+      $value = $joinedGroupId[$i];
       $sql2 = "select * from `member`.`group` where groupID='$value'";
-      list($f,$s) = getDb($sql2,2);
+      list($f,$s,$c) = getDb($sql2,2);
     }
-    return array($f,$s);
-    // $result = getFolderList($test,2);
+    return array($f,$s,$c);
   }else{
     $_SESSION['notCrew'] = "true";
   }
@@ -147,14 +155,16 @@ function getDb($sql, $type)
   } else if ($type == 2) {
     $groupName = array();
     $groupId = array();
+    $currentYear =array();
     if ($result->num_rows > 0) {
       // output data of each row
       while ($row = $result->fetch_assoc()) {
         // echo "<br>" . "in group: " . $row["groupName"];
         array_push($groupName,$row["groupName"]);
         array_push($groupId,$row["groupID"]);
+        array_push($currentYear,$row["currentYear"]);
       }
-      return array($groupName,$groupId);
+      return array($groupName,$groupId,$currentYear);
     } else {
       echo "0 results";
     }
@@ -189,6 +199,7 @@ function insertDb($sql)
   if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
   }
+  mysqli_set_charset($conn,"utf8");
   if ($conn->query($sql) === true) {
     echo "New record created successfully";
   } else {
@@ -496,9 +507,7 @@ function getFolderId($name, $folderId)
   $parameters['q'] = "mimeType='application/vnd.google-apps.folder' and '$folderId' in parents and trashed=false and (name contains '$name')";
   $results = $service->files->listFiles($parameters);
   if (count($results->getFiles()) == 0) {
-    print "getFolderId : No files found.";
-    echo $folderId;
-    print "\n";
+    return null;
   }
   if (count($results->getFiles()) > 1) {
     print "folder more that 1.\n";
@@ -600,26 +609,29 @@ function checkYearFolderExist2($fileId)
   }
   // create first level folder
   $firstLevelId = createFolder($title,'root',true,$spreadsheetId);
+
   // create folder by $notCreateYet array
   $notCreateYet = array_values($notCreateYet);
   // create second level folder
   if (count($notCreateYet) > 0) {
     for ($i = 0; $i < count($notCreateYet); $i++) {
       // echo $notCreateYet[$i];
-      $folderId = createFolder($notCreateYet[$i], $firstLevelId, true,$spreadsheetId);
+      $folderId = createFolder($notCreateYet[$i], $firstLevelId, false,$spreadsheetId);
       // echo "------".$folderId;
       // get id of folder you had just create
       createGroupFolderPermission($firstLevelId, $folderId, $fileId);
     }
   }
+  checkPositionFolderExist2($spreadsheetId,$firstLevelId);
 }
 
+// clear
 function checkPositionFolderExist()
 {
   getMemberSheet(3);
 }
 // for position
-function checkPositionFolderExist2($fileId)
+function checkPositionFolderExist2($fileId,$firstLevelId)
 {
   // check each row position's year
 
@@ -632,6 +644,7 @@ function checkPositionFolderExist2($fileId)
   $response = $service->spreadsheets_values->get($spreadsheetId, $range);
   $values = $response->getValues();
   $position = array();
+  $year = array();
   $parent;
   if (empty($values)) {
     print "No data found.\n";
@@ -639,73 +652,30 @@ function checkPositionFolderExist2($fileId)
     // problem here : how to get parent folder
     // name,folderid;
     foreach ($values as $row) {
-      // row[1] == year
-      $parent = $row[1];
-      // get [project]104 fileID
-      $yearId = getFolderId($parent, 'root');
-      // multiple job in one cell
-      if (strpos($row[0], ',') == true) {
-        $se = explode(", ", $row[0]);
-        for ($i = 0; $i < count($se); $i++) {
-          if (!array_key_exists($se[$i], $position)) {
-            $temp = "$se[$i]";
-            array_push($position, "$temp");
-          }
-        }
-      } else {
-        // judge if repeat
-        if (!array_key_exists($row[0], $position)) {
-          $temp = "$row[0]";
-          array_push($position, "$temp");
-        }
-      }
+      $positionValue = $row[0];
+      $yearValue = $row[1];
+      $yearId = getFolderId($yearValue, $firstLevelId);
+      array_push($position,$positionValue);
+      array_push($year,$yearId); 
+      // 得到 職位名字，該存在的位置ID
     }
-    // remove repeat value
-    $position = array_unique($position);
-    // re-assign key
-    $new_position = array_values($position);
-    // print_r($position);
-
-    echo "<br />";
-    var_dump($new_position);
-    echo "<br />";
-
   }
-  // now had position data in $position
-  $notCreateYet = $new_position;
-  $client = getClient(0);
-  $service = new Google_Service_Drive($client);
-  // parendId in here should not be root, should be "104"folrderID
-  // this para is used for get list of folder in "104"
-  $parameters['q'] = "mimeType='application/vnd.google-apps.folder' and '$yearId' in parents and trashed=false";
-  $results = $service->files->listFiles($parameters);
-  if (count($results->getFiles()) == 0) {
-    print "checkPositionFolderExist : No create yet.\n";
-  } else {
-    foreach ($results->getFiles() as $file) {
-      $gotDir = false;
-      // check drive root folder if exist folder with those name
-      for ($i = 0; $i < count($new_position); $i++) {
-        // if(strcasecmp($position[$i],$file->getName())==0){
-        if ($new_position[$i] == $file->getName()) {
-          $gotDir = true;
-          $gotDirName = $new_position[$i];
-          unset($notCreateYet[$i]);
-        }
-      }
+  $notCreateYetPosition = array();
+  $notCreateYetYear = array();
+  $judge = array();
+  // 先判斷
+  for($i = 0 ; $i<count($position);$i++){
+    $t = $position[$i]."+".$year[$i];
+    if(in_array($t, $judge)==false){
+      array_push($judge,$t);
+      array_push($notCreateYetPosition, $position[$i]);
+      array_push($notCreateYetYear, $year[$i]);
     }
-    // var_dump($notCreateYet);
   }
-  // create folder by $notCreateYet array
-  $notCreateYet = array_values($notCreateYet);
-  // var_dump($notCreateYet);
-  if (count($notCreateYet) > 0) {
-    for ($i = 0; $i < count($notCreateYet); $i++) {
-      // echo $notCreateYet [$i];
-      createFolder($notCreateYet[$i], $yearId, false,$spreadsheetId);
-    }
-    createFolderPermission($yearId, $fileId);
+  for($i =0; $i<count($notCreateYetPosition);$i++){
+    createFolder($notCreateYetPosition[$i],$notCreateYetYear[$i],false,$spreadsheetId);
   }
+  createFolderPermission($firstLevelId,$spreadsheetId);
 }
 
 function createFolder($name, $folderId, $isOnRoot, $spreadsheetId)
@@ -729,26 +699,12 @@ function createFolder($name, $folderId, $isOnRoot, $spreadsheetId)
     $sql = "insert into `member`.`group` (groupName, groupID, drive_folder_id) 
           VALUES ('$name','$driveId','$spreadsheetId')";
     insertDb($sql);
-  }else if($isOnRoot==false){
-    ;
   }
   return $results->getId();
-  // if ($dbClient->query($sql) === TRUE) {
-  //   echo "New record created successfully";
-  // } else {
-  //     echo "Error: " . $sql . "<br>" . $conn->error;
-  // }
-  // $dbClient->close();
-  // little bug : this functino is call by one time, but createPer is run all folder
-  // so return error
-  // createFolderPermission($folderId);
 }
-// notice : different between update and create permission
-// createFolderPermission is for create sub/child folder permission
+
 function createFolderPermission($parentId, $fileId)
 {
-  echo "parent id :";
-  echo $parentId;
   $client = getClient(0);
   $client_s = getClientSheet();
   $service = new Google_Service_Drive($client);
@@ -767,60 +723,33 @@ function createFolderPermission($parentId, $fileId)
     foreach ($values as $row) {
       // usermail == 2 , position == 4
       $userEmail = $row[2];
-      if (strpos($row[4], ',') == true) {
-        // $se is the output array that split row[] with ","
-        $se = explode(", ", $row[4]);
-        echo "createFolderPermission : okay,got you ! Below I commet it";
-        // for($i=0;$i<count($se);$i++){
-        //   if (!array_key_exists($se[$i], $position)) {
-        //     array_push($position, $se[$i]);
-        //     echo "<br />";
-        //     echo "START to get folder ID";
-        //     echo "<br />";
-        //     $fileId         = getFolderId($se[$i],$parentId);
-        //     $userPermission = new Google_Service_Drive_Permission(array(
-        //       'type' => 'user',
-        //       'role' => $role,
-        //       'emailAddress' => $userEmail
-        //     ));
-
-        //     $request = $service->permissions->create($fileId, $userPermission, array(
-        //       'fields' => 'id'
-        //     ));
-        //     $sql="insert into `member`.`user` (email) 
-        //           Select * from (select '$userEmail') AS tmp
-        //           where not exists(select email from `member`.`user` where email = '$userEmail')";
-        //     $sql2="insert into `member`.`userAccessibleGroup` (email,groudID) 
-        //           Select * from (select '$userEmail','$parentId') AS tmp2
-        //           where not exists(select email from `member`.`userAccessibleGroup` where email = '$userEmail')";
-        //     insertDb($sql);
-        //     insertDb($sql2);
-        //   }
-        // }
-      } else {
-        // judge if repeat
-        if (!array_key_exists($row[4], $position)) {
-          array_push($position, "$row[4]");
-          $fileId = getFolderId($row[4], $parentId);
-          $userPermission = new Google_Service_Drive_Permission(array(
-            'type' => 'user',
-            'role' => $role,
-            'emailAddress' => $userEmail
-          ));
-
-          $request = $service->permissions->create($fileId, $userPermission, array(
-            'fields' => 'id'
-          ));
-          $sql = "insert into `member`.`user` (email) 
-                Select * from (select '$userEmail') AS tmp
-                where not exists(select email from `member`.`user` where email = '$userEmail')";
-          $sql2 = "insert into `member`.`useraccessiblegroup` (email,groupID) 
-                Select * from (select '$userEmail','$parentId') AS tmp2
-                where not exists(select email from `member`.`useraccessiblegroup` where email = '$userEmail')";
-          insertDb($sql);
-          insertDb($sql2);
-        }
+      $position = $row[4];
+      $year = $row[5];
+      $yId = getFolderId($year,$parentId);
+      $poId = getFolderId($position,$yId);
+      
+      $userPermission = new Google_Service_Drive_Permission(array(
+          'type' => 'user',
+          'role' => $role,
+          'emailAddress' => $userEmail
+        ));
+      $request = $service->permissions->create($poId, $userPermission, array(
+          'fields' => 'id'
+        ));
+      echo $parentId;
+      $sql = "insert into `member`.`user` (email) 
+        Select * from (select '$userEmail') AS tmp
+        where not exists(select email from `member`.`user` where email = '$userEmail')";
+      $sql2 = "insert into `member`.`useraccessiblegroup` (email,groupID) 
+        Select * from (select '$userEmail','$parentId') AS tmp2
+        where not exists(select email from `member`.`useraccessiblegroup` where email = '$userEmail')";
+      $sqlTest = "insert into `member`.`useraccessiblegroup` (email,groupID,year) values ('$userEmail','$parentId','$year')";
+      $sql3 = "select * from `member`.`useraccessiblegroup` where email = '$userEmail' and groupID = '$parentId' and year='$year'";
+      $result = getDb($sql3,4);
+      if (mysqli_num_rows($result)==0){
+        insertDb($sqlTest);
       }
+      insertDb($sql);
     }
   }
   // delete the illegal permission id come from inherit
