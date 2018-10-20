@@ -35,15 +35,16 @@
     </ul>
     <!-- Sidebar Menu-->
     <ul class="sidebar-menu">
-      <li class="active treeview">
-        <a class="waves-effect waves-dark" href="index.html">
-          <i class="icon-speedometer"></i><span>設定</span>
-        </a>
-      </li>
       <li class="nav-level">社團</li>
       <li class="treeview"><a class="waves-effect waves-dark" href="#!"><i class="icofont icofont-company"></i><span>暨馬同學會</span><i
             class="icon-arrow-down"></i></a>
         <ul class="treeview-menu">
+          <li>
+            <a class="waves-effect waves-dark txt-warning" href="#!">
+              <i class="icon-arrow-right"></i>
+              幹部名單
+            </a>
+          </li>
           <li>
             <a class="waves-effect waves-dark" href="#!">
               <i class="icon-arrow-right"></i>

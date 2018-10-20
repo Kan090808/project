@@ -2,7 +2,7 @@
   <div class="col-md-12">
     <div class="card">
       <div class="card-header">
-        <div class="col-sm-2">
+        <div class="col-sm-4">
           <h1 class="card-title mb-0" style="font-weight:bold">貼文專區</h1>
         </div>
         <div class="col-sm-8">

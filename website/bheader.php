@@ -121,7 +121,8 @@
             <li class="dropdown">
               <a href="#!" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" class="dropdown-toggle drop icon-circle drop-image">
                 <span><img class="img-circle " src="assets/images/avatar-1.png" style="width:40px;" alt="User Image"></span>
-                <span>簡靖騰<i class=" icofont icofont-simple-down"></i></span>
+                <span>簡靖騰<i class=" icofont icofont-simple-down"></i>
+                </span>
               </a>
               <ul class="dropdown-menu settings-menu">
                 <li><a href="profile.html"><i class="icon-user"></i> 個人資料</a></li>
@@ -191,7 +192,7 @@
       </nav>
     </header>
     <!-- Side-Nav-->
-    <?php include("csidebar.php"); ?>
+    <?php include("bsidebar.php"); ?>
     <!-- Sidebar chat start -->
     <?php include("chatbar.php"); ?>
     <?php include("showchat.php"); ?>

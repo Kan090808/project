@@ -61,7 +61,9 @@ INSERT INTO `user` (`id_user_group`, `email`) VALUES
 (23, 'junanyeap@gmail.com'),
 (24, 's104213070@mail1.ncnu.edu.tw'),
 (25, 'junanbackup@gmail.com'),
-(26, 's104213059@mail1.ncnu.edu.tw');
+(26, 's104213059@mail1.ncnu.edu.tw'),
+(27, 'yranyran19@gmail.com'),
+(28, 'kanjinterng@gmail.com');
 
 -- --------------------------------------------------------
 
@@ -83,7 +85,9 @@ INSERT INTO `useraccessiblegroup` (`uAG_id`, `email`, `groupID`) VALUES
 (21, 'junanyeap@gmail.com', '1NbEH9cTWg3i3gVyC8y-Sz-0Q3dxw2l1G'),
 (22, 's104213070@mail1.ncnu.edu.tw', '1NbEH9cTWg3i3gVyC8y-Sz-0Q3dxw2l1G'),
 (23, 'junanbackup@gmail.com', '1NbEH9cTWg3i3gVyC8y-Sz-0Q3dxw2l1G'),
-(24, 's104213059@mail1.ncnu.edu.tw', '1NbEH9cTWg3i3gVyC8y-Sz-0Q3dxw2l1G');
+(24, 's104213059@mail1.ncnu.edu.tw', '1NbEH9cTWg3i3gVyC8y-Sz-0Q3dxw2l1G'),
+(25, 'yranyran19@gmail.com', '1NbEH9cTWg3i3gVyC8y-Sz-0Q3dxw2l1G'),
+(26, 'kanjinterng@gmail.com', '1NbEH9cTWg3i3gVyC8y-Sz-0Q3dxw2l1G');
 
 --
 -- Indexes for dumped tables

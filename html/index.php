@@ -29,7 +29,21 @@ if ($_SESSION["status"] == "false") {
     echo $groupName[$i];
     echo '<a href = "control.php?act=settingGroup&gId='.$groupId[$i].'">setting this group</a>';
     // sidebar, $groupId[$i]
-    listFolderTree($groupId[$i]);
+    echo "<br />";
+    $list = listFolderTree($groupId[$i]);
+    for($j=0;$j<count($list);$j++){
+      echo $list[$j][0];
+      echo $list[$j][1];
+      echo "<br/>";
+      $listFolder = listFolderTree($list[$j][1]);
+      for($k=0;$k<count($listFolder);$k++)
+      {
+        echo $listFolder[$k][0];
+        echo $listFolder[$k][1];
+        echo "<br />";
+      }
+      echo "<br />";
+    }
     // 檔案列出 用$groupId[$i] 達成
     list($fileName,$fileId,$fileType,$lastMod,$fileSize)=getFolderList($groupId[$i],2);
   }

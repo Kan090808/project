@@ -1,23 +1,10 @@
-<?php
-require("../html/model.php");
-$_SESSION["status"] = checkLogin();
-if ($_SESSION["status"] == "false") {
-  $name = "未登入";
-} else {
-  $name = getName();
-  $email = getEmail();
-  list($groupName,$groupId)= getJoinedGroup($email);
-}
-?>
-<?php include("header.php"); ?>
+<?php include("bheader.php"); ?>
 <!-- Sidebar chat end-->
 <div class="content-wrapper">
   <!-- Container-fluid starts -->
   <!-- Main content starts -->
-  <?php 
-  if($_SESSION["status"] == "true"){
+  <?php
     include("homepage.php");
-  }
   ?>
   <!-- Required Jqurey -->
   <script src="assets/plugins/jquery/dist/jquery.min.js"></script>
