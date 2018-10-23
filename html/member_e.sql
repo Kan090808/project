@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 20, 2018 at 09:27 AM
+-- Generation Time: Oct 23, 2018 at 02:32 PM
 -- Server version: 10.1.35-MariaDB
 -- PHP Version: 7.2.9
 
@@ -30,17 +30,19 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `group` (
   `id_group` int(11) NOT NULL,
-  `groupName` varchar(45) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `groupID` varchar(45) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `drive_folder_id` varchar(45) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `groupName` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
+  `groupID` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
+  `crew_sheet_id` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
+  `currentYear` varchar(10) COLLATE utf8_unicode_ci NOT NULL,
+  `member_sheet_id` varchar(45) COLLATE utf8_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `group`
 --
 
-INSERT INTO `group` (`id_group`, `groupName`, `groupID`, `drive_folder_id`) VALUES
-(73, '暨馬同學會', '11bug-RkV_a0FirVOiNgeBhbRjFsLf3vq', '1x3G0jigHF81fYYvgzOmjo2SUS6MoIrhXXswedQxaS-k');
+INSERT INTO `group` (`id_group`, `groupName`, `groupID`, `crew_sheet_id`, `currentYear`, `member_sheet_id`) VALUES
+(73, '暨馬同學會', '11bug-RkV_a0FirVOiNgeBhbRjFsLf3vq', '1x3G0jigHF81fYYvgzOmjo2SUS6MoIrhXXswedQxaS-k', '105', '1x3G0jigHF81fYYvgzOmjo2SUS6MoIrhXXswedQxaS-k');
 
 -- --------------------------------------------------------
 
@@ -50,8 +52,8 @@ INSERT INTO `group` (`id_group`, `groupName`, `groupID`, `drive_folder_id`) VALU
 
 CREATE TABLE `user` (
   `id_user_group` int(11) NOT NULL,
-  `email` varchar(300) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `email` varchar(300) COLLATE utf8_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `user`
@@ -71,31 +73,27 @@ INSERT INTO `user` (`id_user_group`, `email`) VALUES
 
 CREATE TABLE `useraccessiblegroup` (
   `uAG_id` int(11) NOT NULL,
-  `email` varchar(320) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `groupID` varchar(45) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `year` varchar(10) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `email` varchar(320) COLLATE utf8_unicode_ci NOT NULL,
+  `groupID` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
+  `year` varchar(10) COLLATE utf8_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `useraccessiblegroup`
 --
 
-<<<<<<< HEAD
-INSERT INTO `useraccessiblegroup` (`uAG_id`, `email`, `groupID`) VALUES
-(21, 'junanyeap@gmail.com', '1NbEH9cTWg3i3gVyC8y-Sz-0Q3dxw2l1G'),
-(22, 's104213070@mail1.ncnu.edu.tw', '1NbEH9cTWg3i3gVyC8y-Sz-0Q3dxw2l1G'),
-(23, 'junanbackup@gmail.com', '1NbEH9cTWg3i3gVyC8y-Sz-0Q3dxw2l1G'),
-(24, 's104213059@mail1.ncnu.edu.tw', '1NbEH9cTWg3i3gVyC8y-Sz-0Q3dxw2l1G'),
-(25, 'yranyran19@gmail.com', '1NbEH9cTWg3i3gVyC8y-Sz-0Q3dxw2l1G'),
-(26, 'kanjinterng@gmail.com', '1NbEH9cTWg3i3gVyC8y-Sz-0Q3dxw2l1G');
-=======
 INSERT INTO `useraccessiblegroup` (`uAG_id`, `email`, `groupID`, `year`) VALUES
+(21, 'junanyeap@gmail.com', '1NbEH9cTWg3i3gVyC8y-Sz-0Q3dxw2l1G', ''),
+(22, 's104213070@mail1.ncnu.edu.tw', '1NbEH9cTWg3i3gVyC8y-Sz-0Q3dxw2l1G', ''),
+(23, 'junanbackup@gmail.com', '1NbEH9cTWg3i3gVyC8y-Sz-0Q3dxw2l1G', ''),
+(24, 's104213059@mail1.ncnu.edu.tw', '1NbEH9cTWg3i3gVyC8y-Sz-0Q3dxw2l1G', ''),
+(25, 'yranyran19@gmail.com', '1NbEH9cTWg3i3gVyC8y-Sz-0Q3dxw2l1G', ''),
+(26, 'kanjinterng@gmail.com', '1NbEH9cTWg3i3gVyC8y-Sz-0Q3dxw2l1G', ''),
 (39, 'junanyeap@gmail.com', '11bug-RkV_a0FirVOiNgeBhbRjFsLf3vq', '104'),
 (40, 'junanbackup@gmail.com', '11bug-RkV_a0FirVOiNgeBhbRjFsLf3vq', '105'),
 (41, 'kanjingterng@gmail.com', '11bug-RkV_a0FirVOiNgeBhbRjFsLf3vq', '105'),
 (42, 's104213070@mail1.ncnu.edu.tw', '11bug-RkV_a0FirVOiNgeBhbRjFsLf3vq', '105'),
 (43, 'junanyeap@gmail.com', '11bug-RkV_a0FirVOiNgeBhbRjFsLf3vq', '105');
->>>>>>> 4eeb84f922d971167a969380036479b086c2ede0
 
 --
 -- Indexes for dumped tables
