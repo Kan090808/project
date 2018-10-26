@@ -8,6 +8,11 @@ case 'logout':
   getClient(1);
   break;
 
+case 'searchGroup':
+  $string = $_REQUEST['searchContent'];
+  searchGroup($string);
+  break;
+
 case 'getClient':
   getClient(0);
   break;

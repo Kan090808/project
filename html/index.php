@@ -1,6 +1,14 @@
 <?php
 require("model.php");
 $_SESSION["status"] = checkLogin();
+echo "Search Group";
+echo '
+  <form action = "control.php" method="post">
+    <input type="hidden" name="pId" value="$currentFolderId.">
+    <input type="text" name="searchContent" value="">
+    <input type="submit" name="act" value="searchGroup">
+  </form>
+';
 if ($_SESSION["status"] == "false") {
   $name = "no login";
   echo "user : " . $name;
@@ -15,12 +23,14 @@ if ($_SESSION["status"] == "false") {
   echo $email;
   echo "<br/>";
 	$name = getName();
+  $role = getRole($email);
   echo $name;
   echo "<br/>";
-  list($groupName,$groupId,$currentYear)= getJoinedGroup($email);
+  list($groupName,$groupId,$currentYear) = getJoinedGroup($email);
   echo "<br/>";
 
   for($i=0;$i<count($groupName);$i++){
+    echo "<br/>";
     echo $groupName[$i].$currentYear[$i];
     // call this to get current year folder's id;
     $currentFolderId = getCurrentYearGroup($groupId[$i],$currentYear[$i]);
@@ -44,33 +54,34 @@ if ($_SESSION["status"] == "false") {
     
     // setting
     echo "<br/>"; 
-    list($name,$email,$phoneNumber,$position,$group) = settingGroup($groupId[$i]);
-    for($i = 1 ;$i < count($name) ; $i++){
-      echo "<br/>";
-      $realNo = $i+1;
-      echo "row no:".$realNo."";
-      echo $name[$i]."_".$email[$i]."_".$phoneNumber[$i]."_".$position[$i]."_".$group[$i];
-      echo "<a href='control.php?act=deleteSheetData&sheetId=".$sheetId."&no=".$realNo."'>  CLEAR</a>";
+    if($role == 99){
+      list($name,$email,$phoneNumber,$position,$group) = settingGroup($groupId[$i]);
+      for($x = 1 ;$x < count($name) ; $x++){
+        echo "<br/>";
+        $realNo = $x+1;
+        echo "row no:".$realNo."";
+        echo $name[$x]."_".$email[$x]."_".$phoneNumber[$x]."_".$position[$x]."_".$group[$x];
+        echo "<a href='control.php?act=deleteSheetData&sheetId=".$sheetId."&no=".$realNo."'>  CLEAR</a>";
+      }
+      echo '
+        <form action = "control.php" method="post">
+          Name: <input type="text" name="name">
+          E-mail: <input type="text" name="email">
+          tel:<input type="text" name="phoneNumber">
+          position:<input type="text" name="position">
+          group:<input type="text" name="group">
+          <input type="hidden" name="sheetId" value='.$sheetId.'>
+          <input type="submit" name="act" value="addData">
+        </form>
+      ';
     }
-    
-    echo '
-      <form action = "control.php" method="post">
-        Name: <input type="text" name="name">
-        E-mail: <input type="text" name="email">
-        tel:<input type="text" name="phoneNumber">
-        position:<input type="text" name="position">
-        group:<input type="text" name="group">
-        <input type="hidden" name="sheetId" value='.$sheetId.'>
-        <input type="submit" name="act" value="addData">
-      </form>
-    ';
-    // appendData2($name, $email, $phone, $position, $year, $groupId[$i]);
 
     // 檔案資料列出
     echo "<br/>"; 
-    for($i = 0 ;$i < count($fileName) ; $i++){
+    echo "aoe";
+    for($x = 0 ;$x < count($fileName) ; $x++){
       echo "<br/>";
-      echo $fileName[$i]."_".$fileId[$i]."_".$fileType[$i]."_".$fileSize[$i]."_".$lastMod[$i];
+      echo $fileName[$x]."_".$fileId[$x]."_".$fileType[$x]."_".$fileSize[$x]."_".$lastMod[$x];
     }
   }
 

@@ -16,7 +16,7 @@ function getGroupShared($folderId)
   $allSharedFileName = array();
   // now you get alot of file that in your sharedWithMe
   // filter them with their parent id, if their parent id is "104" folder id
-  // then this is the file that you want
+   // then this is the file that you want
   if (count($results->getFiles()) == 0) {
     print "getShared : No files found.\n";
   } else {
@@ -36,6 +36,38 @@ function getGroupShared($folderId)
     }
   }
 
+}
+function searchGroup($string){
+  header('Location: searchResult.php?value='.$string.'');
+}
+
+function checkIfJoinedThisGroup($groupId,$email){
+  // echo $groupId.$email;
+  $client = getClient(0);
+  $service = new Google_Service_Sheets($client);
+
+  $sql = "select * from `member`.`group` where groupID = '".$groupId."'";
+  $rt = getDb($sql,4);
+  $member_sheet_id = "";
+  while ($row=mysqli_fetch_row($rt)){
+    $member_sheet_id = $row[5];
+  }
+  // check status value in member_sheet_id, compare via email
+  $range = 'A2:L';
+  $response = $service->spreadsheets_values->get($member_sheet_id, $range);
+  $values = $response->getValues();
+  if (empty($values)) {
+    print "No data found.\n";
+  } else {
+    foreach ($values as $row) {
+      if ($row[5] == $email) {
+        $status = $row[11];
+        return $status;
+      }else{
+        return "null";
+      }
+    }
+  }
 }
 function editFilePermission($fileId){
   echo "editFilePermission";
@@ -97,12 +129,23 @@ function getEmail(){
     print "An error occurred: " . $e->getMessage();
   }
 }
-
+function getRole($email){
+  $sql = "select role from `member`.`useraccessiblegroup` where email = '".$email."'";
+  $rt = getDb($sql,4);
+  while ($row=mysqli_fetch_row($rt)){
+    $role = $row[0];
+    // array_push($joinedGroupId,$row[0]);
+  }
+  return $role;
+}
 function getCurrentYearGroup($groupId,$currentYear){
   return getFolderId($currentYear,$groupId);  
 }
 function getJoinedGroup($email)
 {
+  $f = array();
+  $s = array();
+  $c = array();
   $sql = "Select * from `member`.`useraccessiblegroup` where email='$email'; ";
   $accessible = array();
   $joinedGroupId = array();
@@ -116,7 +159,12 @@ function getJoinedGroup($email)
     for ($i = 0; $i < count($joinedGroupId); $i++) {
       $value = $joinedGroupId[$i];
       $sql2 = "select * from `member`.`group` where groupID='$value'";
-      list($f,$s,$c) = getDb($sql2,2);
+      list($ff,$ss,$cc) = getDb($sql2,2);
+      for($x = 0 ; $x < count($ff);$x++){
+        array_push($f,$ff[$x]);
+        array_push($s,$ss[$x]);
+        array_push($c,$cc[$x]);
+      }
     }
     return array($f,$s,$c);
   }else{
@@ -201,7 +249,38 @@ function insertDb($sql)
   $conn->close();
   // $conn->close();
 }
+function initMemberSheet($membersheetId){
+  $client = getClient(0);
+  $service = new Google_Service_Sheets($client);
+  $values = [
+    [
+      "time",
+      "name",
+      "gender",
+      "class",
+      "year",
+      "gmail",
+      "tel",
+      "diet",
+      "skill",
+      "prefer",
+      "rank",
+      "status"
+          // Cell values ...
+    ],
+      // Additional rows ...
+  ];
+  $body = new Google_Service_Sheets_ValueRange([
+    'values' => $values
+  ]);
+  $params = [
+    'valueInputOption' => 'RAW',
+    'insertDataOption' => 'INSERT_ROWS'
+  ];
 
+  $range = 'A:L';
+  $response = $service->spreadsheets_values->append($membersheetId, $range, $body, $params);
+}
 function getClientSheet()
 {
   $client = new Google_Client();
@@ -495,8 +574,6 @@ function getMemberSheet($type)
 
 function getFolderId($name, $folderId)
 {
-  echo "<br />";
-  echo $name;
   $client = getClient(0);
   $service = new Google_Service_Drive($client);
   $parameters['q'] = "mimeType='application/vnd.google-apps.folder' and '$folderId' in parents and trashed=false and (name contains '$name')";
@@ -683,9 +760,11 @@ function createFolder($name, $folderId, $isOnRoot, $spreadsheetId)
   ));
   $driveId = $results->getId();
   if ($isOnRoot == true) {
-    $sql = "insert into `member`.`group` (groupName, groupID, crew_sheet_id) 
-          VALUES ('$name','$driveId','$spreadsheetId')";
+    $membersheetId = createFile("sheet","memberSheet",$driveId);
+    $sql = "insert into `member`.`group` (groupName, groupID, crew_sheet_id,member_sheet_id) 
+          VALUES ('$name','$driveId','$spreadsheetId','$membersheetId')";
     insertDb($sql);
+    initMemberSheet($membersheetId);
   }
   return $results->getId();
 }
@@ -771,7 +850,7 @@ function createGroupFolderPermission($parentId, $folderId, $sheetId)
         'emailAddress' => $userEmail
       ));
 
-      $request = $service->permissions->create($folderId, $userPermission, array(
+      $request = $service->permissions->create($parentId, $userPermission, array(
         'fields' => 'id'
       ));
     }
@@ -813,7 +892,8 @@ function createFile($act, $newFileName, $pid)
     $file = $service->files->create($fileMetadata, array(
       'fields' => 'id'
     ));
-    printf("File ID: %s\n", $file->id);
+    return $file->id;
+    // printf("File ID: %s\n", $file->id);
   }
 
 }
@@ -902,10 +982,6 @@ function listFolderTree($location)
         //echo '<a href="control.php?act=listFolderTree&pId=' . $fileId . '">' . $fileName . '</a>';
         array_push($list, array($fileName, $fileId));
       }
-      // else {
-        // $fileName = $file->getName();
-        //echo "FILE" . $fileName;
-      // }
     }
     
   }
@@ -924,6 +1000,7 @@ function getGroupId($sheetId){
 }
 
 function settingGroup($groupId){
+  // echo $groupId;
   $name =array();
   $email =array();
   $phoneNumber =array();
