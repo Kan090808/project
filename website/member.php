@@ -14,7 +14,8 @@
       <div class="col-sm-4">
         <div class="card">
           <div class="card-header">
-            <h5 class="card-title">107屆幹部</h5>
+            <h5 class="card-title col-sm-6">107屆幹部</h5>
+            <button class="btn btn-success" data-toggle="modal" data-target="#addMember">新增幹部</button>
           </div>
           <div class="card-body">
             <div class="container" style="margin:0 auto">
@@ -56,71 +57,76 @@
                   </table>
                 </div>
               </div>
+
             </div>
           </div>
         </div>
       </div>
       <div class="col-sm-8">
-        <div class="card">
-          <div class="card-header">
-            <h5 class="card-title">搜尋會員</h5>
-          </div>
-          <div class="card-body">
-            <div class="container">
-              <div class="row">
-                <div class="form-group">
-                  <div class="col-sm-3">
-                    <input class="form-control" type="search" placeholder="名字">
-                  </div>
-                  <div class="col-sm-3">
-                    <input class="form-control" type="search" placeholder="科系">
-                  </div>
-                  <div class="col-sm-3">
-                    <input class="form-control" type="search" placeholder="興趣">
-                  </div>
-                  <div class="col-sm-3">
-                    <input class="form-control" type="search" placeholder="志願組別">
+      </div>
+      <div class="modal fade" id="addMember">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">搜尋會員</h5>
+            </div>
+            <div class="modal-body">
+              <div class="container">
+                <div class="row">
+                  <div class="form-group">
+                    <div class="col-sm-3">
+                      <input class="form-control" type="search" placeholder="名字">
+                    </div>
+                    <div class="col-sm-3">
+                      <input class="form-control" type="search" placeholder="科系">
+                    </div>
+                    <div class="col-sm-3">
+                      <input class="form-control" type="search" placeholder="興趣">
+                    </div>
+                    <div class="col-sm-3">
+                      <input class="form-control" type="search" placeholder="志願組別">
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div class="row" style="margin-top:10px">
-              <div class="col-sm-12 table-responsive">
-                  <table class="table table-striped">
-                    <thead>
-                      <tr>
-                        <th></th>
-                        <th>姓名</th>
-                        <th>系級</th>
-                        <th>興趣</th>
-                        <th>志願組別</th>
-                        <th>Gmail</th>
-                        <th>聯絡號碼</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td><input type="checkbox"></td>
-                        <td>簡靖騰</td>
-                        <td>資管4</td>
-                        <td>美術</td>
-                        <td>美宣組</td>
-                        <td>kanjingterng@gmail.com</td>
-                        <td>0905620013</td>
-                      </tr>
-                      <tr>
-                        <td><input type="checkbox"></td>
-                        <td>葉潤安</td>
-                        <td>資管4</td>
-                        <td>剪片</td>
-                        <td>資訊組</td>
-                        <td>junanyeap@gmail.com</td>
-                        <td>0901234567</td>
-                        <td></td>
-                      </tr>
-                    </tbody>
-                  </table>
+                <div class="row" style="margin-top:10px">
+                  <div class="col-sm-12 table-responsive">
+                    <table class="table table-striped">
+                      <thead>
+                        <tr>
+                          <th></th>
+                          <th>姓名</th>
+                          <th>系級</th>
+                          <th>興趣</th>
+                          <th>志願組別</th>
+                          <th>Gmail</th>
+                          <th>聯絡號碼</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td><input type="checkbox"></td>
+                          <td>簡靖騰</td>
+                          <td>資管4</td>
+                          <td>美術</td>
+                          <td>美宣組</td>
+                          <td>kanjingterng@gmail.com</td>
+                          <td>0905620013</td>
+                        </tr>
+                        <tr>
+                          <td><input type="checkbox"></td>
+                          <td>葉潤安</td>
+                          <td>資管4</td>
+                          <td>剪片</td>
+                          <td>資訊組</td>
+                          <td>junanyeap@gmail.com</td>
+                          <td>0901234567</td>
+                          <td></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <button class="btn btn-sm btn-success" style="margin-left:10px">確認新增</button>
                 </div>
-                <button class="btn btn-sm btn-success" style="margin-left:10px">新增幹部</button>
               </div>
             </div>
           </div>

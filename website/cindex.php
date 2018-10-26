@@ -14,10 +14,6 @@
           <li class="breadcrumb-item"><b>資訊組</b>
           </li>
         </ol>
-        <div class="col-sm-4">
-          <button type="button" class="btn btn-info txt-white">幹部名單</button>
-          <button type="button" class="btn btn-warning txt-white">設定</button>
-        </div>
       </div>
     </div>
     <div class="row" style="margin-top:25px">
