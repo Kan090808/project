@@ -45,7 +45,13 @@
   <link rel="stylesheet" type="text/css" href="assets/css/color/color-1.min.css" id="color" />
 
 </head>
-
+<script>
+var inp = document.getElementById('fileElementId');
+for (var i = 0; i < inp.files.length; ++i) {
+  var name = inp.files.item(i).name;
+  alert("here is a file name: " + name);
+}
+</script>
 <body class="sidebar-mini fixed">
   <div class="loader-bg">
     <div class="loader-bar">
