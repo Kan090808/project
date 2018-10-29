@@ -19,24 +19,30 @@ if ($_SESSION["status"] == "false") {
 		</form>
 		';
 } else {
-  $email = getEmail();
-  echo $email;
+  $initEmail = getEmail();
+  echo $initEmail;
   echo "<br/>";
 	$name = getName();
-  $role = getRole($email);
   echo $name;
   echo "<br/>";
-  list($groupName,$groupId,$currentYear) = getJoinedGroup($email);
+  list($groupName,$groupId,$currentYear) = getJoinedGroup($initEmail);
   echo "<br/>";
 
   for($i=0;$i<count($groupName);$i++){
+    $role = checkRole($initEmail,$groupId[$i]); 
     echo "<br/>";
     echo $groupName[$i].$currentYear[$i];
+    echo "
+      <form method='post' action='memberSheet.php'>
+        <input type='hidden' name='email' value='$initEmail'>
+        <input type='hidden' name='groupId' value='$groupId[$i]'>
+        <input type='submit' value = 'memberSheet'>
+      </form>";
     // call this to get current year folder's id;
     $currentFolderId = getCurrentYearGroup($groupId[$i],$currentYear[$i]);
     echo '
       <form action = "control.php" method="post">
-        <input type="hidden" name="pId" value="$currentFolderId.">
+        <input type="hidden" name="pId" value="$currentFolderId">
         <input type="hidden" name="type" value="2">
         <input type="submit" name="act" value="getFolderList">
       </form>
@@ -51,29 +57,6 @@ if ($_SESSION["status"] == "false") {
     listFolderTree($groupId[$i]);
     // 檔案列出 用$groupId[$i] 達成
     list($fileName,$fileId,$fileType,$lastMod,$fileSize)=getFolderList($groupId[$i],2);
-    
-    // setting
-    echo "<br/>"; 
-    if($role == 99){
-      list($name,$email,$phoneNumber,$position,$group) = settingGroup($groupId[$i]);
-      for($x = 1 ;$x < count($name) ; $x++){
-        echo "<br/>";
-        $realNo = $x+1;
-        echo "row no:".$realNo."";
-        echo $name[$x]."_".$email[$x]."_".$phoneNumber[$x]."_".$position[$x]."_".$group[$x];
-        echo "<a href='control.php?act=deleteSheetData&sheetId=".$sheetId."&no=".$realNo."'>  CLEAR</a>";
-      }
-      echo '
-        <form action = "control.php" method="post">
-          Name: <input type="text" name="name">
-          E-mail: <input type="text" name="email">
-          tel:<input type="text" name="phoneNumber">
-          position:<input type="text" name="position">
-          group:<input type="text" name="group">
-          <input type="hidden" name="sheetId" value='.$sheetId.'>
-          <input type="submit" name="act" value="addData">
-        </form>
-      ';
     }
 
     // 檔案資料列出
@@ -98,5 +81,5 @@ if ($_SESSION["status"] == "false") {
 		<input type="submit" name="act" value="logout"><br/>
 	</form>
 	';
-}
+
 ?>
