@@ -82,6 +82,17 @@
     }
   }
 </script>
+<script>
+    $('#member').click(function() {
+      $('#mainContent').load('member.php');
+    });
+    $('#folder').click(function() {
+      $('#mainContent').load('folder.php');
+    });
+    $('#club').click(function() {
+      $('#mainContent').load('club.php');
+    });
+</script>
 </body>
 
 </html>
