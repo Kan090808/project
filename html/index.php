@@ -50,7 +50,7 @@ if ($_SESSION["status"] == "false") {
     // 帶1進去，從model裡面echo出來
     // 帶2進去，回傳array
     getFolderList($currentFolderId,1);
-    $sheetId = getGroupSheet($groupId[$i]);
+    $sheetId = getGroupCrewSheet($groupId[$i]);
     // sidebar, $groupId[$i]
     // all year
     echo "<br/>-------------all year-------";

@@ -3,6 +3,18 @@ require ('model.php');
 
 $action = $_REQUEST['act'];
 switch ($action) {
+
+case 'approvedMember':
+  $no = $_REQUEST['no'];
+  $sheetId = $_REQUEST['sheetId'];
+  approvedMember($no,$sheetId);
+  break;
+
+case 'removeMember':
+  $no = $_REQUEST['no'];
+  $sheetId = $_REQUEST['sheetId'];
+  break;
+
 case 'logout':
 
   // logout();

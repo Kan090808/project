@@ -118,3 +118,24 @@ echo "
     <input type='hidden' name='type' value='2'>
     <input type='submit' value = 'go to your god damn group shared folder'>
   </form>";
+
+
+//
+for($x = 1 ;$x < count($name) ; $x++){
+    echo "<br/>";
+    $realNo = $x+1;
+    echo "row no:".$realNo."";
+    echo $name[$x]."_".$email[$x]."_".$phoneNumber[$x]."_".$position[$x]."_".$group[$x];
+    echo "<a href='control.php?act=deleteSheetData&sheetId=".$sheetId."&no=".$realNo."'>  CLEAR</a>";
+  }
+  echo '
+    <form action = "control.php" method="post">
+      Name: <input type="text" name="name">
+      E-mail: <input type="text" name="email">
+      tel:<input type="text" name="phoneNumber">
+      position:<input type="text" name="position">
+      group:<input type="text" name="group">
+      <input type="hidden" name="sheetId" value='.$sheetId.'>
+      <input type="submit" name="act" value="addData">
+    </form>
+  ';
