@@ -34,45 +34,58 @@
       </li>
     </ul>
     <!-- Sidebar Menu-->
-    <ul class="sidebar-menu">
+    <ul class="sidebar-menu" id="mainMenu">
+      <li class="nav-level">平臺</li>
+      <li id="club">
+        <a class="waves-effect waves-dark"><i class="icofont icofont-home-search"></i><span>搜尋社團</span></a>
+      </li>
+      <li>
+        <a class="waves-effect waves-dark"><i class="icofont icofont-ui-chat"></i></i><span>討論區</span></a>
+      </li>
       <li class="nav-level">社團</li>
-      <li class="treeview"><a class="waves-effect waves-dark" href="#!"><i class="icofont icofont-company"></i><span>暨馬同學會</span><i
+      <li class="treeview"><a class="waves-effect waves-dark" href="#!"><i class="icofont icofont-people"></i><span>暨馬同學會</span><i
             class="icon-arrow-down"></i></a>
         <ul class="treeview-menu">
-          <li>
-            <a class="waves-effect waves-dark txt-warning" href="#!">
-              <i class="icon-arrow-right"></i>
+          <li id="member">
+            <a class="waves-effect waves-dark txt-warning">
+            <i class="icofont icofont-ui-note"></i>
               幹部名單
             </a>
           </li>
           <li>
             <a class="waves-effect waves-dark" href="#!">
-              <i class="icon-arrow-right"></i>
+            <i class="icofont icofont-ui-home"></i>
               首頁
             </a>
           </li>
           <li>
             <a class="waves-effect waves-dark" href="#!">
-              <i class="icon-arrow-right"></i>
+            <i class="icofont icofont-calendar"></i>
               日曆
+            </a>
+          </li>
+          <li>
+            <a class="waves-effect waves-dark" id="folder">
+            <i class="icofont icofont-speech-comments"></i>
+              幹部討論區
             </a>
           </li>
           <li class="treeview">
             <a class="waves-effect waves-dark" href="#!">
-              <i class="icon-arrow-right"></i>
+            <i class="icofont icofont-briefcase-alt-2"></i>
               <span>組別</span>
               <i class="icon-arrow-down"></i>
             </a>
             <ul class="treeview-menu">
               <li>
                 <a class="waves-effect waves-dark" href="#!">
-                  <i class="icon-arrow-right"></i>
+                <i class="icofont icofont-briefcase-alt-2"></i>
                   財政
                 </a>
               </li>
               <li>
                 <a class="waves-effect waves-dark" href="#!">
-                  <i class="icon-arrow-right"></i>
+                <i class="icofont icofont-briefcase-alt-2"></i>
                   <span>活動組</span>
                 </a>
 
@@ -81,7 +94,7 @@
           </li>
           <li class="treeview">
             <a class="waves-effect waves-dark" href="#!">
-              <i class="icon-arrow-right"></i>
+            <i class="icofont icofont-social-aim"></i>
               <span>活動</span>
               <i class="icon-arrow-down"></i>
             </a>
@@ -89,7 +102,7 @@
             <ul class="treeview-menu">
               <li>
                 <a class="waves-effect waves-dark" href="#!">
-                  <i class="icon-arrow-right"></i>
+                <i class="icofont icofont-social-aim"></i>
                   校慶
                   <i class="icon-arrow-down"></i>
                 </a>
@@ -111,7 +124,7 @@
               </li>
               <li>
                 <a class="waves-effect waves-dark" href="#!">
-                  <i class="icon-arrow-right"></i>
+                <i class="icofont icofont-social-aim"></i>
                   大馬周
                   <i class="icon-arrow-down"></i>
                 </a>
@@ -135,7 +148,7 @@
           </li>
           <li class="treeview">
             <a class="waves-effect waves-dark" href="#!">
-              <i class="icon-arrow-right"></i>
+              <i class="icofont icofont-folder-search"></i>
               <span>歷屆</span>
               <i class="icon-arrow-down"></i>
             </a>
@@ -143,7 +156,7 @@
             <ul class="treeview-menu">
               <li>
                 <a class="waves-effect waves-dark" href="#!">
-                  <i class="icon-arrow-right"></i>
+                  <i class="icofont icofont-people"></i>
                   <b>107</b>
                   <i class="icon-arrow-down"></i>
                 </a>
@@ -247,7 +260,7 @@
           </li>
         </ul>
       </li>
-      <li class="treeview"><a class="waves-effect waves-dark" href="#!"><i class="icofont icofont-company"></i><span>僑生聯誼會</span><i
+      <li class="treeview"><a class="waves-effect waves-dark" href="#!"><i class="icofont icofont-people"></i><span>僑生聯誼會</span><i
             class="icon-arrow-down"></i></a>
         <ul class="treeview-menu">
           <li>

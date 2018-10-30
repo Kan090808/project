@@ -3,6 +3,7 @@
 
 <head>
   <title>Get File Details</title>
+  <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
 </head>
 
 <body style="font:15px Calibri;">
@@ -27,6 +28,16 @@
   <!-- <p>
     <input type="submit" value="Show Details" onclick="FileDetails()">
   </p> -->
+  <button>press</button>
+  <a>hello2</a>
+  <ul>
+    <li>hello</li>
+    <li><ul><li id="press">heheh</li></ul></li>
+  </ul>
+  <div id="divToReload">
+  </div>
+  <div id="divSrc">
+  </div>
 </body>
 <!-- <script>
   $("file").change(function () {
@@ -62,5 +73,22 @@
     }
   }
 </script>
+<script>
+// $("#press").click(function() {
+//   //$("#divToReload" ).load( "localhost/website/member.php");
+//   alert("success");
+// });
+// function pls(){
+  $(document).ready(function() {
 
+    $('#press').click(function() {
+
+      var url = 'member.php';
+      alert(event.target.id);
+      $('#divToReload').load('member.php');
+
+    });
+  });
+// }
+</script>
 </html>

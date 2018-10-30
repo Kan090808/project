@@ -2,11 +2,11 @@
   <div class="col-md-12">
     <div class="card">
       <div class="card-header">
-        <div class="col-sm-4">
-          <h1 class="card-title mb-0" style="font-weight:bold">貼文專區</h1>
+        <div class="col-sm-3">
+          <h1 class="card-title mb-0 " style="font-weight:bold">貼文專區</h1>
         </div>
         <div class="col-sm-8">
-          <button class="btn btn-success" data-toggle="modal" data-target="#newpost" style="margin-left:-40px">新增</button>
+          <button class="btn btn-success" data-toggle="modal" data-target="#newpost">新增</button>
         </div>
         <div class="modal fade" id="newpost">
           <div class="modal-dialog modal-lg" style="transform: translate(0, -50%);top: 50%;margin: 0 auto;">
