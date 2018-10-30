@@ -81,5 +81,4 @@ if ($_SESSION["status"] == "false") {
 		<input type="submit" name="act" value="logout"><br/>
 	</form>
 	';
-
 ?>

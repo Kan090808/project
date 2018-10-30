@@ -7,12 +7,13 @@ switch ($action) {
 case 'approvedMember':
   $no = $_REQUEST['no'];
   $sheetId = $_REQUEST['sheetId'];
-  approvedMember($no,$sheetId);
+  $approvedStatus = approvedMember($no,$sheetId);
   break;
 
 case 'removeMember':
   $no = $_REQUEST['no'];
   $sheetId = $_REQUEST['sheetId'];
+  $removeStatus = removeMember($no,$sheetId);
   break;
 
 case 'logout':
@@ -24,6 +25,8 @@ case 'logout':
 
 case 'newMemberDetail':
   $name = $_REQUEST['name'];
+  $id = $_REQUEST['id'];
+  $department = $_REQUEST['department'];
   $email = $_REQUEST['email'];
   $gender = $_REQUEST['gender'];
   $class = $_REQUEST['class'];
@@ -34,7 +37,7 @@ case 'newMemberDetail':
   $prefer = $_REQUEST['prefer'];
   $groupId = $_REQUEST['groupId'];
   $status = 0;
-  newMemberDetail($name,$email,$gender,$class,$year,$tel,$diet,$skill,$prefer,$groupId,$status);
+  newMemberDetail($name,$id,$email,$gender,$class,$department,$year,$tel,$diet,$skill,$prefer,$groupId,$status);
   header('Location: index.php');
   break;
 
@@ -176,6 +179,12 @@ case 'selectFirstSheet':
 
   session_destroy();
   echo "selectFirstSheet" . $rt;
+  break;
+
+case 'toCrew':
+  $no = $_REQUEST['no'];
+  $sheetId = $_REQUEST['sheetId'];
+  addMemberToCrewSheet($no,$sheetId);
   break;
 
 case 'readDb':

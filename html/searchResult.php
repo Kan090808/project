@@ -8,7 +8,7 @@ while ($row=mysqli_fetch_row($rt)){
 	$status = checkIfJoinedThisGroup($row[2],$email);
 	$groupId = $row[2];
 	echo $row[1]."---".$row[4];
-	if($status == null){
+	if($status == "null"){
 		echo "
 		    <form method='post' action='insertMember.php'>
 		      <input type='hidden' name='act' value='newMemberDetail'>

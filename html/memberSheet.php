@@ -11,9 +11,9 @@ echo "this test page is for view or edit memberSheet of a group<br/>";
 list($name,$email,$phoneNumber,$position,$group) = settingGroup($groupId);
 if($role >= 90){  
   $rt = printMemberSheetValue($sheetId,$role);
-  list($name,$gender,$class,$year,$gmail,$tel,$diet,$skill,$prefer,$status) = $rt;
+  list($name,$id,$gender,$class,$department,$year,$gmail,$tel,$diet,$skill,$prefer,$status) = $rt;
   for ($i=0;$i<count($name);$i++){
-    echo "<br/>".$i."_".$name[$i]."_".$gender[$i];
+    echo "<br/>".$i."_".$name[$i]."_".$class[$i];
     if($status[$i]==0){
       echo "__waiting to approved";
       echo '
@@ -23,13 +23,20 @@ if($role >= 90){
           <input type="submit" name="act" value="approvedMember">
         </form>
       ';
-    }else if($status == 1){
+    }else if($status[$i] == 1){
       echo "__member";
       echo '
         <form action = "control.php" method="post">
           <input type="hidden" name="no" value="'.$i.'">
           <input type="hidden" name="sheetId" value="'.$sheetId.'">
           <input type="submit" name="act" value="removeMember">
+        </form>
+      ';
+      echo '
+        <form action = "control.php" method="post">
+          <input type="hidden" name="no" value="'.$i.'">
+          <input type="hidden" name="sheetId" value="'.$sheetId.'">
+          <input type="submit" name="act" value="toCrew">
         </form>
       ';
     }
