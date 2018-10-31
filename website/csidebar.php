@@ -46,6 +46,12 @@
       <li class="treeview"><a class="waves-effect waves-dark" href="#!"><i class="icofont icofont-people"></i><span>暨馬同學會</span><i
             class="icon-arrow-down"></i></a>
         <ul class="treeview-menu">
+        <li id="join">
+            <a class="waves-effect waves-dark txt-success">
+            <i class="icofont icofont-ui-note"></i>
+              加入社團申請
+            </a>
+          </li>
           <li id="member">
             <a class="waves-effect waves-dark txt-warning">
             <i class="icofont icofont-ui-note"></i>

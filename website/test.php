@@ -4,14 +4,15 @@
 <head>
   <title>Get File Details</title>
   <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+  
 </head>
 
 <body style="font:15px Calibri;">
   <!--ADD INPUT OF TYPE FILE WITH THE MULTIPLE OPTION-->
   <p>
-    <input type="file" id="file" onchange="FileDetails()"multiple />
+    <input type="file" id="file" onchange="FileDetails()" multiple />
   </p>
-
+  <input type="checkbox" class="check">
   <!--SHOW RESULT HERE-->
   <p id="num"></p>
   <table>
@@ -28,16 +29,116 @@
   <!-- <p>
     <input type="submit" value="Show Details" onclick="FileDetails()">
   </p> -->
-  <button>press</button>
+  
+  <iframe src="https://drive.google.com/drive/my-drive" width="640" height="480"></iframe>
+  <iframe src="https://drive.google.com/embeddedfolderview?id=1MFPjsDX_TdMab2I9eztbpXKyU6izZc0c" width="100%"height="300px"></iframe>
+  <button id="calendar">press</button>
   <a>hello2</a>
+  <thead>
+    <tr>
+      <th><input type="checkbox" id="checkall" class="check"></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><input type="checkbox" class="check"></td>
+    </tr>
+    <tr>
+      <td><input type="checkbox" class="check"></td>
+    </tr>
+    <tr>
+      <td><input type="checkbox" class="check"></td>
+    </tr>
+  </tbody>
+  <div class="container" style="margin:0 auto">
+    <div class="table-responsive">
+      <table class="table table-striped" style="width:100%;">
+        <thead>
+          <tr>
+            <th><input type="checkbox" id="checkall" class="check"></th>
+            <th>姓名</th>
+            <th>性別</th>
+            <th>系所</th>
+            <th>班別</th>
+            <th>年級</th>
+            <th>Gmail</th>
+            <th>聯絡號碼</th>
+            <th>技術</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><input type="checkbox" class="check"></td>
+            <td>簡靖騰</td>
+            <td>男</td>
+            <td>資管</td>
+            <td>大學部</td>
+            <td>4</td>
+            <td>kanjingterng@gmail.com</td>
+            <td>0905620013</td>
+            <td>美術</td>
+          </tr>
+          <tr>
+            <td><input type="checkbox" class="check"></td>
+            <td>簡靖騰</td>
+            <td>男</td>
+            <td>資管</td>
+            <td>大學部</td>
+            <td>4</td>
+            <td>kanjingterng@gmail.com</td>
+            <td>0905620013</td>
+            <td>美術</td>
+          </tr>
+          <tr>
+            <td><input type="checkbox" class="check"></td>
+            <td>簡靖騰</td>
+            <td>男</td>
+            <td>資管</td>
+            <td>大學部</td>
+            <td>4</td>
+            <td>kanjingterng@gmail.com</td>
+            <td>0905620013</td>
+            <td>美術</td>
+          </tr>
+          <tr>
+            <td><input type="checkbox" class="check"></td>
+            <td>簡靖騰</td>
+            <td>男</td>
+            <td>資管</td>
+            <td>大學部</td>
+            <td>4</td>
+            <td>kanjingterng@gmail.com</td>
+            <td>0905620013</td>
+            <td>美術</td>
+          </tr>
+          <tr>
+            <td><input type="checkbox" class="check"></td>
+            <td>簡靖騰</td>
+            <td>男</td>
+            <td>資管</td>
+            <td>大學部</td>
+            <td>4</td>
+            <td>kanjingterng@gmail.com</td>
+            <td>0905620013</td>
+            <td>美術</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
   <ul>
     <li>hello</li>
-    <li><ul><li id="press">heheh</li></ul></li>
+    <li>
+      <ul>
+        <li id="press">heheh</li>
+      </ul>
+    </li>
   </ul>
+  <input type="number">
   <div id="divToReload">
   </div>
-  <div id="divSrc">
-  </div>
+  <iframe id="iframe" frameborder="5" width="100%" height="500px">
+  </iframe>
 </body>
 <!-- <script>
   $("file").change(function () {
@@ -74,21 +175,46 @@
   }
 </script>
 <script>
-// $("#press").click(function() {
-//   //$("#divToReload" ).load( "localhost/website/member.php");
-//   alert("success");
-// });
-// function pls(){
-  $(document).ready(function() {
+  // $("#press").click(function() {
+  //   //$("#divToReload" ).load( "localhost/website/member.php");
+  //   alert("success");
+  // });
+  // function pls(){
 
-    $('#press').click(function() {
+  $('#press').click(function () {
 
-      var url = 'member.php';
-      alert(event.target.id);
-      $('#divToReload').load('member.php');
+    var url = 'member.php';
+    alert(event.target.id);
+    $('#divToReload').load('member.php');
 
-    });
   });
-// }
+  $('#calendar').click(function () {
+
+    // var url = 'member.php';
+    // alert(event.target.id);
+    $('#iframe').attr('src', 'https://hackmd.io/IN2EwIUoS1G33PnDK9Iy1A?both');
+  });
+  // }
+    $("input[id='checkall']").click(function () {
+      $(".check").prop('checked', $(this).prop('checked'));
+  });
+  // $(document).ready(function () {
+  //   $('input[id="checkall"]').on('click', function () {
+  //     $(this).closest('table').find('tbody :checkbox')
+  //       .prop('checked', this.checked)
+  //       .closest('tr').toggleClass('selected', this.checked);
+  //   });
+  // $("input[id='checkall']").click(function () {
+  //   $('.check').not(this).prop('checked', this.checked);
+  // });
+  // $('input[id="checkall"]').change(function() {
+  //     $(this).closest('tbody').next().find('.check').prop('checked', this.checked);
+  // });
+  // $('input[id="checkall"]').change(function() {
+  //     var checkthis = $(this);
+  //     var checkboxes = $(checkthis).closest('tbody').next().find('.check');
+  //     checkboxes.prop("checked", checkthis.checked);
+  //   });
 </script>
+
 </html>
