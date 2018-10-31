@@ -5,6 +5,25 @@ require __DIR__ . '/vendor/autoload.php';
 if (isset($_POST['verCode'])) { //check if form was submitted
   $input = $_POST['verCode']; //get input text
 }
+function addMemberToCrewSheet($no,$membersheetId){
+  $no = $no + 2;
+  $client = getClient(0);
+  $service = new Google_Service_Sheets($client);
+  $range = 'A'.$no.':N'.$no;
+  $response = $service->spreadsheets_values->get($membersheetId, $range);
+  $values = $response->getValues();
+  $position = array();
+  $year = array();
+  $parent;
+  if (empty($values)) {
+    print "No data found.\n";
+  }
+  else {
+    foreach($values as $row) {
+      echo $row[1];
+    }
+  }
+}
 
 function appendData()
 {
@@ -33,6 +52,31 @@ function appendData2($name, $email, $phone, $position, $year, $fileId)
   $params = ['valueInputOption' => 'RAW', 'insertDataOption' => 'INSERT_ROWS'];
   $range = 'A2:F';
   $response = $service->spreadsheets_values->append($spreadsheetId, $range, $body, $params);
+}
+
+function approvedMember($no,$sheetId){
+  // echo $no.$groupId;
+  $no = $no + 2;
+  $client = getClient(0);
+  $service = new Google_Service_Sheets($client);
+  $range = 'N'.$no;
+  $returnValue = "true";
+  $valueInputOption = "USER_ENTERED";
+  $value = [
+    ["1"]
+    ];
+  $body = new Google_Service_Sheets_ValueRange(['values' => $value]);
+  $params = [
+      'valueInputOption' => $valueInputOption
+  ];
+  try{
+    $response = $service->spreadsheets_values->update($sheetId, $range, $body, $params);  
+  }
+  // 
+  catch(Exception $e){
+    $returnValue = "false";
+  }
+  return $returnValue;
 }
 
 function checkLogin()
@@ -77,16 +121,16 @@ function checkIfJoinedThisGroup($groupId, $email)
 
   // check status value in member_sheet_id, compare via email
 
-  $range = 'A2:L';
+  $range = 'A2:N';
   $response = $service->spreadsheets_values->get($member_sheet_id, $range);
   $values = $response->getValues();
   if (empty($values)) {
-    print "No data found.\n";
+    return "null";
   }
   else {
     foreach($values as $row) {
-      if ($row[5] == $email) {
-        $status = $row[11];
+      if ($row[7] == $email) {
+        $status = $row[13];
         return $status;
       }
       else {
@@ -626,6 +670,7 @@ function getDb($sql, $type)
     }
   }
   else
+
   if ($type == 3) {
     if (!$result) {
       trigger_error('Invalid query: ' . $conn->error);
@@ -867,10 +912,21 @@ function getGroupShared($folderId)
   }
 }
 
-function getGroupSheet($groupId)
+function getGroupCrewSheet($groupId)
 {
   $sql = "select * from `member`.`group` where groupID='" . $groupId . "'";
   return getDb($sql, 3);
+}
+
+function getGroupMemberSheet($groupId)
+{
+  $sql = "select * from `member`.`group` where groupID='" . $groupId . "'";
+  $rt = getDb($sql, 4);
+  $member_sheet_id = "";
+  while ($row = mysqli_fetch_row($rt)) {
+    $member_sheet_id = $row[5];
+  }
+  return $member_sheet_id;
 }
 
 function getGroupId($sheetId)
@@ -1181,7 +1237,7 @@ function initMemberSheet($membersheetId)
 {
   $client = getClient(0);
   $service = new Google_Service_Sheets($client);
-  $values = [["time", "name", "gender", "class", "year", "gmail", "tel", "diet", "skill", "prefer", "rank", "status"
+  $values = [["time", "name", "id", "gender", "class", "department", "year", "gmail", "tel", "diet", "skill", "prefer", "rank", "status"
 
   // Cell values ...
 
@@ -1192,7 +1248,7 @@ function initMemberSheet($membersheetId)
   ];
   $body = new Google_Service_Sheets_ValueRange(['values' => $values]);
   $params = ['valueInputOption' => 'RAW', 'insertDataOption' => 'INSERT_ROWS'];
-  $range = 'A:L';
+  $range = 'A:N';
   $response = $service->spreadsheets_values->append($membersheetId, $range, $body, $params);
 }
 
@@ -1232,7 +1288,7 @@ function listFolderTree($location)
   return $list;
 }
 
-function newMemberDetail($name,$email,$gender,$class,$year,$tel,$diet,$skill,$prefer,$groupId,$status){
+function newMemberDetail($name,$id,$email,$gender,$class,$department,$year,$tel,$diet,$skill,$prefer,$groupId,$status){
   $time = date(DATE_RFC2822);
   $sql = "select * from `member`.`group` where groupID= '" . $groupId . "'";
   $rt = getDb($sql,4);
@@ -1242,7 +1298,7 @@ function newMemberDetail($name,$email,$gender,$class,$year,$tel,$diet,$skill,$pr
   }
   $client = getClient(0);
   $service = new Google_Service_Sheets($client);
-  $values = [[$time, $name,$gender,$class,$year,$email,$tel,$diet,$skill,$prefer,0,$status
+  $values = [[$time, $name,$id,$gender,$class,$department,$year,$email,$tel,$diet,$skill,$prefer,0,$status
 
   // Cell values ...
 
@@ -1253,9 +1309,75 @@ function newMemberDetail($name,$email,$gender,$class,$year,$tel,$diet,$skill,$pr
   ];
   $body = new Google_Service_Sheets_ValueRange(['values' => $values]);
   $params = ['valueInputOption' => 'RAW', 'insertDataOption' => 'INSERT_ROWS'];
-  $range = 'A:L';
+  $range = 'A:N';
   $response = $service->spreadsheets_values->append($member_sheet_id, $range, $body, $params);
 }
+
+function printMemberSheetValue($member_sheet_id,$role){
+  $name = array();
+  $gender = array();
+  $id = array();
+  $class = array();
+  $department = array();
+  $year = array();
+  $gmail = array();
+  $tel = array();
+  $diet = array();
+  $skill = array();
+  $prefer = array();
+  $status = array();
+  
+  $client = getClient(0);
+  $service = new Google_Service_Sheets($client);
+  $range = 'A2:N';
+  $response = $service->spreadsheets_values->get($member_sheet_id, $range);
+  $values = $response->getValues();
+  if (empty($values)) {
+    print "PrintMemberSheetValue : No data found.\n";
+  }
+  else {
+    foreach($values as $row) {
+      array_push($name,$row[1]);
+      array_push($id,$row[2]);
+      array_push($gender,$row[3]);
+      array_push($class,$row[4]);
+      array_push($department,$row[5]);
+      array_push($year,$row[6]);
+      array_push($gmail,$row[7]);
+      array_push($tel,$row[8]);
+      array_push($diet,$row[9]);
+      array_push($skill,$row[10]);
+      array_push($prefer,$row[11]);
+      array_push($status,$row[13]);
+    }
+    return array($name,$id,$gender,$class,$department,$year,$gmail,$tel,$diet,$skill,$prefer,$status);
+  }
+}
+
+function removeMember($no,$sheetId){
+  $no = $no + 2;
+  $client = getClient(0);
+  $service = new Google_Service_Sheets($client);
+  $range = 'A'.$no.':N'.$no;
+  $returnValue = "true";
+  $valueInputOption = "USER_ENTERED";
+  $value = [
+    ["1"]
+    ];
+  $requestBody = new Google_Service_Sheets_ClearValuesRequest();
+  $params = [
+      'valueInputOption' => $valueInputOption
+  ];
+  try{
+    $response = $service->spreadsheets_values->clear($sheetId, $range, $requestBody);  
+  }
+  // 
+  catch(Exception $e){
+    $returnValue = "false";
+  }
+  return $returnValue;
+}
+
 function searchGroup($string)
 {
   header('Location: searchResult.php?value=' . $string . '');
@@ -1295,14 +1417,14 @@ function settingGroup($groupId)
   $phoneNumber = array();
   $position = array();
   $group = array();
-  $sheetId = getGroupSheet($groupId);
+  $sheetId = getGroupCrewSheet($groupId);
   $client = getClientSheet();
   $service = new Google_Service_Sheets($client);
   $range = "B:F";
   $response = $service->spreadsheets_values->get($sheetId, $range);
   $values = $response->getValues();
   if (empty($values)) {
-    print "No data found.\n";
+    print "settingGroup : No data found.\n";
   }
   else {
     foreach($values as $row) {

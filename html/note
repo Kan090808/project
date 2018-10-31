@@ -59,3 +59,11 @@
 problem :
 --[fix]if share 104 folder to a user, that mean this user has all the folder permission[can set r or rw] under 104 folder
 --[fix]get shared,filter by id, not specific name
+
+memberSheet -> 幹部
+幹部名單 組長組員 社長
+規避會長開folder
+
+帖文 標題，內容，掛載google服務（新增，選擇），上傳檔案
+
+報名表單（產生簽到單）

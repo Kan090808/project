@@ -3,30 +3,44 @@ require("model.php");
 
 $email = $_REQUEST['email'];
 $groupId = $_REQUEST['groupId'];
-$sheetId = getGroupSheet($groupId);
+$sheetId = getGroupMemberSheet($groupId);
 $role = checkRole($email,$groupId);
 // setting
-echo "<br/>";
+echo "this test page is for view or edit memberSheet of a group<br/>";
+
 list($name,$email,$phoneNumber,$position,$group) = settingGroup($groupId);
-if($role > 90){  
-  for($x = 1 ;$x < count($name) ; $x++){
-    echo "<br/>";
-    $realNo = $x+1;
-    echo "row no:".$realNo."";
-    echo $name[$x]."_".$email[$x]."_".$phoneNumber[$x]."_".$position[$x]."_".$group[$x];
-    echo "<a href='control.php?act=deleteSheetData&sheetId=".$sheetId."&no=".$realNo."'>  CLEAR</a>";
+if($role >= 90){  
+  $rt = printMemberSheetValue($sheetId,$role);
+  list($name,$id,$gender,$class,$department,$year,$gmail,$tel,$diet,$skill,$prefer,$status) = $rt;
+  for ($i=0;$i<count($name);$i++){
+    echo "<br/>".$i."_".$name[$i]."_".$class[$i];
+    if($status[$i]==0){
+      echo "__waiting to approved";
+      echo '
+        <form action = "control.php" method="post">
+          <input type="hidden" name="no" value="'.$i.'">
+          <input type="hidden" name="sheetId" value="'.$sheetId.'">
+          <input type="submit" name="act" value="approvedMember">
+        </form>
+      ';
+    }else if($status[$i] == 1){
+      echo "__member";
+      echo '
+        <form action = "control.php" method="post">
+          <input type="hidden" name="no" value="'.$i.'">
+          <input type="hidden" name="sheetId" value="'.$sheetId.'">
+          <input type="submit" name="act" value="removeMember">
+        </form>
+      ';
+      echo '
+        <form action = "control.php" method="post">
+          <input type="hidden" name="no" value="'.$i.'">
+          <input type="hidden" name="sheetId" value="'.$sheetId.'">
+          <input type="submit" name="act" value="toCrew">
+        </form>
+      ';
+    }
   }
-  echo '
-    <form action = "control.php" method="post">
-      Name: <input type="text" name="name">
-      E-mail: <input type="text" name="email">
-      tel:<input type="text" name="phoneNumber">
-      position:<input type="text" name="position">
-      group:<input type="text" name="group">
-      <input type="hidden" name="sheetId" value='.$sheetId.'>
-      <input type="submit" name="act" value="addData">
-    </form>
-  ';
 }else{
 	for($x = 1 ;$x < count($name) ; $x++){
     echo "<br/>";
