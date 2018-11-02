@@ -61,7 +61,7 @@
       // THE TOTAL FILE COUNT.
       document.getElementById('num').innerHTML =
         '<b>已選擇: ' + fi.files.length + '個檔案</b></br >';
-      
+
       // RUN A LOOP TO CHECK EACH SELECTED FILE.
       for (var i = 0; i <= fi.files.length - 1; i++) {
 
@@ -71,8 +71,8 @@
         // SHOW THE EXTRACTED DETAILS OF THE FILE.
         document.getElementById('tb').innerHTML =
           document.getElementById('tb').innerHTML + '<tr><td> ' +
-          fname + '</td><td>' + fsize + 'bytes</td><td>'+
-          '<button type="button" class="close" aria-label="close">'+
+          fname + '</td><td>' + fsize + 'bytes</td><td>' +
+          '<button type="button" class="close" aria-label="close">' +
           '<span aria-hidden="true">&times;</span></button></td></tr>';
       }
     } else {
@@ -83,15 +83,24 @@
   }
 </script>
 <script>
-    $('#member').click(function() {
-      $('#mainContent').load('member.php');
-    });
-    $('#folder').click(function() {
-      $('#mainContent').load('folder.php');
-    });
-    $('#club').click(function() {
-      $('#mainContent').load('club.php');
-    });
+  $('#join').click(function () {
+    $('#mainContent').load('join.php');
+  });
+  $('#member').click(function () {
+    $('#mainContent').load('member.php');
+  });
+  $('#folder').click(function () {
+    $('#mainContent').load('folder.php');
+  });
+  $('#club').click(function () {
+    $('#mainContent').load('club.php');
+  });
+  $("input[id='checkall']").click(function () {
+      $("table .check").prop('checked', $(this).prop('checked'));
+  });
+  // $("#checkall").click(function(){
+  //   $('.check').not(this).prop('checked', this.checked);
+  // });
 </script>
 </body>
 
