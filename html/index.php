@@ -19,6 +19,7 @@ if ($_SESSION["status"] == "false") {
 		</form>
 		';
 } else {
+  test();
   $initEmail = getEmail();
   echo $initEmail;
   echo "<br/>";
@@ -61,7 +62,6 @@ if ($_SESSION["status"] == "false") {
 
     // 檔案資料列出
     echo "<br/>"; 
-    echo "aoe";
     for($x = 0 ;$x < count($fileName) ; $x++){
       echo "<br/>";
       echo $fileName[$x]."_".$fileId[$x]."_".$fileType[$x]."_".$fileSize[$x]."_".$lastMod[$x];
