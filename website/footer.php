@@ -89,11 +89,17 @@
   $('#member').click(function () {
     $('#mainContent').load('member.php');
   });
+  $('#club').click(function () {
+    $('#mainContent').load('club.php');
+  });
+  $('#calendar').click(function () {
+    $('#mainContent').load('calendar.php');
+  });
   $('#folder').click(function () {
     $('#mainContent').load('folder.php');
   });
-  $('#club').click(function () {
-    $('#mainContent').load('club.php');
+  $('#searchclub').click(function () {
+    $('#mainContent').load('searchclub.php');
   });
   $("input[id='checkall']").click(function () {
       $("table .check").prop('checked', $(this).prop('checked'));

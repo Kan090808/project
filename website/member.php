@@ -9,7 +9,7 @@
     <div class="col-sm-6">
       <div class="card">
         <div class="card-header">
-          <h5 class="card-title col-sm-8">107屆幹部</h5>
+          <h5 class="card-title col-sm-8">107屆幹部名單</h5>
           <button class="btn btn-success" data-toggle="modal" data-target="#addMember">新增</button>
           <button class="btn btn-info">儲存</button>
         </div>
@@ -58,7 +58,7 @@
     <div class="col-sm-6">
       <div class="card">
         <div class="card-header">
-          <h5 class="card-title col-sm-8">108屆幹部</h5>
+          <h5 class="card-title col-sm-8">108屆幹部名單</h5>
           <button class="btn btn-success" data-toggle="modal" data-target="#addMember">新增</button>
           <button class="btn btn-info">儲存</button>
         </div>

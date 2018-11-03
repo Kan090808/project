@@ -172,6 +172,7 @@ $.pushMenu = {
                 $("body").removeClass('sidebar-open');
             }
         });
+        
     }
 };
 $.tree = function(menu) {

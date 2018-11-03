@@ -46,12 +46,13 @@
   <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
 </head>
 <script>
-var inp = document.getElementById('fileElementId');
+  var inp = document.getElementById('fileElementId');
 for (var i = 0; i < inp.files.length; ++i) {
   var name = inp.files.item(i).name;
   alert("here is a file name: " + name);
 }
 </script>
+
 <body class="sidebar-mini fixed">
   <div class="loader-bg">
     <div class="loader-bar">
