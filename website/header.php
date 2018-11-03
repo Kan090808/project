@@ -44,6 +44,7 @@
   <!--color css-->
   <link rel="stylesheet" type="text/css" href="assets/css/color/color-1.min.css" id="color" />
 
+  <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
 </head>
 
 <body class="sidebar-mini fixed">

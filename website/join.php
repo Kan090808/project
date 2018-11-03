@@ -8,7 +8,7 @@
     <div class="col-sm-12">
       <div class="card">
         <div class="card-header">
-          <h5 class="card-title col-sm-8">加入社團名單</h5>
+          <h5 class="card-title col-sm-8">加入社團申請</h5>
           <button class="btn btn-success" data-toggle="modal" data-target="#addMember">批準</button>
           <button class="btn btn-warning">拒絕</button>
         </div>

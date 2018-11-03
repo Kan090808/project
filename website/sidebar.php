@@ -39,26 +39,42 @@
     </ul>
     <!-- Sidebar Menu-->
     <ul class="sidebar-menu">
-      <li class="active treeview">
-        <a class="waves-effect waves-dark" href="index.php">
-          <i class="icon-speedometer"></i><span>設定</span>
-        </a>
+      <li class="nav-level">平臺</li>
+      <li id="club">
+        <a class="waves-effect waves-dark"><i class="icofont icofont-home-search"></i><span>搜尋社團</span></a>
+      </li>
+      <li>
+        <a class="waves-effect waves-dark"><i class="icofont icofont-ui-chat"></i></i><span>討論區</span></a>
       </li>
       <?php if($_SESSION["status"] == "true"){
         for($i=0;$i<count($groupName);$i++){
           echo '<li class="nav-level">社團</li>
       <li class="treeview"><a class="waves-effect waves-dark" href="#!"><i class="icofont icofont-company"></i><span>'.$groupName[$i].'</span><i
             class="icon-arrow-down"></i></a>
-        <ul class="treeview-menu">
-          <li>
+        <ul class="treeview-menu">';
+          if(!isset($_SESSION['notCrew'])){
+            echo '<li id="join">
+            <a class="waves-effect waves-dark txt-success">
+              <i class="icofont icofont-ui-note"></i>
+              加入社團申請
+            </a>
+          </li>
+          <li id="member">
+            <a class="waves-effect waves-dark txt-warning">
+              <i class="icofont icofont-ui-note"></i>
+              幹部名單
+            </a>
+          </li>';
+          };
+          echo '<li>
             <a class="waves-effect waves-dark" href="#!">
               <i class="icon-arrow-right"></i>
               首頁
             </a>
           </li>
-          <li>
+          <li id="calendar">
             <a class="waves-effect waves-dark" href="#!">
-              <i class="icon-arrow-right"></i>
+              <i class="icofont icofont-calendar"></i>
               日曆
             </a>
           </li>';

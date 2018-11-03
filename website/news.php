@@ -15,9 +15,12 @@
                   <div class="row">
                     <span class="col-xs-2 col-md-1"><img class="img-circle " src="assets/images/avatar-1.png" style="width:40px;"
                         alt="User Image"></span>
-                    <div class="col-xs-10">
+                    <div class="col-xs-8">
                       <b>簡靖騰</b>
                       <div class="small txt-white">November 2017</div>
+                    </div>
+                    <div class="col-sm-2">
+                      <button class="btn btn-info">展開</button>
                     </div>
                   </div>
                 </div>

@@ -1,3 +1,4 @@
+<?php $v="200px"?>
 <!DOCTYPE html>
 <html>
 
@@ -29,10 +30,21 @@
   <!-- <p>
     <input type="submit" value="Show Details" onclick="FileDetails()">
   </p> -->
-  
-  <iframe src="https://drive.google.com/drive/my-drive" width="640" height="480"></iframe>
-  <iframe src="https://drive.google.com/embeddedfolderview?id=1MFPjsDX_TdMab2I9eztbpXKyU6izZc0c" width="100%"height="300px"></iframe>
-  <button id="calendar">press</button>
+  <iframe src="https://calendar.google.com/calendar/embed?mode=AGENDA&amp;height=600&amp;wkst=1&amp;bgcolor=%23FFFFFF&amp;src=kanjingterng%40gmail.com&amp;color=%2329527A&amp;ctz=Asia%2FShanghai&amp;dates=20100717%2F20180725" style="border-width:0" width="800" height="600" frameborder="0" scrolling="no"></iframe>  
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+<div class="g-hangout" data-render="createhangout"></div>
+  <iframe src="https://docs.google.com/presentation/d/e/2PACX-1vQcN72l7wmwfQKPDMUbYv6igkgz0fgghvApjI7FAPFJTq9R3ubOocwobez3k2CCI8b33TSMSPJCAEbG/embed?start=true&loop=true&delayms=3000" frameborder="0" width="480" height="299" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
+  <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSfPB8WRtxptXI8uU8eGEvKp2QvwUOHrzQpO_WY_ffgz9dQTBg/viewform?embedded=true" width="100%" height="397" frameborder="0" marginheight="0" marginwidth="0"/>正在加载...</iframe>
+  <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vTyzzbIUlf-RrdZSnX8CTYdDZ8AkDtEbAnLGZcZ49sYefQvnmsDorUoWnhVlNdoGmRMdysGEnamInnn/pubhtml?gid=0&amp;single=true&amp;widget=true&amp;headers=false" width="100%" height="500px  "></iframe>
+  <button id="size">size</button>
+  <div class="responsive">
+  <iframe src="https://docs.google.com/document/d/e/2PACX-1vTMs-NT7BkQzIhEYnE-q8rBbEBWEaf0UmP0Y0jczjZ-TtaQJYggKlxg1_P2UX6srJ6f05ys5cvlOQ2U/pub?embedded=true" style="width:80%; height:100%; border:1;"></iframe><iframe src="https://drive.google.com/drive/my-drive" width="640" height="480"></iframe>
+    </div>
+    <iframe src="https://docs.google.com/spreadsheets/u/0/d/10jJ-0gnTzNusJ9FryhixVrp4ScjPJzcT3oVKzUMr_BQ/htmlembed/sheet#gid=0"></iframe>
+  <div style="width:100%">
+      <iframe src="https://drive.google.com/embeddedfolderview?id=1MFPjsDX_TdMab2I9eztbpXKyU6izZc0c" width="100%"height="300px"></iframe>
+  </div>
+        <button id="calendar">press</button>
   <a>hello2</a>
   <thead>
     <tr>
@@ -146,6 +158,7 @@
       })
 </script> -->
 <script>
+  
   function FileDetails() {
 
     // GET THE FILE INPUT.
@@ -188,12 +201,12 @@
     $('#divToReload').load('member.php');
 
   });
-  $('#calendar').click(function () {
+  // $('#calendar').click(function () {
 
-    // var url = 'member.php';
-    // alert(event.target.id);
-    $('#iframe').attr('src', 'https://hackmd.io/IN2EwIUoS1G33PnDK9Iy1A?both');
-  });
+  //   // var url = 'member.php';
+  //   // alert(event.target.id);
+  //   $('#iframe').attr('src', 'https://hackmd.io/IN2EwIUoS1G33PnDK9Iy1A?both');
+  // });
   // }
     $("input[id='checkall']").click(function () {
       $(".check").prop('checked', $(this).prop('checked'));
@@ -216,5 +229,9 @@
   //     checkboxes.prop("checked", checkthis.checked);
   //   });
 </script>
-
+<script type="text/javascript">
+    $('#size').click(function () {
+        $("iframe").height(100%);
+    });
+</script>
 </html>

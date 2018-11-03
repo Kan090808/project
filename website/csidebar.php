@@ -14,29 +14,29 @@
       <li>
         <a class="waves-effect waves-dark" href="profile.html">
           <i class="icon-user"></i>
-          <span class="menu-text">View Profile</span>
+          <span class="menu-text">個人資料</span>
           <span class="selected"></span>
         </a>
       </li>
       <li>
         <a class="waves-effect waves-dark" href="javascript:void(0)">
           <i class="icon-settings"></i>
-          <span class="menu-text">Settings</span>
+          <span class="menu-text">設定</span>
           <span class="selected"></span>
         </a>
       </li>
       <li>
         <a class="waves-effect waves-dark" href="javascript:void(0)">
           <i class="icon-logout"></i>
-          <span class="menu-text">Logout</span>
+          <span class="menu-text">登出</span>
           <span class="selected"></span>
         </a>
       </li>
     </ul>
     <!-- Sidebar Menu-->
-    <ul class="sidebar-menu" id="mainMenu">
+    <ul class="sidebar-menu" id="mainMenu" >
       <li class="nav-level">平臺</li>
-      <li id="club">
+      <li id="searchclub">
         <a class="waves-effect waves-dark"><i class="icofont icofont-home-search"></i><span>搜尋社團</span></a>
       </li>
       <li>
@@ -46,52 +46,52 @@
       <li class="treeview"><a class="waves-effect waves-dark" href="#!"><i class="icofont icofont-people"></i><span>暨馬同學會</span><i
             class="icon-arrow-down"></i></a>
         <ul class="treeview-menu">
-        <li id="join">
+          <li id="join">
             <a class="waves-effect waves-dark txt-success">
-            <i class="icofont icofont-ui-note"></i>
+              <i class="icofont icofont-ui-note"></i>
               加入社團申請
             </a>
           </li>
           <li id="member">
             <a class="waves-effect waves-dark txt-warning">
-            <i class="icofont icofont-ui-note"></i>
+              <i class="icofont icofont-ui-note"></i>
               幹部名單
             </a>
           </li>
-          <li>
+          <li id="club">
             <a class="waves-effect waves-dark" href="#!">
-            <i class="icofont icofont-ui-home"></i>
+              <i class="icofont icofont-ui-home"></i>
               首頁
             </a>
           </li>
-          <li>
+          <li id="calendar">
             <a class="waves-effect waves-dark" href="#!">
-            <i class="icofont icofont-calendar"></i>
+              <i class="icofont icofont-calendar"></i>
               日曆
             </a>
           </li>
           <li>
             <a class="waves-effect waves-dark" id="folder">
-            <i class="icofont icofont-speech-comments"></i>
+              <i class="icofont icofont-speech-comments"></i>
               幹部討論區
             </a>
           </li>
           <li class="treeview">
             <a class="waves-effect waves-dark" href="#!">
-            <i class="icofont icofont-briefcase-alt-2"></i>
+              <i class="icofont icofont-briefcase-alt-2"></i>
               <span>組別</span>
               <i class="icon-arrow-down"></i>
             </a>
             <ul class="treeview-menu">
               <li>
                 <a class="waves-effect waves-dark" href="#!">
-                <i class="icofont icofont-briefcase-alt-2"></i>
+                  <i class="icofont icofont-briefcase-alt-2"></i>
                   財政
                 </a>
               </li>
               <li>
                 <a class="waves-effect waves-dark" href="#!">
-                <i class="icofont icofont-briefcase-alt-2"></i>
+                  <i class="icofont icofont-briefcase-alt-2"></i>
                   <span>活動組</span>
                 </a>
 
@@ -100,7 +100,7 @@
           </li>
           <li class="treeview">
             <a class="waves-effect waves-dark" href="#!">
-            <i class="icofont icofont-social-aim"></i>
+              <i class="icofont icofont-social-aim"></i>
               <span>活動</span>
               <i class="icon-arrow-down"></i>
             </a>
@@ -108,7 +108,7 @@
             <ul class="treeview-menu">
               <li>
                 <a class="waves-effect waves-dark" href="#!">
-                <i class="icofont icofont-social-aim"></i>
+                  <i class="icofont icofont-social-aim"></i>
                   校慶
                   <i class="icon-arrow-down"></i>
                 </a>
@@ -130,7 +130,7 @@
               </li>
               <li>
                 <a class="waves-effect waves-dark" href="#!">
-                <i class="icofont icofont-social-aim"></i>
+                  <i class="icofont icofont-social-aim"></i>
                   大馬周
                   <i class="icon-arrow-down"></i>
                 </a>

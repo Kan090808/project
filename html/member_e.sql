@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 23, 2018 at 02:32 PM
+-- Generation Time: Oct 31, 2018 at 03:47 AM
 -- Server version: 10.1.35-MariaDB
 -- PHP Version: 7.2.9
 
@@ -42,7 +42,8 @@ CREATE TABLE `group` (
 --
 
 INSERT INTO `group` (`id_group`, `groupName`, `groupID`, `crew_sheet_id`, `currentYear`, `member_sheet_id`) VALUES
-(73, '暨馬同學會', '11bug-RkV_a0FirVOiNgeBhbRjFsLf3vq', '1x3G0jigHF81fYYvgzOmjo2SUS6MoIrhXXswedQxaS-k', '105', '1x3G0jigHF81fYYvgzOmjo2SUS6MoIrhXXswedQxaS-k');
+(73, '暨馬同學會', '11bug-RkV_a0FirVOiNgeBhbRjFsLf3vq', '1x3G0jigHF81fYYvgzOmjo2SUS6MoIrhXXswedQxaS-k', '105', '1x3G0jigHF81fYYvgzOmjo2SUS6MoIrhXXswedQxaS-k'),
+(77, 'testgroup', '1FNWlbEzQxhuQjekZbvyuzAOFEExFl-TY', '1Ei9A0woqv9iQWBPuCEiwgeDwZYhF_MsUvi49dzYRhmI', '105', '1gZktJWaw3VpDiF8AcMdP8_gDOWnnkZJPcvxguxYv3w0');
 
 -- --------------------------------------------------------
 
@@ -75,25 +76,25 @@ CREATE TABLE `useraccessiblegroup` (
   `uAG_id` int(11) NOT NULL,
   `email` varchar(320) COLLATE utf8_unicode_ci NOT NULL,
   `groupID` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
-  `year` varchar(10) COLLATE utf8_unicode_ci NOT NULL
+  `year` varchar(10) COLLATE utf8_unicode_ci NOT NULL,
+  `role` int(99) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `useraccessiblegroup`
 --
 
-INSERT INTO `useraccessiblegroup` (`uAG_id`, `email`, `groupID`, `year`) VALUES
-(21, 'junanyeap@gmail.com', '1NbEH9cTWg3i3gVyC8y-Sz-0Q3dxw2l1G', ''),
-(22, 's104213070@mail1.ncnu.edu.tw', '1NbEH9cTWg3i3gVyC8y-Sz-0Q3dxw2l1G', ''),
-(23, 'junanbackup@gmail.com', '1NbEH9cTWg3i3gVyC8y-Sz-0Q3dxw2l1G', ''),
-(24, 's104213059@mail1.ncnu.edu.tw', '1NbEH9cTWg3i3gVyC8y-Sz-0Q3dxw2l1G', ''),
-(25, 'yranyran19@gmail.com', '1NbEH9cTWg3i3gVyC8y-Sz-0Q3dxw2l1G', ''),
-(26, 'kanjinterng@gmail.com', '1NbEH9cTWg3i3gVyC8y-Sz-0Q3dxw2l1G', ''),
-(39, 'junanyeap@gmail.com', '11bug-RkV_a0FirVOiNgeBhbRjFsLf3vq', '104'),
-(40, 'junanbackup@gmail.com', '11bug-RkV_a0FirVOiNgeBhbRjFsLf3vq', '105'),
-(41, 'kanjingterng@gmail.com', '11bug-RkV_a0FirVOiNgeBhbRjFsLf3vq', '105'),
-(42, 's104213070@mail1.ncnu.edu.tw', '11bug-RkV_a0FirVOiNgeBhbRjFsLf3vq', '105'),
-(43, 'junanyeap@gmail.com', '11bug-RkV_a0FirVOiNgeBhbRjFsLf3vq', '105');
+INSERT INTO `useraccessiblegroup` (`uAG_id`, `email`, `groupID`, `year`, `role`) VALUES
+(39, 'junanyeap@gmail.com', '11bug-RkV_a0FirVOiNgeBhbRjFsLf3vq', '104', 99),
+(40, 'junanbackup@gmail.com', '11bug-RkV_a0FirVOiNgeBhbRjFsLf3vq', '105', 99),
+(41, 'kanjingterng@gmail.com', '11bug-RkV_a0FirVOiNgeBhbRjFsLf3vq', '105', 99),
+(42, 's104213070@mail1.ncnu.edu.tw', '11bug-RkV_a0FirVOiNgeBhbRjFsLf3vq', '105', 99),
+(43, 'junanyeap@gmail.com', '11bug-RkV_a0FirVOiNgeBhbRjFsLf3vq', '105', 99),
+(54, 'junanyeap@gmail.com', '1FNWlbEzQxhuQjekZbvyuzAOFEExFl-TY', '104', 0),
+(55, 'junanbackup@gmail.com', '1FNWlbEzQxhuQjekZbvyuzAOFEExFl-TY', '105', 99),
+(56, 'kanjingterng@gmail.com', '1FNWlbEzQxhuQjekZbvyuzAOFEExFl-TY', '105', 0),
+(57, 's104213070@mail1.ncnu.edu.tw', '1FNWlbEzQxhuQjekZbvyuzAOFEExFl-TY', '105', 0),
+(58, 'junanyeap@gmail.com', '1FNWlbEzQxhuQjekZbvyuzAOFEExFl-TY', '105', 0);
 
 --
 -- Indexes for dumped tables
@@ -125,7 +126,7 @@ ALTER TABLE `useraccessiblegroup`
 -- AUTO_INCREMENT for table `group`
 --
 ALTER TABLE `group`
-  MODIFY `id_group` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=74;
+  MODIFY `id_group` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=78;
 
 --
 -- AUTO_INCREMENT for table `user`
@@ -137,7 +138,7 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `useraccessiblegroup`
 --
 ALTER TABLE `useraccessiblegroup`
-  MODIFY `uAG_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
+  MODIFY `uAG_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=59;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
