@@ -4,6 +4,10 @@ require ('model.php');
 $action = $_REQUEST['act'];
 switch ($action) {
 
+case 'allGroup':
+  allGroup();
+  break;
+
 case 'approvedMember':
   $no = $_REQUEST['no'];
   $sheetId = $_REQUEST['sheetId'];

@@ -8,11 +8,11 @@ $role = checkRole($email,$groupId);
 // setting
 // test();
 echo "this test page is for view or edit memberSheet of a group<br/>";
-
-list($name,$email,$phoneNumber,$position,$group) = settingGroup($groupId);
+echo "you role number is ".$role;
+$rt = printMemberSheetValue($sheetId,$role);
+// var_dump($rt);
+list($name,$id,$gender,$class,$department,$year,$gmail,$tel,$diet,$skill,$prefer,$status) = $rt;
 if($role >= 90){
-  $rt = printMemberSheetValue($sheetId,$role);
-  list($name,$id,$gender,$class,$department,$year,$gmail,$tel,$diet,$skill,$prefer,$status) = $rt;
   for ($i=0;$i<count($name);$i++){
     echo "<br/>".$i."_".$name[$i]."_".$class[$i];
     if($status[$i]==0){
@@ -43,11 +43,11 @@ if($role >= 90){
     }
   }
 }else{
-	for($x = 1 ;$x < count($name) ; $x++){
-    echo "<br/>";
-    $realNo = $x+1;
-    echo "row no:".$realNo."";
-    echo $name[$x]."_".$email[$x]."_".$phoneNumber[$x]."_".$position[$x]."_".$group[$x];
+	for($x = 0 ;$x < count($name) ; $x++){
+    	echo "<br/>";
+    	$realNo = $x+1;
+    	echo "row no:".$realNo."";
+    	echo $name[$x]."_".$id[$x]."_".$class[$x]."_".$department[$x]."_".$year[$x];
   }
 }
 ?>

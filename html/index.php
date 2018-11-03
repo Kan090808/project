@@ -9,6 +9,12 @@ echo '
     <input type="submit" name="act" value="searchGroup">
   </form>
 ';
+echo '
+  <form action = "control.php" method="post">
+    <input type="submit" name="act" value="allGroup">
+  </form>
+';
+
 if ($_SESSION["status"] == "false") {
   $name = "no login";
   echo "user : " . $name;
@@ -19,7 +25,7 @@ if ($_SESSION["status"] == "false") {
 		</form>
 		';
 } else {
-  test();
+  // test();
   $initEmail = getEmail();
   echo $initEmail;
   echo "<br/>";
@@ -33,6 +39,12 @@ if ($_SESSION["status"] == "false") {
     $role = checkRole($initEmail,$groupId[$i]); 
     echo "<br/>";
     echo $groupName[$i].$currentYear[$i];
+    echo "
+      <form method='post' action='crewMemberSheet.php'>
+        <input type='hidden' name='email' value='$initEmail'>
+        <input type='hidden' name='groupId' value='$groupId[$i]'>
+        <input type='submit' value = 'crewMemberSheet'>
+      </form>";
     echo "
       <form method='post' action='memberSheet.php'>
         <input type='hidden' name='email' value='$initEmail'>

@@ -45,6 +45,46 @@ function addMemberToCrewSheet($no, $membersheetId)
     }
   }
 }
+function allGroup(){
+  // if want to join, use insertMember.php
+  // echo "
+  //   <form method='post' action='insertMember.php'>
+  //     <input type='hidden' name='email' value='".$email."'>
+  //     <input type='hidden' name='groupId' value='".$groupId."'>
+  //     <input type='submit' value = 'Apply to join this Group'>
+  //   </form>";
+  $email = getEmail();
+  $searchResultGroupName = array();
+  $searchResultGroupCurrentYear = array();
+  $searchResultGroupId = array();
+  $searchResultGroupIfJoined = array();
+  $sql = "select * from `member`.`group`";
+  $rt = getDb($sql,4);
+  while ($row=mysqli_fetch_row($rt)){
+    $status = checkIfJoinedThisGroup($row[2],$email);
+    $groupId = $row[2];
+    array_push($searchResultGroupName,$row[1]);
+    array_push($searchResultGroupId,$row[2]);
+    array_push($searchResultGroupCurrentYear,$row[4]);
+    // $status state
+    // null = no joined no apply
+    // 0 = apply not accept
+    // 1 = joined
+    array_push($searchResultGroupIfJoined,$status);
+    // echo $row[1]."---".$row[4];
+
+    // if($status == "null"){
+
+    // }else if($status == 0){
+    //   echo "<br/>";
+    //   echo "applying... wait for approve or reject";
+    // }else if($status == 1){
+    //   echo "<br/>";
+    //   echo "joined";
+    // }
+  }
+  return array($searchResultGroupId,$searchResultGroupName,$searchResultGroupCurrentYear,$searchResultGroupIfJoined);
+}
 function appendData()
 {
   getMemberSheet(2);
@@ -343,6 +383,7 @@ function createFolderPermission($parentId, $fileId)
       }else if(strcmp($roleString, "組長") ==0){
         $roleNum = 89;
       }else if(strcmp($roleString, "組員") ==0){
+
         $roleNum = 88;
       }else if(strcmp($roleString, "顧問") ==0){
         $roleNum = 79;
@@ -584,8 +625,12 @@ function getClientReadOnly()
     header('Location: ' . filter_var($redirect_uri, FILTER_SANITIZE_URL));
   }
   if ($client->isAccessTokenExpired()) {
-    $refreshToken = $client->getRefreshToken();
-    $client->refreshToken($refreshToken);
+    // $refreshToken = $client->getRefreshToken();
+    // $client->refreshToken($refreshToken);
+    session_unset();
+    session_destroy();
+    session_unset();
+    $client->revokeToken();
   }
   return $client;
 }
@@ -609,8 +654,12 @@ function getClientSheet()
     header('Location: ' . filter_var($redirect_uri, FILTER_SANITIZE_URL));
   }
   if ($client->isAccessTokenExpired()) {
-    $refreshToken = $client->getRefreshToken();
-    $client->refreshToken($refreshToken);
+    // $refreshToken = $client->getRefreshToken();
+    // $client->refreshToken($refreshToken);
+    session_unset();
+    session_destroy();
+    session_unset();
+    $client->revokeToken();
   }
   // if ($client->isAccessTokenExpired()) {
   //   $client->fetchAccessTokenWithRefreshToken($client->getRefreshToken());
@@ -1056,16 +1105,6 @@ function getParent($service, $fileId)
   // var_dump($json);
   // echo "parent id : ".$parent;
   return $parent;
-}
-function getRole($email)
-{
-  $sql = "select role from `member`.`useraccessiblegroup` where email = '" . $email . "'";
-  $rt = getDb($sql, 4);
-  while ($row = mysqli_fetch_row($rt)) {
-    $role = $row[0];
-    // array_push($joinedGroupId,$row[0]);
-  }
-  return $role;
 }
 function getShared()
 {
