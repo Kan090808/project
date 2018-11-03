@@ -6,10 +6,11 @@ $groupId = $_REQUEST['groupId'];
 $sheetId = getGroupMemberSheet($groupId);
 $role = checkRole($email,$groupId);
 // setting
+// test();
 echo "this test page is for view or edit memberSheet of a group<br/>";
 
 list($name,$email,$phoneNumber,$position,$group) = settingGroup($groupId);
-if($role >= 90){  
+if($role >= 90){
   $rt = printMemberSheetValue($sheetId,$role);
   list($name,$id,$gender,$class,$department,$year,$gmail,$tel,$diet,$skill,$prefer,$status) = $rt;
   for ($i=0;$i<count($name);$i++){

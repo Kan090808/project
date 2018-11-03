@@ -176,9 +176,7 @@ case 'selectFirstSheet':
   if ($type == 2) {
     appendData2($_SESSION['name'], $_SESSION['email'], $_SESSION['phone'], $_SESSION['position'], $_SESSION['year'], $rt);
   }
-
   session_destroy();
-  echo "selectFirstSheet" . $rt;
   break;
 
 case 'toCrew':

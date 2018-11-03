@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 31, 2018 at 03:47 AM
+-- Generation Time: Nov 02, 2018 at 04:45 PM
 -- Server version: 10.1.35-MariaDB
 -- PHP Version: 7.2.9
 
@@ -42,8 +42,7 @@ CREATE TABLE `group` (
 --
 
 INSERT INTO `group` (`id_group`, `groupName`, `groupID`, `crew_sheet_id`, `currentYear`, `member_sheet_id`) VALUES
-(73, '暨馬同學會', '11bug-RkV_a0FirVOiNgeBhbRjFsLf3vq', '1x3G0jigHF81fYYvgzOmjo2SUS6MoIrhXXswedQxaS-k', '105', '1x3G0jigHF81fYYvgzOmjo2SUS6MoIrhXXswedQxaS-k'),
-(77, 'testgroup', '1FNWlbEzQxhuQjekZbvyuzAOFEExFl-TY', '1Ei9A0woqv9iQWBPuCEiwgeDwZYhF_MsUvi49dzYRhmI', '105', '1gZktJWaw3VpDiF8AcMdP8_gDOWnnkZJPcvxguxYv3w0');
+(147, '暨南大學馬來西亞同學會', '1fvWi7jDch_hxiwYfJPH2aSIGCtFTQbzu', '19SJsCLSLOSwnfT2Zx8zNvclOqCx2UCJOTsYiPfGirMw', '', '1usz2S7u6jS4YXd__ex3h8veQrwkXCrlpXYNdMxAnN1M');
 
 -- --------------------------------------------------------
 
@@ -61,10 +60,13 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`id_user_group`, `email`) VALUES
-(27, 'junanyeap@gmail.com'),
-(28, 'junanbackup@gmail.com'),
-(29, 'kanjingterng@gmail.com'),
-(30, 's104213070@mail1.ncnu.edu.tw');
+(52, 'junanyeap@gmail.com'),
+(53, 'junanbackup@gmail.com'),
+(54, 'kanjingterng@gmail.com'),
+(55, 's104213070@mail1.ncnu.edu.tw'),
+(56, 's104213059@mail1.ncnu.edu.tw'),
+(57, 'yranyran19@gmail.com'),
+(58, 's104213071@mail1.ncnu.edu.tw');
 
 -- --------------------------------------------------------
 
@@ -85,16 +87,13 @@ CREATE TABLE `useraccessiblegroup` (
 --
 
 INSERT INTO `useraccessiblegroup` (`uAG_id`, `email`, `groupID`, `year`, `role`) VALUES
-(39, 'junanyeap@gmail.com', '11bug-RkV_a0FirVOiNgeBhbRjFsLf3vq', '104', 99),
-(40, 'junanbackup@gmail.com', '11bug-RkV_a0FirVOiNgeBhbRjFsLf3vq', '105', 99),
-(41, 'kanjingterng@gmail.com', '11bug-RkV_a0FirVOiNgeBhbRjFsLf3vq', '105', 99),
-(42, 's104213070@mail1.ncnu.edu.tw', '11bug-RkV_a0FirVOiNgeBhbRjFsLf3vq', '105', 99),
-(43, 'junanyeap@gmail.com', '11bug-RkV_a0FirVOiNgeBhbRjFsLf3vq', '105', 99),
-(54, 'junanyeap@gmail.com', '1FNWlbEzQxhuQjekZbvyuzAOFEExFl-TY', '104', 0),
-(55, 'junanbackup@gmail.com', '1FNWlbEzQxhuQjekZbvyuzAOFEExFl-TY', '105', 99),
-(56, 'kanjingterng@gmail.com', '1FNWlbEzQxhuQjekZbvyuzAOFEExFl-TY', '105', 0),
-(57, 's104213070@mail1.ncnu.edu.tw', '1FNWlbEzQxhuQjekZbvyuzAOFEExFl-TY', '105', 0),
-(58, 'junanyeap@gmail.com', '1FNWlbEzQxhuQjekZbvyuzAOFEExFl-TY', '105', 0);
+(246, 'junanyeap@gmail.com', '1fvWi7jDch_hxiwYfJPH2aSIGCtFTQbzu', '104', 89),
+(247, 'junanbackup@gmail.com', '1fvWi7jDch_hxiwYfJPH2aSIGCtFTQbzu', '105', 89),
+(248, 'kanjingterng@gmail.com', '1fvWi7jDch_hxiwYfJPH2aSIGCtFTQbzu', '105', 88),
+(249, 's104213070@mail1.ncnu.edu.tw', '1fvWi7jDch_hxiwYfJPH2aSIGCtFTQbzu', '105', 88),
+(250, 's104213059@mail1.ncnu.edu.tw', '1fvWi7jDch_hxiwYfJPH2aSIGCtFTQbzu', '104', 88),
+(251, 'yranyran19@gmail.com', '1fvWi7jDch_hxiwYfJPH2aSIGCtFTQbzu', '105', 99),
+(252, 's104213071@mail1.ncnu.edu.tw', '1fvWi7jDch_hxiwYfJPH2aSIGCtFTQbzu', '105', 98);
 
 --
 -- Indexes for dumped tables
@@ -126,19 +125,19 @@ ALTER TABLE `useraccessiblegroup`
 -- AUTO_INCREMENT for table `group`
 --
 ALTER TABLE `group`
-  MODIFY `id_group` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=78;
+  MODIFY `id_group` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=148;
 
 --
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id_user_group` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+  MODIFY `id_user_group` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=59;
 
 --
 -- AUTO_INCREMENT for table `useraccessiblegroup`
 --
 ALTER TABLE `useraccessiblegroup`
-  MODIFY `uAG_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=59;
+  MODIFY `uAG_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=253;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
