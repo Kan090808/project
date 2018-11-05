@@ -5,12 +5,13 @@
     <div class="user-panel">
       <div class="f-left image"><img src="assets/images/avatar-1.png" alt="User Image" class="img-circle"></div>
       <div class="f-left info">
-        <?php if ($_SESSION["status"] == "false") {
-          echo '<p class="col-sm-6">' . $name . '</p><form class="col-sm-6" action="../html/control.php" method="post"><button class="btn btn-sm" type="submit" value="getClient" name="act">登入</button></form> ';
-        } else {
-          echo '<small>' . $name . '</small><p class="designation">暨馬同學會會長<i class="icofont icofont-caret-down m-l-5"></i></p>';
-        }
-        ?>
+        <?php
+if ($_SESSION["status"] == "false") {
+  echo '<p class="col-sm-6">' . $name . '</p><form class="col-sm-6" action="../html/control.php" method="post"><button class="btn btn-sm" type="submit" value="getClient" name="act">登入</button></form> ';
+} else {
+  echo '<p class="designation" style="font-size:20px">' . $name . '<i class="icofont icofont-caret-down m-l-5"></i></p>';
+}
+?>
       </div>
     </div>
     <!-- sidebar profile Menu-->
@@ -40,20 +41,21 @@
     <!-- Sidebar Menu-->
     <ul class="sidebar-menu">
       <li class="nav-level">平臺</li>
-      <li id="club">
+      <li id="searchclub">
         <a class="waves-effect waves-dark"><i class="icofont icofont-home-search"></i><span>搜尋社團</span></a>
       </li>
       <li>
         <a class="waves-effect waves-dark"><i class="icofont icofont-ui-chat"></i></i><span>討論區</span></a>
       </li>
-      <?php if($_SESSION["status"] == "true"){
-        for($i=0;$i<count($groupName);$i++){
-          echo '<li class="nav-level">社團</li>
-      <li class="treeview"><a class="waves-effect waves-dark" href="#!"><i class="icofont icofont-company"></i><span>'.$groupName[$i].'</span><i
+      <?php
+if ($_SESSION["status"] == "true") {
+  for ($i = 0; $i < count($groupName); $i++) {
+    echo '<li class="nav-level">社團</li>
+      <li class="treeview"><a class="waves-effect waves-dark" href="#!"><i class="icofont icofont-company"></i><span>' . $groupName[$i] . '</span><i
             class="icon-arrow-down"></i></a>
         <ul class="treeview-menu">';
-          if(!isset($_SESSION['notCrew'])){
-            echo '<li id="join">
+    if (!isset($_SESSION['notCrew'])) {
+      echo '<li id="join">
             <a class="waves-effect waves-dark txt-success">
               <i class="icofont icofont-ui-note"></i>
               加入社團申請
@@ -65,8 +67,9 @@
               幹部名單
             </a>
           </li>';
-          };
-          echo '<li>
+    }
+    ;
+    echo '<li>
             <a class="waves-effect waves-dark" href="#!">
               <i class="icon-arrow-right"></i>
               首頁
@@ -78,207 +81,151 @@
               日曆
             </a>
           </li>';
-          if(!isset($_SESSION['notCrew'])){
-            $list = listFolderTree($groupId[$i]);
-            for($j=0;$j<count($list);$j++){
-              echo '<li class="treeview">
-                <a class="waves-effect waves-dark" href="#!">
-                  <i class="icon-arrow-right"></i>
-                  <span>'.$list[$j][0].'</span>
-                  <i class="icon-arrow-down"></i>
-                </a>';
-                // $listFolder = listFolderTree($list[$j][1]);
-                // for($k=0;$k<count($listFolder);$k++)
-                // {
-                // echo '<ul class="treeview-menu">
-                //   <li>
-                //     <a class="waves-effect waves-dark" href="#!">
-                //       <i class="icon-arrow-right"></i>
-                //       <span>'.$listFolder[$k][0].'</span>
-                //     </a>
-                //   </li>';
-                // echo '</ul>';
-              // echo $list[$j][0];
-              // echo $list[$j][1];
-              echo "<br/>";
-            }
+    if (!isset($_SESSION['notCrew'])) {
+      $currentFolderId = getCurrentYearGroup($groupId[$i], $currentYear[$i]);
+      $cfolder         = getFolderList($currentFolderId, 2);
+      $cfileName       = $cfolder[0];
+      $cfileId         = $cfolder[1];
+      $cfileType       = $cfolder[2];
+      $cfileLastMod    = $cfolder[3];
+      $cfileSize       = $cfolder[4];
+      $zubieId         = '';
+      $huodongId       = '';
+      for ($k = 0; $k < count($cfileName); $k++) {
+        if ($cfileName[$k] == "組別") {
+          $zubieId = $cfileId[$k];
+        }
+        if ($cfileName[$k] == "活動") {
+          $huodongId = $cfileId[$k];
+        }
+      }
+      echo '<li class="treeview">
+            <a class="waves-effect waves-dark" href="#!">
+              <i class="icofont icofont-briefcase-alt-2"></i>
+              <span>組別</span>
+              <i class="icon-arrow-down"></i>
+            </a>
+            <ul class="treeview-menu">';
+      $gfolder      = getFolderList($zubieId, 2);
+      $gfileName    = $gfolder[0];
+      $gfileId      = $gfolder[1];
+      $gfileType    = $gfolder[2];
+      $gfileLastMod = $gfolder[3];
+      $gfileSize    = $gfolder[4];
+      for ($j = 0; $j < count($gfileName); $j++) {
+        echo '<li>
+                  <a class="waves-effect waves-dark" href="#!">
+                    <i class="icofont icofont-briefcase-alt-2"></i>
+                    ' . $gfileName[$j] . '
+                  </a>
+                </li>';
+      }
+      echo '</ul></li>';
+      echo '<li class="treeview">
+            <a class="waves-effect waves-dark" href="#!">
+              <i class="icofont icofont-social-aim"></i>
+              <span>活動</span>
+              <i class="icon-arrow-down"></i>
+            </a>
+            <ul class="treeview-menu">';
+      $efolder      = getFolderList($huodongId, 2);
+      $efileName    = $efolder[0];
+      $efileId      = $efolder[1];
+      $efileType    = $efolder[2];
+      $efileLastMod = $efolder[3];
+      $efileSize    = $efolder[4];
+      for ($j = 0; $j < count($efileName); $j++) {
+        echo '<li>
+                  <a class="waves-effect waves-dark" href="#!">
+                    <i class="icofont icofont-social-aim"></i>
+                    ' . $efileName[$j] . '
+                  </a>
+                </li>';
+      }
+      echo '</ul></li>';
+    }
+    echo '<li class="treeview">
+            <a class="waves-effect waves-dark" href="#!">
+              <i class="icofont icofont-folder-search"></i>
+              <span>歷屆</span>
+              <i class="icon-arrow-down"></i>
+            </a>
+            <ul class="treeview-menu">';
+    $allYears      = getfolderList($groupId[$i], 2);
+    $ayfileName    = $allYears[0];
+    $ayfileId      = $allYears[1];
+    $ayfileType    = $allYears[2];
+    $ayfileLastMod = $allYears[3];
+    $ayfileSize    = $allYears[4];
+    for ($j = 0; $j < count($ayfileName); $j++) {
+      if (strpos($ayfileType[$j], "folder") && $ayfileId[$j] != $currentFolderId) {
+        $lfolder      = getFolderList($ayfileId[$j], 2);
+        $lfileName    = $lfolder[0];
+        $lfileId      = $lfolder[1];
+        $lfileType    = $lfolder[2];
+        $lfileLastMod = $lfolder[3];
+        $lfileSize    = $lfolder[4];
+        echo '<li class="treeview"><a class="waves-effect waves-dark" href="#!"><i class="icofont icofont-company"></i><span>' . $ayfileName[$j] . '</span><i
+                    class="icon-arrow-down"></i></a>
+                <ul class="treeview-menu">';
+        $lzubieId   = '';
+        $lhuodongId = '';
+        for ($k = 0; $k < count($lfileName); $k++) {
+          if ($lfileName[$k] == "組別") {
+            $lzubieId = $lfileId[$k];
+          } else if ($lfileName[$k] == "活動") {
+            $lhuodongId = $lfileId[$k];
           }
         }
-
-  
-  if(!isset($_SESSION['notCrew']))
-  {
-    echo '<li class="treeview">
-    <a class="waves-effect waves-dark" href="#!">
-      <i class="icon-arrow-right"></i>
-      <span>活動</span>
-      <i class="icon-arrow-down"></i>
-    </a>
-
-    <ul class="treeview-menu">
-      <li>
-        <a class="waves-effect waves-dark" href="#!">
-          <i class="icon-arrow-right"></i>
-          校慶
-          <i class="icon-arrow-down"></i>
-        </a>
-        <ul class="treeview-menu">
-          <li>
-            <a class="waves-effect waves-dark" href="#!">
-              <i class="icon-arrow-right"></i>
-              财政
-            </a>
-          </li>
-          <li>
-            <a class="waves-effect waves-dark" href="#!">
-              <i class="icon-arrow-right"></i>
-              <span>文書組</span>
-            </a>
-
-          </li>
-        </ul>
-      </li>
-      <li>
-        <a class="waves-effect waves-dark" href="#!">
-          <i class="icon-arrow-right"></i>
-          大馬周
-          <i class="icon-arrow-down"></i>
-        </a>
-        <ul class="treeview-menu">
-          <li>
-            <a class="waves-effect waves-dark" href="#!">
-              <i class="icon-arrow-right"></i>
-              财政
-            </a>
-          </li>
-          <li>
-            <a class="waves-effect waves-dark" href="#!">
-              <i class="icon-arrow-right"></i>
-              <span>文書組</span>
-            </a>
-
-          </li>
-        </ul>
-      </li>
-    </ul>
-  </li>
-  <li class="treeview">
-    <a class="waves-effect waves-dark" href="#!">
-      <i class="icon-arrow-right"></i>
-      <span>歷屆</span>
-      <i class="icon-arrow-down"></i>
-    </a>
-
-    <ul class="treeview-menu">
-      <li>
-        <a class="waves-effect waves-dark" href="#!">
-          <i class="icon-arrow-right"></i>
-          <b>107</b>
-          <i class="icon-arrow-down"></i>
-        </a>
-        <ul class="treeview-menu">
-          <li>
-            <a class="waves-effect waves-dark" href="#!">
-              <i class="icon-arrow-right"></i>
-              組別
-              <i class="icon-arrow-down"></i>
-            </a>
-            <ul class="treeview-menu">
-              <li>
-                <a class="waves-effect waves-dark" href="#!">
-                  <i class="icon-arrow-right"></i>
-                  财政
-                </a>
-              </li>
-              <li>
-                <a class="waves-effect waves-dark" href="#!">
-                  <i class="icon-arrow-right"></i>
-                  <span>文書組</span>
-                </a>
-              </li>
-            </ul>
-          </li>
-          <li>
-            <a class="waves-effect waves-dark" href="#!">
-              <i class="icon-arrow-right"></i>
-              活動
-              <i class="icon-arrow-down"></i>
-            </a>
-            <ul class="treeview-menu">
-              <li>
-                <a class="waves-effect waves-dark" href="#!">
-                  <i class="icon-arrow-right"></i>
-                  校慶
-                </a>
-              </li>
-              <li>
-                <a class="waves-effect waves-dark" href="#!">
-                  <i class="icon-arrow-right"></i>
-                  <span>大馬周</span>
-                </a>
-              </li>
-            </ul>
-          </li>
-        </ul>
-      </li>
-      <li>
-        <a class="waves-effect waves-dark" href="#!">
-          <i class="icon-arrow-right"></i>
-          <b>106</b>
-          <i class="icon-arrow-down"></i>
-        </a>
-        <ul class="treeview-menu">
-          <li>
-            <a class="waves-effect waves-dark" href="#!">
-              <i class="icon-arrow-right"></i>
-              組別
-              <i class="icon-arrow-down"></i>
-            </a>
-            <ul class="treeview-menu">
-              <li>
-                <a class="waves-effect waves-dark" href="#!">
-                  <i class="icon-arrow-right"></i>
-                  财政
-                </a>
-              </li>
-              <li>
-                <a class="waves-effect waves-dark" href="#!">
-                  <i class="icon-arrow-right"></i>
-                  <span>文書組</span>
-                </a>
-              </li>
-            </ul>
-          </li>
-          <li>
-            <a class="waves-effect waves-dark" href="#!">
-              <i class="icon-arrow-right"></i>
-              活動
-              <i class="icon-arrow-down"></i>
-            </a>
-            <ul class="treeview-menu">
-              <li>
-                <a class="waves-effect waves-dark" href="#!">
-                  <i class="icon-arrow-right"></i>
-                  校慶
-                </a>
-              </li>
-              <li>
-                <a class="waves-effect waves-dark" href="#!">
-                  <i class="icon-arrow-right"></i>
-                  <span>大馬周</span>
-                </a>
-              </li>
-            </ul>
-          </li>
-        </ul>
-      </li>
-    </ul>
-  </li>
-</ul>
-</li>';
+        echo '<li class="treeview">
+              <a class="waves-effect waves-dark" href="#!">
+                <i class="icofont icofont-briefcase-alt-2"></i>
+                <span>組別</span>
+                <i class="icon-arrow-down"></i>
+              </a>
+              <ul class="treeview-menu">';
+        $lgfolder      = getFolderList($lzubieId, 2);
+        $lgfileName    = $lgfolder[0];
+        $lgfileId      = $lgfolder[1];
+        $lgfileType    = $lgfolder[2];
+        $lgfileLastMod = $lgfolder[3];
+        $lgfileSize    = $lgfolder[4];
+        for ($l = 0; $l < count($lgfileName); $l++) {
+          echo '<li>
+                    <a class="waves-effect waves-dark" href="#!">
+                      <i class="icofont icofont-briefcase-alt-2"></i>
+                      ' . $lgfileName[$l] . '
+                    </a>
+                  </li>';
+        }
+        echo '</ul></li>';
+        echo '<li class="treeview">
+              <a class="waves-effect waves-dark" href="#!">
+                <i class="icofont icofont-social-aim"></i>
+                <span>活動</span>
+                <i class="icon-arrow-down"></i>
+              </a>
+              <ul class="treeview-menu">';
+        $lefolder      = getFolderList($lhuodongId, 2);
+        $lefileName    = $lefolder[0];
+        $lefileId      = $lefolder[1];
+        $lefileType    = $lefolder[2];
+        $lefileLastMod = $lefolder[3];
+        $lefileSize    = $lefolder[4];
+        for ($l = 0; $l < count($lefileName); $l++) {
+          echo '<li>
+                    <a class="waves-effect waves-dark" href="#!">
+                      <i class="icofont icofont-social-aim"></i>
+                      ' . $lefileName[$l] . '
+                    </a>
+                  </li>';
+        }
+        echo '</ul></li></ul></li>';
+      }
+    }
   }
 }
-  ?>
+?>
     </ul>
   </section>
 </aside>

@@ -1,12 +1,15 @@
 <?php
+// error_reporting(E_ERROR | E_PARSE);
+
 require("../html/model.php");
 $_SESSION["status"] = checkLogin();
 if ($_SESSION["status"] == "false") {
   $name = "未登入";
 } else {
   $name = getName();
-  $email = getEmail();
-  list($groupName,$groupId)= getJoinedGroup($email);
+  $initEmail = getEmail();
+  list($groupName,$groupId,$currentYear) = getJoinedGroup($initEmail);
+  
 }
 ?>
 <?php include("header.php"); ?>
