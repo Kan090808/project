@@ -14,6 +14,24 @@ case 'approvedMember':
   $approvedStatus = approvedMember($no,$sheetId);
   break;
 
+case 'choseExistsToPost':
+  $title = $_REQUEST['title'];
+  $type = $_REQUEST['type'];
+  $belong = $_REQUEST['belong'];
+  // $test = $_REQUEST['title'];
+  // echo $test;
+  if($title != ""){
+    $_SESSION['tempTitle'] = $title;
+  }
+  choseExistsToPost($title,$type,$belong);
+  break;
+
+case 'clearChoseSession':
+  unset($_SESSION['attach']);
+  unset($_SESSION['newPostAttach']);
+  unset($_SESSION['tempTitle']);
+  header('Location: index.php');
+  break;
 case 'removeMember':
   $no = $_REQUEST['no'];
   $sheetId = $_REQUEST['sheetId'];
@@ -45,9 +63,45 @@ case 'newMemberDetail':
   header('Location: index.php');
   break;
 
+case 'newPostAttach':
+  if($title != ""){
+    $_SESSION['tempTitle'] = $title;
+  }
+  $title = $_REQUEST['title2'];
+  $belong = $_REQUEST['belong'];
+  $type = $_REQUEST['type'];
+  $mime = $_REQUEST['newFileMime'];
+  $array = array($title,$belong,$type,$mime);
+  if(isset($_SESSION['newPostAttach'])){
+    array_push($_SESSION['newPostAttach'], $array);
+    header('Location: index.php');
+  }else{
+    $_SESSION['newPostAttach'] = array();
+    array_push($_SESSION['newPostAttach'], $array);
+    header('Location: index.php');
+  }
+  break;
+
+case 'newPost':
+  $title = $_REQUEST['title'];
+  $belong = $_REQUEST['belong'];
+  $type = $_REQUEST['type'];
+  $mime = $_REQUEST['mime'];
+  $attach = unserialize(base64_decode($_REQUEST['attach']));
+  $newPostAttach = unserialize(base64_decode($_REQUEST['newPostAttach']));
+  newPost($title,$belong,$type,$mime,$newPostAttach,$attach);
+  break;
+
 case 'searchGroup':
   $string = $_REQUEST['searchContent'];
   searchGroup($string);
+  break;
+
+case 'explorer':
+  $title = $_REQUEST['title'];
+  $folderId = $_REQUEST['id'];
+  $posttype = $_REQUEST['posttype'];
+  explorer($title,$posttype,$folderId);
   break;
 
 case 'getClient':
@@ -167,6 +221,14 @@ case 'selectItem':
     // separateCreateAndPermission($_SESSION['folderId'],$_SESSION['sheetId']);
 
     session_destroy();
+  }
+  else
+  if ($type == 4) {
+    $fId = $_REQUEST['fId'];
+    $title = $_REQUEST['title'];
+    $belong = $_REQUEST['belong'];
+    $posttype = $_REQUEST['posttype'];
+    choseExistsToPost2($title,$fId,$belong,$posttype);
   }
 
   // got file id now

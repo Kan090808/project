@@ -4,7 +4,7 @@ $_SESSION["status"] = checkLogin();
 echo "Search Group";
 echo '
   <form action = "control.php" method="post">
-    <input type="hidden" name="pId" value="$currentFolderId.">
+    <input type="hidden" name="pId" value="$currentFolderId">
     <input type="text" name="searchContent" value="">
     <input type="submit" name="act" value="searchGroup">
   </form>
@@ -51,46 +51,116 @@ if ($_SESSION["status"] == "false") {
         <input type='hidden' name='groupId' value='$groupId[$i]'>
         <input type='submit' value = 'memberSheet'>
       </form>";
-    // call this to get current year folder's id;
+      // call this to get current year folder's id;
     $currentFolderId = getCurrentYearGroup($groupId[$i],$currentYear[$i]);
     echo '
       <form action = "control.php" method="post">
         <input type="hidden" name="pId" value="$currentFolderId">
         <input type="hidden" name="type" value="2">
         <input type="submit" name="act" value="getFolderList">
-      </form>
-    ';
-    // 帶1進去，從model裡面echo出來
-    // 帶2進去，回傳array
+      </form>';
+      // 帶1進去，從model裡面echo出來
+      // 帶2進去，回傳array
     getFolderList($currentFolderId,1);
-    $sheetId = getGroupCrewSheet($groupId[$i]);
-    // sidebar, $groupId[$i]
-    // all year
-    echo "<br/>-------------all year-------";
-    listFolderTree($groupId[$i]);
-    // 檔案列出 用$groupId[$i] 達成
-    list($fileName,$fileId,$fileType,$lastMod,$fileSize)=getFolderList($groupId[$i],2);
+      // sidebar, $groupId[$i]
+      // all year
+    // echo "<br/>-------------all year-------";
+    // listFolderTree($groupId[$i]);
+    // // 檔案列出 用$groupId[$i] 達成
+    // list($fileName,$fileId,$fileType,$lastMod,$fileSize)=getFolderList($groupId[$i],2);
+    // for($x = 0 ;$x < count($fileName) ; $x++){
+    //   echo "<br/>";
+    //   echo $fileName[$x]."_".$fileId[$x]."_".$fileType[$x]."_".$fileSize[$x]."_".$lastMod[$x];
+    // }
+    $title = "";
+    if(isset($_SESSION['tempTitle'])){
+      $title = $_SESSION['tempTitle'];
+    }
+    echo "<br/>-------------post-------";
+    $attach;
+    $newPostAttach;
+    if(isset($_SESSION['attach'])){
+      $attach = base64_encode(serialize($_SESSION['attach']));
+      // $attach = $_SESSION['attach'];
+    }
+    if(isset($_SESSION['newPostAttach'])){
+      $newPostAttach = base64_encode(serialize($_SESSION['newPostAttach']));
+      // $newPostAttach = $_SESSION['newPostAttach'];
+    }
+    echo '
+      <form action = "control.php" method="post">
+        po 文標題
+        <input type="text" name="title" value="'.$title.'"><br/>
+        新開文件
+        <input type="text" name="title2" value="">
+        <input type="hidden" name="belong" value="'.$groupId[$i].'">
+        <input type="hidden" name="type" value="2">
+        <input type="hidden" name="mime" value="doc">
+        <input type="radio" name="newFileMime" value="doc"> doc
+        <input type="radio" name="newFileMime" value="sheet"> sheet
+        <input type="radio" name="newFileMime" value="slide"> slide
+        <br>
+        <input type="submit" name="act" value="newPostAttach">
+        <input type="hidden" name="belong" value="'.$groupId[$i].'">
+        <input type="submit" name="act" value="choseExistsToPost">
+        <input type="hidden" name="attach" value="'.$attach.'">
+        <input type="hidden" name="newPostAttach" value="'.$newPostAttach.'">
+        <input type="submit" name="act" value="newPost">
+      </form>
+      ';
+    echo '
+      <form action = "control.php" method="post">
+        <input type="submit" name="act" value="clearChoseSession">
+      </form>';
+      // var_dump($_SESSION['attach']);
+      // echo '<pre>' . var_export($_SESSION['attach'], true) . '</pre>';
+    if(isset($_SESSION['newPostAttach'])){
+      echo "<br/>要新開的文件";
+      $temp = $_SESSION['newPostAttach'];
+      for($x=0;$x<count($temp);$x++){
+        list($newPostAttachTitle,$newPostAttachBelong,$newPostType,$newPostAttachMime)=$temp[$x];
+        // echo '<pre>' . var_export($temp[$x], true) . '</pre>';
+        echo "<br/>".$newPostAttachTitle."_".$newPostAttachBelong."_".$newPostType."_".$newPostAttachMime;
+      }
+    }else{
+      echo "<br/>沒有要新開的文件";
     }
 
-    // 檔案資料列出
-    echo "<br/>"; 
-    for($x = 0 ;$x < count($fileName) ; $x++){
-      echo "<br/>";
-      echo $fileName[$x]."_".$fileId[$x]."_".$fileType[$x]."_".$fileSize[$x]."_".$lastMod[$x];
+    if(isset($_SESSION['attach'])){
+      echo "<br/>掛載的文件";
+      $temp = $_SESSION['attach'];
+      for($x=0;$x<count($temp);$x++){
+        list($title,$fileId,$belong,$posttype)=$temp[$x];
+        // echo '<pre>' . var_export($temp[$x], true) . '</pre>';
+        echo "<br/>".$title."_".$fileId."_".$belong."_".$posttype;
+      }
+    }else{
+      echo "<br/>沒有掛載的文件";
+    }
+    list($postId,$postAttach)=getPost($groupId[$i],2);
+    for($x=0;$x<count($postId);$x++){
+      // var_dump($postAttach);
+      echo "<br/>".$postId[$x]."___".$postAttach[$x];
+      $link = getFileLink($postAttach[$x]);
+      $emblink = getEmb($postAttach[$x]);
+      echo "<a href='$link'>view/edit in docs</a><br/>";
+      echo "<iframe src = '$emblink'></iframe>";
     }
   }
+  // 檔案資料列出
+  echo "<br/>"; 
+}
 
-  if(isset($_SESSION['notCrew'])){
-    echo "<br/>";
-    echo "YOU ARE NOT CREW";
-  }else{
-    echo "<br/>";
-    echo "YOU ARE CREW";
-  }
-  
-  echo '
-	<form action="control.php" method="post">
-		<input type="submit" name="act" value="logout"><br/>
-	</form>
-	';
+if(isset($_SESSION['notCrew'])){
+  echo "<br/>";
+  echo "YOU ARE NOT CREW";
+}else{
+  echo "<br/>";
+  echo "YOU ARE CREW";
+}  
+echo '
+<form action="control.php" method="post">
+	<input type="submit" name="act" value="logout"><br/>
+</form>
+';
 ?>

@@ -1,6 +1,6 @@
 <?php
-session_start();
 require __DIR__ . '/vendor/autoload.php';
+session_start();
 $GLOBALS['rootroot'] = "1gFdoJoNtjlABmjRYim5xEAXbLvnoIBLs";
 if (isset($_POST['verCode'])) { //check if form was submitted
   $input = $_POST['verCode']; //get input text
@@ -126,6 +126,13 @@ function approvedMember($no, $sheetId)
     $returnValue = "false";
   }
   return $returnValue;
+}
+function checkMimeType($fileId){
+  $client = getClient(0);
+  $service = new Google_Service_Drive($client);
+  $files = $service->files->get($fileId);
+  $type = $files->getMimetype();
+  return $type;
 }
 function checkLogin()
 {
@@ -324,6 +331,20 @@ function checkPositionFolderExist2($fileId, $firstLevelId,$secondLevelGroupId)
     // createFolder($notCreateYetPosition[$i], $firstLevelId, false, $spreadsheetId);
   }
   createFolderPermission($firstLevelId, $spreadsheetId);
+}
+function choseExistsToPost($title,$posttype,$belong){
+  explorer($title,$posttype,$belong);
+}
+function choseExistsToPost2($title,$fileId,$belong,$posttype){
+  $array = array($title,$fileId,$belong,$posttype);
+  if(isset($_SESSION['attach'])){
+    array_push($_SESSION['attach'], $array);
+    header('Location: index.php');
+  }else{
+    $_SESSION['attach'] = array();
+    array_push($_SESSION['attach'], $array);
+    header('Location: index.php');
+  }
 }
 
 function createFolder($name, $folderId, $isOnRoot, $spreadsheetId)
@@ -562,11 +583,39 @@ function editFilePermission($fileId)
 {
   echo "editFilePermission";
 }
+function explorer($title,$posttype,$belong){
+  $client = getClient(0);
+  $service = new Google_Service_Drive($client);
+  // $parameters['q'] = "'$belong' in parents and trashed=false";
+  $optParams = array(
+    'pageSize' => 50,
+    'fields' => "files(id,name,size,mimeType,modifiedTime)",
+    'orderBy' => "folder",
+    'q' => "'" . $belong . "' in parents and trashed=false"
+  );
+  $results = $service->files->listFiles($optParams);
+  if (count($results->getFiles()) == 0) {
+    print "No files found.\n";
+  }
+  else {
+    foreach($results->getFiles() as $file) {
+      if($file->getMimetype() =="application/vnd.google-apps.folder"){
+        $folderId = $file->getId();
+        echo '<br/>';
+        echo '<a href="control.php?act=explorer&title='.$title.'&id='.$folderId.'&posttype='.$posttype.'">'."[folder]".$file->getName().'</a>';
+      }else{
+        $fileId = $file->getId();
+        echo '<br/>';
+        echo '<a href="control.php?act=selectItem&type=4&posttype='.$posttype.'&fId='.$fileId.'&title='.$title.'&belong='.$belong.'">'.$file->getName().'</a>';
+      }
+    }
+  }
+}
 function getClient($type)
 {
   $client = new Google_Client();
   $client->setApplicationName('project108 ');
-  $client->setAuthConfig('../html/webClient.json');
+  $client->setAuthConfig('../html/webclient.json');
   $client->addScope("https://www.googleapis.com/auth/drive");
   $client->setAccessType('offline');
   $client->setApprovalPrompt('force');
@@ -608,7 +657,7 @@ function getClientReadOnly()
 {
   $client = new Google_Client();
   $client->setApplicationName('project108 ');
-  $client->setAuthConfig('../html/webClient.json');
+  $client->setAuthConfig('../html/webclient.json');
   $client->addScope("https://www.googleapis.com/auth/drive.readonly");
   $client->setAccessType('offline');
   $client->setApprovalPrompt('force');
@@ -638,7 +687,7 @@ function getClientSheet()
 {
   $client = new Google_Client();
   $client->setApplicationName('project108 ');
-  $client->setAuthConfig('webClient.json');
+  $client->setAuthConfig('webclient.json');
   $client->addScope("https://www.googleapis.com/auth/spreadsheet");
   $client->setAccessType('offline');
   if (isset($_SESSION['access_token']) && $_SESSION['access_token']) {
@@ -670,6 +719,10 @@ function getClientSheet()
 function getCurrentYearGroup($groupId, $currentYear)
 {
   return getFolderId($currentYear, $groupId);
+}
+function getCurrentLocationPost($location,$type){
+  // type 1 =normal,folderid | 2 = intro,groupId | 3 = notice,groupId
+
 }
 function getDb($sql, $type)
 {
@@ -754,6 +807,38 @@ function getEmail()
     echo "error";
     print "An error occurred: " . $e->getMessage();
   }
+}
+function getEmb($fileId){
+  // 取巧寫法，變成是要去判斷他是什麼type
+  // spreadsheet = "https://docs.google.com/spreadsheets/d/".$fileId."/preview";
+  // doc = "https://docs.google.com/document/d/".$fileId."/preview";
+  // slide = "https://docs.google.com/presentation/d/".$fileId."/preview";
+  $type = checkMimeType($fileId);
+  $emb;
+  if($type == "application/vnd.google-apps.document"){
+    $emb = "https://docs.google.com/document/d/".$fileId."/preview";
+
+  }else if($type == "application/vnd.google-apps.spreadsheet"){
+    $emb = "https://docs.google.com/spreadsheets/d/".$fileId."/preview";
+  
+  }else if($type == "application/vnd.google-apps.presentation"){
+    $emb = "https://docs.google.com/presentation/d/".$fileId."/preview";
+  }
+  return $emb;
+}
+function getFileLink($fileId){
+  $type = checkMimeType($fileId);
+  $link;
+  if($type == "application/vnd.google-apps.document"){
+    $link = "https://docs.google.com/document/d/".$fileId;
+
+  }else if($type == "application/vnd.google-apps.spreadsheet"){
+    $link = "https://docs.google.com/spreadsheets/d/".$fileId;
+  
+  }else if($type == "application/vnd.google-apps.presentation"){
+    $link = "https://docs.google.com/presentation/d/".$fileId;
+  }
+  return $link;
 }
 function getFolderList($location, $type)
 {
@@ -1125,6 +1210,27 @@ function getShared()
     }
   }
 }
+function getPost($belong,$type){
+  $postId = array();
+  $postTitle = array();
+  $postAttach2 = array();
+  $postId2 = array();
+  $sql = "select * from `member`.`post` where belong = '".$belong."' and type = '".$type."'";
+  $rt = getDb($sql,4);
+  while ($row = $rt->fetch_assoc()) {
+    array_push($postId,$row["id"]);
+    array_push($postTitle,$row["title"]);
+  }
+  for($i=0;$i<count($postId);$i++){
+    $sql = "select * from `member`.`postattach` where postId = '".$postId[$i]."'";
+    $rt2 = getDb($sql,4);
+    while ($row2 = $rt2->fetch_assoc()){
+      array_push($postAttach2,$row2["attachId"]);
+      array_push($postId2,$row2["postId"]);
+    }
+  }
+  return array($postId2,$postAttach2);
+}
 function getWho()
 {
   $rt = shell_exec('whoami');
@@ -1237,6 +1343,44 @@ function newMemberDetail($name, $id, $email, $gender, $class, $department, $year
   $range = 'A:N';
   $response = $service->spreadsheets_values->append($member_sheet_id, $range, $body, $params);
 }
+function newPost($title,$belong,$type,$mime,$newPostAttach,$attach){
+  if($type == 1){
+    
+  }else if($type == 2){
+    $postid;
+    // 開個屬於帖文內容的doc
+    $fileId = createFile($mime,$title,$belong);
+    $sql = "insert into `member`.`post` (title,fileId,belong,type) VALUES ('$title','$fileId','$belong','$type')";
+    // 找回剛才創建的文件，加入db
+    $checkpostid = "select * from `member`.`post` where title = '".$title."' and fileId = '".$fileId."' and belong = '".$belong."' and type = '".$type."'";
+    insertDb($sql);
+    $rt = getDb($checkpostid,4);
+    while ($row = $rt->fetch_assoc()) {
+      $postid = $row["id"];
+    }
+    $sql2 = "insert into `member`.`postattach` (attachId,postId) VALUES ('$fileId','$postid')";
+    insertDb($sql2);
+    // 寫入新開的文件
+    for($x=0;$x<count($newPostAttach);$x++){
+      if(count($newPostAttach) != 0){
+        list($newPostAttachTitle,$newPostAttachBelong,$newPostType,$newPostAttachMime)=$newPostAttach[$x];
+        $fileId = createFile($newPostAttachMime,$newPostAttachTitle,$newPostAttachBelong);
+        $sql3 = "insert into `member`.`postattach` (attachId,postId) VALUES ('$fileId','$postid')";
+        insertDb($sql3);
+      }
+    }
+    for($x=0;$x<count($attach);$x++){
+      if(count($attach) != 0){
+        list($exsistTitle,$exsistsFileId,$exsistsBelong,$existsPosttype)=$attach[$x];
+        $sql3 = "insert into `member`.`postattach` (attachId,postId) VALUES ('$exsistsFileId','$postid')";
+        insertDb($sql3);
+      }
+    }
+  }else if($type == 3){
+
+  }
+}
+
 function printMemberSheetValue($member_sheet_id, $role)
 {
   $name = array();
