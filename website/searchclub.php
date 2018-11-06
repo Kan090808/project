@@ -1,3 +1,4 @@
+<?php require("../html/model.php");?>
 <div class="container">
   <div class="row">
     <div class="main-header">
@@ -33,7 +34,19 @@
               <col width="10%">
               <col width="10%">
               <tbody>
-                <tr>
+              <?php 
+                // require("../html/model.php");
+                $allresult = allGroup();
+                $arGroupName = $allresult[1];
+                for($i=0;$i<count($arGroupName);$i++){
+                  echo '<tr>
+                  <td><a href="#">'.$arGroupName[$i].'</a></td>
+                  <td><button class="btn btn-success">首頁</button></td>
+                  <td><button class="btn btn-info" data-toggle="modal" data-target="#clubform">申請</button></td>
+                </tr>';
+                }
+              ?>
+                <!-- <tr>
                   <td><a href="#">暨馬同學會</a></td>
                   <td><button class="btn btn-success">首頁</button></td>
                   <td><button class="btn btn-info" data-toggle="modal" data-target="#clubform">申請</button></td>
@@ -52,7 +65,7 @@
                   <td><a href="#">暨馬同學會</a></td>
                   <td><button class="btn btn-success">首頁</button></td>
                   <td><button class="btn btn-info" data-toggle="modal" data-target="#clubform">申請</button></td>
-                </tr>
+                </tr> -->
               </tbody>
             </table>
           </div>
