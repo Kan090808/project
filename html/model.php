@@ -5,20 +5,85 @@ $GLOBALS['rootroot'] = "1gFdoJoNtjlABmjRYim5xEAXbLvnoIBLs";
 if (isset($_POST['verCode'])) { //check if form was submitted
   $input = $_POST['verCode']; //get input text
 }
-function test()
+function testtype1($type1id)
 { 
-  $position = "社長";
-  $position2 = "副社長";
-  $position3 = "顧問";
-  if (!in_array("顧問", array($position,$position2,$position3))) {
-      // strcmp($var1, $var2) !== 0
-      // if($position!="社長" || $position!="副社長" || $position!="顧問"){
-        // xxgroup - 105
-    echo $position;
-    echo $position2;
-    echo $position3;
+  $title = "";
+  if(isset($_SESSION['tempTitle'])){
+    $title = $_SESSION['tempTitle'];
+  }
+  $attach = "";
+  $newPostAttach = "";
+  if(isset($_SESSION['attach'])){
+    $attach = base64_encode(serialize($_SESSION['attach']));
+    // $attach = $_SESSION['attach'];
+  }
+  if(isset($_SESSION['newPostAttach'])){
+    $newPostAttach = base64_encode(serialize($_SESSION['newPostAttach']));
+    // $newPostAttach = $_SESSION['newPostAttach'];
+  }
+  echo '
+    <form action = "control.php" method="post">
+      po 文標題
+      <input type="text" name="title" value="'.$title.'"><br/>
+      新開文件
+      <input type="text" name="title2" value="">
+      <input type="hidden" name="belong" value="'.$type1id.'">
+      <input type="hidden" name="type" value="1">
+      <input type="hidden" name="mime" value="doc">
+      <input type="radio" name="newFileMime" value="doc"> doc
+      <input type="radio" name="newFileMime" value="sheet"> sheet
+      <input type="radio" name="newFileMime" value="slide"> slide
+      <br>
+      <input type="submit" name="act" value="newPostAttach">
+      <input type="hidden" name="belong" value="'.$type1id.'">
+      <input type="submit" name="act" value="choseExistsToPost">
+      <input type="hidden" name="attach" value="'.$attach.'">
+      <input type="hidden" name="newPostAttach" value="'.$newPostAttach.'">
+      <input type="submit" name="act" value="newPost">
+    </form>
+    ';
+  echo '
+    <form action = "control.php" method="post">
+      <input type="submit" name="act" value="clearChoseSession">
+    </form>';
+    // var_dump($_SESSION['attach']);
+    // echo '<pre>' . var_export($_SESSION['attach'], true) . '</pre>';
+  if(isset($_SESSION['newPostAttach'])){
+    echo "<br/>要新開的文件";
+    $temp = $_SESSION['newPostAttach'];
+    for($x=0;$x<count($temp);$x++){
+      list($newPostAttachTitle,$newPostAttachBelong,$newPostType,$newPostAttachMime)=$temp[$x];
+      // echo '<pre>' . var_export($temp[$x], true) . '</pre>';
+      echo "<br/>".$newPostAttachTitle."_".$newPostAttachBelong."_".$newPostType."_".$newPostAttachMime;
+    }
   }else{
-    echo "notEqual";
+    echo "<br/>沒有要新開的文件";
+  }
+
+  if(isset($_SESSION['attach'])){
+    echo "<br/>掛載的文件";
+    $temp = $_SESSION['attach'];
+    for($x=0;$x<count($temp);$x++){
+      list($title,$fileId,$belong,$posttype)=$temp[$x];
+      // echo '<pre>' . var_export($temp[$x], true) . '</pre>';
+      echo "<br/>".$title."_".$fileId."_".$belong."_".$posttype;
+    }
+  }else{
+    echo "<br/>沒有掛載的文件";
+  }
+  // 取出帖文
+  list($postId,$postTitle,$postAttach,$isMainAttach)=getPost($type1id,2);
+  for($x=0;$x<count($postId);$x++){
+    if($isMainAttach[$x] == true){
+      // var_dump($postAttach);
+      echo "<br/>".$postTitle[$x]."___".$postAttach[$x];
+      $link = getFileLink($postAttach[$x]);
+      $emblink = getEmb($postAttach[$x]);
+      echo "<a href='$link'>view/edit in docs</a><br/>";
+      echo "<iframe src = '$emblink'></iframe>";
+    }else{
+      echo "<br/>帖文附件：".$postTitle[$x]."___".$postAttach[$x];
+    } 
   }
 }
 function addMemberToCrewSheet($no, $membersheetId)
@@ -608,6 +673,28 @@ function explorer($title,$posttype,$belong){
         echo '<br/>';
         echo '<a href="control.php?act=selectItem&type=4&posttype='.$posttype.'&fId='.$fileId.'&title='.$title.'&belong='.$belong.'">'.$file->getName().'</a>';
       }
+    }
+  }
+}
+function explorerFolderOnly($title,$posttype,$belong){
+  $client = getClient(0);
+  $service = new Google_Service_Drive($client);
+  // $parameters['q'] = "'$belong' in parents and trashed=false";
+  $optParams = array(
+    'pageSize' => 50,
+    'fields' => "files(id,name,size,mimeType,modifiedTime)",
+    'orderBy' => "folder",
+    'q' => "mimeType = 'application/vnd.google-apps.folder' and '" . $belong . "' in parents and trashed=false"
+  );
+  $results = $service->files->listFiles($optParams);
+  if (count($results->getFiles()) == 0) {
+    print "No files found.\n";
+  }
+  else {
+    foreach($results->getFiles() as $file) {
+      $folderId = $file->getId();
+      echo '<br/>';
+      echo '<a href="control.php?act=selectItem&type=5&posttype='.$posttype.'&fId='.$fileId.'&title='.$title.'&belong='.$belong.'">'."[folder]".$file->getName().'</a>';
     }
   }
 }
@@ -1212,24 +1299,71 @@ function getShared()
 }
 function getPost($belong,$type){
   $postId = array();
+  $postFileId = array();
   $postTitle = array();
+  $postTitle2 = array();
+  $mainAttach = array();
   $postAttach2 = array();
   $postId2 = array();
+  $isPostMainAttach = array();
   $sql = "select * from `member`.`post` where belong = '".$belong."' and type = '".$type."'";
   $rt = getDb($sql,4);
   while ($row = $rt->fetch_assoc()) {
     array_push($postId,$row["id"]);
+    array_push($postFileId,$row["fileId"]);
+    array_push($mainAttach,$row["fileId"]);
     array_push($postTitle,$row["title"]);
   }
   for($i=0;$i<count($postId);$i++){
     $sql = "select * from `member`.`postattach` where postId = '".$postId[$i]."'";
     $rt2 = getDb($sql,4);
     while ($row2 = $rt2->fetch_assoc()){
+      if($row2["attachId"]==$postFileId[$i]){
+        // echo "<br>ttt".$row2["attachId"].$postFileId[$i];
+        array_push($isPostMainAttach,true);
+      }else{
+        array_push($isPostMainAttach,false);
+      }
       array_push($postAttach2,$row2["attachId"]);
       array_push($postId2,$row2["postId"]);
+      array_push($postTitle2,$postTitle[$i]);
     }
   }
-  return array($postId2,$postAttach2);
+  return array($postId2,$postTitle2,$postAttach2,$isPostMainAttach);
+}
+function getPinPost($belong,$type){
+  $postId = array();
+  $postFileId = array();
+  $postTitle = array();
+  $postTitle2 = array();
+  $mainAttach = array();
+  $postAttach2 = array();
+  $postId2 = array();
+  $isPostMainAttach = array();
+  $sql = "select * from `member`.`post` where belong = '".$belong."' and type = '".$type."' and pin = '1'";
+  $rt = getDb($sql,4);
+  while ($row = $rt->fetch_assoc()) {
+    array_push($postId,$row["id"]);
+    array_push($postFileId,$row["fileId"]);
+    array_push($mainAttach,$row["fileId"]);
+    array_push($postTitle,$row["title"]);
+  }
+  for($i=0;$i<count($postId);$i++){
+    $sql = "select * from `member`.`postattach` where postId = '".$postId[$i]."'";
+    $rt2 = getDb($sql,4);
+    while ($row2 = $rt2->fetch_assoc()){
+      if($row2["attachId"]==$postFileId[$i]){
+        // echo "<br>ttt".$row2["attachId"].$postFileId[$i];
+        array_push($isPostMainAttach,true);
+      }else{
+        array_push($isPostMainAttach,false);
+      }
+      array_push($postAttach2,$row2["attachId"]);
+      array_push($postId2,$row2["postId"]);
+      array_push($postTitle2,$postTitle[$i]);
+    }
+  }
+  return array($postId2,$postTitle2,$postAttach2,$isPostMainAttach);
 }
 function getWho()
 {
@@ -1344,41 +1478,80 @@ function newMemberDetail($name, $id, $email, $gender, $class, $department, $year
   $response = $service->spreadsheets_values->append($member_sheet_id, $range, $body, $params);
 }
 function newPost($title,$belong,$type,$mime,$newPostAttach,$attach){
-  if($type == 1){
+  // if($type == 1){
     
-  }else if($type == 2){
-    $postid;
+  // }else if($type == 2){
+  //   $postid;
+  //   // 開個屬於帖文內容的doc
+  //   $fileId = createFile($mime,$title,$belong);
+  //   $sql = "insert into `member`.`post` (title,fileId,belong,type) VALUES ('$title','$fileId','$belong','$type')";
+  //   // 找回剛才創建的文件，加入db
+  //   $checkpostid = "select * from `member`.`post` where title = '".$title."' and fileId = '".$fileId."' and belong = '".$belong."' and type = '".$type."'";
+  //   insertDb($sql);
+  //   $rt = getDb($checkpostid,4);
+  //   while ($row = $rt->fetch_assoc()) {
+  //     $postid = $row["id"];
+  //   }
+  //   $sql2 = "insert into `member`.`postattach` (attachId,postId) VALUES ('$fileId','$postid')";
+  //   insertDb($sql2);
+  //   // 寫入新開的文件
+  //   for($x=0;$x<count($newPostAttach);$x++){
+  //     if($newPostAttach != "" && count($newPostAttach) != 0){
+  //       list($newPostAttachTitle,$newPostAttachBelong,$newPostType,$newPostAttachMime)=$newPostAttach[$x];
+  //       if($newPostAttachBelong!="" || $postid != ""){
+  //         $fileId = createFile($newPostAttachMime,$newPostAttachTitle,$newPostAttachBelong);
+  //         $sql3 = "insert into `member`.`postattach` (attachId,postId) VALUES ('$fileId','$postid')";
+  //         insertDb($sql3);
+  //       }
+  //     }
+  //   }
+  //   // 寫入掛載的文件
+  //   for($x=0;$x<count($attach);$x++){
+  //     if($attach != "" && count($attach) != 0){
+  //       list($exsistTitle,$exsistsFileId,$exsistsBelong,$existsPosttype)=$attach[$x];
+  //       $sql3 = "insert into `member`.`postattach` (attachId,postId) VALUES ('$exsistsFileId','$postid')";
+  //       insertDb($sql3);
+  //     }
+  //   }
+  // }else if($type == 3){
+
+  // }
+  $postid;
     // 開個屬於帖文內容的doc
-    $fileId = createFile($mime,$title,$belong);
-    $sql = "insert into `member`.`post` (title,fileId,belong,type) VALUES ('$title','$fileId','$belong','$type')";
-    // 找回剛才創建的文件，加入db
-    $checkpostid = "select * from `member`.`post` where title = '".$title."' and fileId = '".$fileId."' and belong = '".$belong."' and type = '".$type."'";
-    insertDb($sql);
-    $rt = getDb($checkpostid,4);
-    while ($row = $rt->fetch_assoc()) {
-      $postid = $row["id"];
-    }
-    $sql2 = "insert into `member`.`postattach` (attachId,postId) VALUES ('$fileId','$postid')";
-    insertDb($sql2);
-    // 寫入新開的文件
-    for($x=0;$x<count($newPostAttach);$x++){
-      if(count($newPostAttach) != 0){
-        list($newPostAttachTitle,$newPostAttachBelong,$newPostType,$newPostAttachMime)=$newPostAttach[$x];
+  $fileId = createFile($mime,$title,$belong);
+  $sql = "insert into `member`.`post` (title,fileId,belong,type,pin) VALUES ('$title','$fileId','$belong','$type',0)";
+  // 找回剛才創建的文件，加入db
+  $checkpostid = "select * from `member`.`post` where title = '".$title."' and fileId = '".$fileId."' and belong = '".$belong."' and type = '".$type."'";
+  insertDb($sql);
+  $rt = getDb($checkpostid,4);
+  while ($row = $rt->fetch_assoc()) {
+    $postid = $row["id"];
+  }
+  $sql2 = "insert into `member`.`postattach` (attachId,postId) VALUES ('$fileId','$postid')";
+  insertDb($sql2);
+  // 寫入新開的文件
+  for($x=0;$x<count($newPostAttach);$x++){
+    if($newPostAttach != "" && count($newPostAttach) != 0){
+      list($newPostAttachTitle,$newPostAttachBelong,$newPostType,$newPostAttachMime)=$newPostAttach[$x];
+      if($newPostAttachBelong!="" || $postid != ""){
         $fileId = createFile($newPostAttachMime,$newPostAttachTitle,$newPostAttachBelong);
         $sql3 = "insert into `member`.`postattach` (attachId,postId) VALUES ('$fileId','$postid')";
         insertDb($sql3);
       }
     }
-    for($x=0;$x<count($attach);$x++){
-      if(count($attach) != 0){
-        list($exsistTitle,$exsistsFileId,$exsistsBelong,$existsPosttype)=$attach[$x];
-        $sql3 = "insert into `member`.`postattach` (attachId,postId) VALUES ('$exsistsFileId','$postid')";
-        insertDb($sql3);
-      }
-    }
-  }else if($type == 3){
-
   }
+  // 寫入掛載的文件
+  for($x=0;$x<count($attach);$x++){
+    if($attach != "" && count($attach) != 0){
+      list($exsistTitle,$exsistsFileId,$exsistsBelong,$existsPosttype)=$attach[$x];
+      $sql3 = "insert into `member`.`postattach` (attachId,postId) VALUES ('$exsistsFileId','$postid')";
+      insertDb($sql3);
+    }
+  }
+  unset($_SESSION['attach']);
+  unset($_SESSION['newPostAttach']);
+  unset($_SESSION['tempTitle']);
+  // header('Location: index.php');
 }
 
 function printMemberSheetValue($member_sheet_id, $role)

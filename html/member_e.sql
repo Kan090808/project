@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 02, 2018 at 04:45 PM
+-- Generation Time: Nov 08, 2018 at 02:16 PM
 -- Server version: 10.1.35-MariaDB
 -- PHP Version: 7.2.9
 
@@ -42,7 +42,53 @@ CREATE TABLE `group` (
 --
 
 INSERT INTO `group` (`id_group`, `groupName`, `groupID`, `crew_sheet_id`, `currentYear`, `member_sheet_id`) VALUES
-(147, '暨南大學馬來西亞同學會', '1fvWi7jDch_hxiwYfJPH2aSIGCtFTQbzu', '19SJsCLSLOSwnfT2Zx8zNvclOqCx2UCJOTsYiPfGirMw', '', '1usz2S7u6jS4YXd__ex3h8veQrwkXCrlpXYNdMxAnN1M');
+(147, '暨南大學馬來西亞同學會', '1fvWi7jDch_hxiwYfJPH2aSIGCtFTQbzu', '19SJsCLSLOSwnfT2Zx8zNvclOqCx2UCJOTsYiPfGirMw', '105', '1usz2S7u6jS4YXd__ex3h8veQrwkXCrlpXYNdMxAnN1M');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `post`
+--
+
+CREATE TABLE `post` (
+  `id` int(11) NOT NULL,
+  `time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `title` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+  `fileId` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
+  `belong` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
+  `type` int(11) NOT NULL,
+  `pin` tinyint(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Dumping data for table `post`
+--
+
+INSERT INTO `post` (`id`, `time`, `title`, `fileId`, `belong`, `type`, `pin`) VALUES
+(17, '2018-11-06 14:38:46', 'test1', '1TFu_0f1Pl7IsYJSzM8gIgX9lu-WGj-o5Il3g6jPzZdE', '1fvWi7jDch_hxiwYfJPH2aSIGCtFTQbzu', 2, 0),
+(24, '2018-11-08 12:47:58', 'importTant', '1S5P9d3zljvA7BJ7tta3sRzTG6um6p5Xd0dFiYmq7ngg', '1YPIU7jCmaDj8Wt9ZlhwTfO9uTY_eyNeb', 1, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `postattach`
+--
+
+CREATE TABLE `postattach` (
+  `id` int(11) NOT NULL,
+  `attachId` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
+  `postId` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Dumping data for table `postattach`
+--
+
+INSERT INTO `postattach` (`id`, `attachId`, `postId`) VALUES
+(17, '1TFu_0f1Pl7IsYJSzM8gIgX9lu-WGj-o5Il3g6jPzZdE', 17),
+(18, '1K6tRHHEfgFzrwXWgL1yBIYieaT_DMG8M-m5tbjvHQnQ', 17),
+(19, '1usz2S7u6jS4YXd__ex3h8veQrwkXCrlpXYNdMxAnN1M', 17),
+(35, '1S5P9d3zljvA7BJ7tta3sRzTG6um6p5Xd0dFiYmq7ngg', 24);
 
 -- --------------------------------------------------------
 
@@ -106,6 +152,18 @@ ALTER TABLE `group`
   ADD PRIMARY KEY (`id_group`);
 
 --
+-- Indexes for table `post`
+--
+ALTER TABLE `post`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `postattach`
+--
+ALTER TABLE `postattach`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `user`
 --
 ALTER TABLE `user`
@@ -126,6 +184,18 @@ ALTER TABLE `useraccessiblegroup`
 --
 ALTER TABLE `group`
   MODIFY `id_group` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=148;
+
+--
+-- AUTO_INCREMENT for table `post`
+--
+ALTER TABLE `post`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+
+--
+-- AUTO_INCREMENT for table `postattach`
+--
+ALTER TABLE `postattach`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
 
 --
 -- AUTO_INCREMENT for table `user`

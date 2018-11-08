@@ -73,12 +73,13 @@ if ($_SESSION["status"] == "false") {
     //   echo $fileName[$x]."_".$fileId[$x]."_".$fileType[$x]."_".$fileSize[$x]."_".$lastMod[$x];
     // }
     $title = "";
+    $attach = "";
     if(isset($_SESSION['tempTitle'])){
       $title = $_SESSION['tempTitle'];
     }
     echo "<br/>-------------post-------";
-    $attach;
-    $newPostAttach;
+    $attach = "";
+    $newPostAttach = "";
     if(isset($_SESSION['attach'])){
       $attach = base64_encode(serialize($_SESSION['attach']));
       // $attach = $_SESSION['attach'];
@@ -137,16 +138,36 @@ if ($_SESSION["status"] == "false") {
     }else{
       echo "<br/>沒有掛載的文件";
     }
-    list($postId,$postAttach)=getPost($groupId[$i],2);
+    list($postId,$postTitle,$postAttach,$isMainAttach)=getPost($groupId[$i],2);
     for($x=0;$x<count($postId);$x++){
-      // var_dump($postAttach);
-      echo "<br/>".$postId[$x]."___".$postAttach[$x];
-      $link = getFileLink($postAttach[$x]);
-      $emblink = getEmb($postAttach[$x]);
-      echo "<a href='$link'>view/edit in docs</a><br/>";
-      echo "<iframe src = '$emblink'></iframe>";
+      if($isMainAttach[$x] == true){
+        // var_dump($postAttach);
+        echo "<br/>".$postTitle[$x]."___".$postAttach[$x];
+        $link = getFileLink($postAttach[$x]);
+        $emblink = getEmb($postAttach[$x]);
+        echo "<a href='$link'>view/edit in docs</a><br/>";
+        echo "<iframe src = '$emblink'></iframe>";
+      }else{
+        echo "<br/>帖文附件：".$postTitle[$x]."___".$postAttach[$x];
+      } 
     }
   }
+  echo "<br>";
+  echo "-------------在某個群組下，開帖文------------------";
+  $type1id = "1YPIU7jCmaDj8Wt9ZlhwTfO9uTY_eyNeb";
+  // 開帖文用的測試寫法，參考testtype
+  // testtype1($type1id);
+
+  // 取得置頂貼
+  $rt = getPinPost($type1id,1);
+  // echo '
+  //   <form action = "control.php" method="post">
+  //     <input type="hidden" name="title" value="test2">
+  //     <input type="hidden" name="posttype" value="1">
+  //     <input type="hidden" name="id" value="'.$type1id.'">
+  //     <input type="submit" name="act" value="explorer">
+  //   </form>';
+
   // 檔案資料列出
   echo "<br/>"; 
 }

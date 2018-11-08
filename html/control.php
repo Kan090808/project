@@ -87,9 +87,22 @@ case 'newPost':
   $belong = $_REQUEST['belong'];
   $type = $_REQUEST['type'];
   $mime = $_REQUEST['mime'];
-  $attach = unserialize(base64_decode($_REQUEST['attach']));
-  $newPostAttach = unserialize(base64_decode($_REQUEST['newPostAttach']));
+  $attach = "";
+  $newPostAttach = "";
+  if($_REQUEST['attach'] != ""){
+    $attach = unserialize(base64_decode($_REQUEST['attach']));  
+  }
+  if($_REQUEST['newPostAttach'] != ""){
+    $newPostAttach = unserialize(base64_decode($_REQUEST['newPostAttach']));
+  }
+  // if($newPostAttach == ""){
+  //   echo "nonewpostattach";
+  // }
+  // if($attach == ""){
+  //   echo "noattach";
+  // }
   newPost($title,$belong,$type,$mime,$newPostAttach,$attach);
+  header('Location: index.php');
   break;
 
 case 'searchGroup':
@@ -102,6 +115,13 @@ case 'explorer':
   $folderId = $_REQUEST['id'];
   $posttype = $_REQUEST['posttype'];
   explorer($title,$posttype,$folderId);
+  break;
+
+case 'explorerFolderOnly':
+  $title = $_REQUEST['title'];
+  $folderId = $_REQUEST['id'];
+  $posttype = $_REQUEST['posttype'];
+  explorerFolderOnly($title,$posttype,$folderId);
   break;
 
 case 'getClient':
@@ -230,7 +250,14 @@ case 'selectItem':
     $posttype = $_REQUEST['posttype'];
     choseExistsToPost2($title,$fId,$belong,$posttype);
   }
-
+  else
+  if ($type == 5) {
+    $fId = $_REQUEST['fId'];
+    $title = $_REQUEST['title'];
+    $belong = $_REQUEST['belong'];
+    $posttype = $_REQUEST['posttype'];
+    choseExistsToPost2($title,$fId,$belong,$posttype);
+  }
   // got file id now
 
   break;
