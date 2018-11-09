@@ -151,7 +151,15 @@ if ($_SESSION["status"] == "false") {
         echo "<br/>帖文附件：".$postTitle[$x]."___".$postAttach[$x];
       } 
     }
+    echo "<br/>";
+    echo '
+      <form action = "control.php" method="post">
+        <br>refresh drive folder permission by crewSheet
+        <input type="hidden" name="groupId" value="'.$groupId[$i].'">
+        <input type="submit" name="act" value="refreshGroupPermission">
+      </form>'; 
   }
+
   echo "<br>";
   echo "-------------在某個群組下，開帖文------------------";
   $type1id = "1YPIU7jCmaDj8Wt9ZlhwTfO9uTY_eyNeb";
@@ -169,7 +177,7 @@ if ($_SESSION["status"] == "false") {
   //   </form>';
 
   // 檔案資料列出
-  echo "<br/>"; 
+  
 }
 // handOver("1fvWi7jDch_hxiwYfJPH2aSIGCtFTQbzu",getEmail(),"106");
 // refreshGroupPermission("1fvWi7jDch_hxiwYfJPH2aSIGCtFTQbzu");
@@ -180,6 +188,14 @@ if(isset($_SESSION['notCrew'])){
   echo "<br/>";
   echo "YOU ARE CREW";
 }  
+echo '
+<form action="control.php" method="post">
+  <input type="text" name="newYear" value="106"><br/>
+  <input type="text" name="email" value="yranyran19@gmail.com"><br/>
+  <input type="text" name="groupId" value="1qadFURqSk44BYdgd4jLHxFaVcp0RbQNc"><br/>
+  <input type="submit" name="act" value="handOver"><br/>
+</form>
+';
 echo '
 <form action="control.php" method="post">
 	<input type="submit" name="act" value="logout"><br/>

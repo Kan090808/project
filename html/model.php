@@ -1426,37 +1426,41 @@ function handOver($groupId,$email,$newYear){
   $client = getClient(0);
   $service = new Google_Service_Drive($client);
   $role = checkRole($email,$groupId);
-  $permissionList = getPermissionList($groupId,$email);
-  var_dump($permissionList);
-  for($i=0;$i<count($permissionList);$i++){
-    if(getUserId()!=$permissionList[$i]){
-      echo $permissionList[$i];
-    }else{
-      echo "same";
-    }
-    $permission = $service->permissions->get($groupId, $permissionList[$i]);
-    $permission->setRole("reader");
-    $service->permissions->update($groupId, $permissionList[$i], $permission);  
-  }
+  $userPermission = new Google_Service_Drive_Permission(array(
+                      'type' => 'user',
+                      'role' => 'owner',
+                      'transferOwnership' => 'true',
+                      'emailAddress' => $email
+                  ));
+  $request = $service->permissions->create(
+    $groupId, 
+    $userPermission, 
+    array('fields' => 'id', 'transferOwnership' => 'true'));
+  
+  // for($i=0;$i<count($permissionList);$i++){
+  //   $permission = $service->permissions->get($groupId, $permissionList[$i]);
+  //   $permission->setRole("reader");
+  //   $service->permissions->update($groupId, $permissionList[$i], $permission);  
+  // }
   // if role > 90, than start the handover process
   // set the current year to new year
-  $sql = "update group set currentYear= '$newYear' WHERE groupID = '$groupId';";
-  getDb($sql,4);
-  // update  all 105 user permission to reader
-  for($i = 0 ; $i<count($permissionList);$i++){
-    if(getUserId() != $permissionList[$i]){
-      $service->permissions->delete($fileId, $permissionList[$i]);  
-    }
-    $userPermission = new Google_Service_Drive_Permission(array(
-      'type' => 'user',
-      'role' => 'reader',
-      'emailAddress' => $userEmail
-    ));
-    $request = $service->permissions->create($fileId, $userPermission, array(
-      'fields' => 'id'
-    ));
-    var_dump($request);
-  }
+  // $sql = "update group set currentYear= '$newYear' WHERE groupID = '$groupId';";
+  // getDb($sql,4);
+  // // update  all 105 user permission to reader
+  // for($i = 0 ; $i<count($permissionList);$i++){
+  //   if(getUserId() != $permissionList[$i]){
+  //     $service->permissions->delete($fileId, $permissionList[$i]);  
+  //   }
+  //   $userPermission = new Google_Service_Drive_Permission(array(
+  //     'type' => 'user',
+  //     'role' => 'reader',
+  //     'emailAddress' => $userEmail
+  //   ));
+  //   $request = $service->permissions->create($fileId, $userPermission, array(
+  //     'fields' => 'id'
+  //   ));
+  //   var_dump($request);
+  // }
   // add new 106 user permission
 }
 function ifInFolder($service, $folderId, $fileId)
@@ -1546,14 +1550,14 @@ function listFolderTree($location)
   return $list;
 }
 function inputYear($fileId){
-  echo '
-    <form action = "control.php" method="post">
-      <input type="hidden" name="fileId" value="'.$fileId.'">
-      <input type="text" name="year" value="">
-      <input type="submit" name="act" value="inputYear">
-    </form>
-  ';
-  // checkYearFolderExist2($fileId);
+  // echo '
+    // <form action = "control.php" method="post">
+      // <input type="hidden" name="fileId" value="'.$fileId.'">
+      // <input type="text" name="year" value="">
+      // <input type="submit" name="act" value="inputYear">
+    // </form>
+  // ';
+  checkYearFolderExist2($fileId);
 }
 function newMemberDetail($name, $id, $email, $gender, $class, $department, $year, $tel, $diet, $skill, $prefer, $groupId, $status)
 {
@@ -1577,44 +1581,6 @@ function newMemberDetail($name, $id, $email, $gender, $class, $department, $year
   $response = $service->spreadsheets_values->append($member_sheet_id, $range, $body, $params);
 }
 function newPost($title,$belong,$type,$mime,$newPostAttach,$attach){
-  // if($type == 1){
-    
-  // }else if($type == 2){
-  //   $postid;
-  //   // 開個屬於帖文內容的doc
-  //   $fileId = createFile($mime,$title,$belong);
-  //   $sql = "insert into `member`.`post` (title,fileId,belong,type) VALUES ('$title','$fileId','$belong','$type')";
-  //   // 找回剛才創建的文件，加入db
-  //   $checkpostid = "select * from `member`.`post` where title = '".$title."' and fileId = '".$fileId."' and belong = '".$belong."' and type = '".$type."'";
-  //   insertDb($sql);
-  //   $rt = getDb($checkpostid,4);
-  //   while ($row = $rt->fetch_assoc()) {
-  //     $postid = $row["id"];
-  //   }
-  //   $sql2 = "insert into `member`.`postattach` (attachId,postId) VALUES ('$fileId','$postid')";
-  //   insertDb($sql2);
-  //   // 寫入新開的文件
-  //   for($x=0;$x<count($newPostAttach);$x++){
-  //     if($newPostAttach != "" && count($newPostAttach) != 0){
-  //       list($newPostAttachTitle,$newPostAttachBelong,$newPostType,$newPostAttachMime)=$newPostAttach[$x];
-  //       if($newPostAttachBelong!="" || $postid != ""){
-  //         $fileId = createFile($newPostAttachMime,$newPostAttachTitle,$newPostAttachBelong);
-  //         $sql3 = "insert into `member`.`postattach` (attachId,postId) VALUES ('$fileId','$postid')";
-  //         insertDb($sql3);
-  //       }
-  //     }
-  //   }
-  //   // 寫入掛載的文件
-  //   for($x=0;$x<count($attach);$x++){
-  //     if($attach != "" && count($attach) != 0){
-  //       list($exsistTitle,$exsistsFileId,$exsistsBelong,$existsPosttype)=$attach[$x];
-  //       $sql3 = "insert into `member`.`postattach` (attachId,postId) VALUES ('$exsistsFileId','$postid')";
-  //       insertDb($sql3);
-  //     }
-  //   }
-  // }else if($type == 3){
-
-  // }
   $postid;
     // 開個屬於帖文內容的doc
   $fileId = createFile($mime,$title,$belong);

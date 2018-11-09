@@ -1,8 +1,12 @@
 <?php
-require ('model.php');
+require("model.php");
 
 $action = $_REQUEST['act'];
 switch ($action) {
+
+case 'handOver':
+  handOver($_REQUEST['groupId'],$_REQUEST['email'],$_REQUEST['newYear']);
+  break;
 
 case 'allGroup':
   allGroup();
