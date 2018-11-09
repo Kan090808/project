@@ -1,6 +1,11 @@
 <?php
+if(!isset($_SESSION)) 
+{ 
+  session_start(); 
+} 
 require __DIR__ . '/vendor/autoload.php';
-session_start();
+
+$GLOBALS['client'] = getClient(0);
 $GLOBALS['rootroot'] = "1gFdoJoNtjlABmjRYim5xEAXbLvnoIBLs";
 if (isset($_POST['verCode'])) { //check if form was submitted
   $input = $_POST['verCode']; //get input text
@@ -261,9 +266,10 @@ function checkYearFolderExist2($fileId)
 {
   // this function is called with a sheet file id
   // get all year by sheet
+  // $client = getClient(0);
+  $service = new Google_Service_Sheets($GLOBALS['client']);
+  $currentYear = "105";
   $secondLevelGroupId = "";
-  $client = getClientSheet();
-  $service = new Google_Service_Sheets($client);
   $rootroot = $GLOBALS['rootroot'];
   $spreadsheetId = $fileId;
   $response_title = $service->spreadsheets->get($spreadsheetId);
@@ -291,8 +297,7 @@ function checkYearFolderExist2($fileId)
   }
   // now had year data in $position
   $notCreateYet = $new_year;
-  $client = getClient(0);
-  $service = new Google_Service_Drive($client);
+  $service = new Google_Service_Drive($GLOBALS['client']);
   $parameters['q'] = "mimeType='application/vnd.google-apps.folder' and '$rootroot' in parents and trashed=false";
   $results = $service->files->listFiles($parameters);
   if (count($results->getFiles()) == 0) {
@@ -333,7 +338,7 @@ function checkYearFolderExist2($fileId)
     }
   }
   // 利用xx組別文件夾的id，底下產生職位組別
-  checkPositionFolderExist2($spreadsheetId,$firstLevelId ,$secondLevelGroupId);
+  checkPositionFolderExist2($spreadsheetId,$firstLevelId ,$secondLevelGroupId,$currentYear);
 }
 // clear
 function checkPositionFolderExist()
@@ -341,11 +346,11 @@ function checkPositionFolderExist()
   getMemberSheet(3);
 }
 // for position
-function checkPositionFolderExist2($fileId, $firstLevelId,$secondLevelGroupId)
+function checkPositionFolderExist2($fileId, $firstLevelId,$secondLevelGroupId,$currentYear)
 {
   // check each row position's year
   // get all position name by sheet
-  $client = getClientSheet();
+  $client = getClient(0);
   $service = new Google_Service_Sheets($client);
   $spreadsheetId = $fileId;
   $range = "E2:F";
@@ -393,10 +398,9 @@ function checkPositionFolderExist2($fileId, $firstLevelId,$secondLevelGroupId)
     if(!in_array($notCreateYetPosition[$i], array("社長","副社長","顧問"))){
       createFolder($notCreateYetPosition[$i], $notCreateYetYear[$i], false, $spreadsheetId);
     }
-    // echo "AA".$notCreateYetPosition[$i]."BB".$notCreateYetYear[$i];
     // createFolder($notCreateYetPosition[$i], $firstLevelId, false, $spreadsheetId);
   }
-  createFolderPermission($firstLevelId, $spreadsheetId);
+  createFolderPermission($firstLevelId, $spreadsheetId,$currentYear);
 }
 function choseExistsToPost($title,$posttype,$belong){
   explorer($title,$posttype,$belong);
@@ -437,7 +441,7 @@ function createFolder($name, $folderId, $isOnRoot, $spreadsheetId)
   }
   return $results->getId();
 }
-function createFolderPermission($parentId, $fileId)
+function createFolderPermission($parentId, $fileId, $currentYear)
 {
   // echo $parentId.$fileId;
   $client = getClient(0);
@@ -445,8 +449,6 @@ function createFolderPermission($parentId, $fileId)
   $service = new Google_Service_Drive($client);
   $service_s = new Google_Service_Sheets($client_s);
   $spreadsheetId = $fileId;
-  // echo $spreadsheetId;
-  // $spreadsheetId = '1jRQ1jr6DlxAv8VbM5z-NopMTcB0DpT1oqHVzM4BYC1o';
   $range = 'A2:G';
   // 2 & 4
   $response = $service_s->spreadsheets_values->get($spreadsheetId, $range);
@@ -477,9 +479,8 @@ function createFolderPermission($parentId, $fileId)
       } else {
         $roleNum = 60;
       }
-      if(!in_array($roleString, array("社長","副社長","顧問"))){
+      if(!in_array($roleString, array("社長","副社長","顧問")) && $currentYear==$year){
         // xxgroup - 105
-        echo $roleString;
         $yId = getFolderId($year, $parentId);
         // echo "yid=".$yId;
         // xxgroup - 105 - zubie
@@ -510,12 +511,16 @@ function createFolderPermission($parentId, $fileId)
           insertDb($sqlTest);
         }
         insertDb($sql);
-
       }else{
-
+        if($currentYear != $year){
+          echo $userEmail;
+          $role = "reader";
+        }else{
+          $role = "writer";
+        }
         $userPermission = new Google_Service_Drive_Permission(array(
           'type' => 'user',
-          'role' => 'writer',
+          'role' => $role,
           'emailAddress' => $userEmail
         ));
         $request = $service->permissions->create($parentId, $userPermission, array(
@@ -1233,7 +1238,6 @@ function getMemberSheet($type)
 // use to find memberSheet file in drive
 
 {
-  echo $type;
   $client = getClient(0);
   $service = new Google_Service_Drive($client);
   $parameters['q'] = "mimeType='application/vnd.google-apps.spreadsheet' and trashed=false";
@@ -1541,6 +1545,16 @@ function listFolderTree($location)
   // return array($fileName,$fileId);
   return $list;
 }
+function inputYear($fileId){
+  echo '
+    <form action = "control.php" method="post">
+      <input type="hidden" name="fileId" value="'.$fileId.'">
+      <input type="text" name="year" value="">
+      <input type="submit" name="act" value="inputYear">
+    </form>
+  ';
+  // checkYearFolderExist2($fileId);
+}
 function newMemberDetail($name, $id, $email, $gender, $class, $department, $year, $tel, $diet, $skill, $prefer, $groupId, $status)
 {
   $time = date(DATE_RFC2822);
@@ -1705,7 +1719,9 @@ function refreshGroupPermission($groupId){
       $service->permissions->delete($groupId, $permissionList[$i]);  
     }
   }
-  // createFolderPermission($groupId,$crew_sheet_id);
+  createFolderPermission($groupId,$crew_sheet_id,"105");
+  createGroupFolderPermissionEditor($groupId);
+  createGroupFolderPermission($groupId,"",$crew_sheet_id);
 }
 function removeMember($no, $sheetId)
 {
@@ -1740,7 +1756,8 @@ function selectFirstSheet($fileId, $type)
     getMemberList($fileId);
   }
   if ($type == 1) {
-    checkYearFolderExist2($fileId);
+    inputYear($fileId);
+    // checkYearFolderExist2($fileId);
   }
   if ($type == 2) {
     return $fileId;
