@@ -61,7 +61,7 @@ if ($_SESSION["status"] == "false") {
       </form>';
       // 帶1進去，從model裡面echo出來
       // 帶2進去，回傳array
-    getFolderList($currentFolderId,1);
+    // getFolderList($currentFolderId,1);
       // sidebar, $groupId[$i]
       // all year
     // echo "<br/>-------------all year-------";
@@ -159,7 +159,7 @@ if ($_SESSION["status"] == "false") {
   // testtype1($type1id);
 
   // 取得置頂貼
-  $rt = getPinPost($type1id,1);
+  // $rt = getPinPost($type1id,1);
   // echo '
   //   <form action = "control.php" method="post">
   //     <input type="hidden" name="title" value="test2">
@@ -171,7 +171,8 @@ if ($_SESSION["status"] == "false") {
   // 檔案資料列出
   echo "<br/>"; 
 }
-
+// handOver("1fvWi7jDch_hxiwYfJPH2aSIGCtFTQbzu",getEmail(),"106");
+// refreshGroupPermission("1fvWi7jDch_hxiwYfJPH2aSIGCtFTQbzu");
 if(isset($_SESSION['notCrew'])){
   echo "<br/>";
   echo "YOU ARE NOT CREW";

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 08, 2018 at 02:16 PM
+-- Generation Time: Nov 09, 2018 at 01:48 PM
 -- Server version: 10.1.35-MariaDB
 -- PHP Version: 7.2.9
 
@@ -42,7 +42,8 @@ CREATE TABLE `group` (
 --
 
 INSERT INTO `group` (`id_group`, `groupName`, `groupID`, `crew_sheet_id`, `currentYear`, `member_sheet_id`) VALUES
-(147, '暨南大學馬來西亞同學會', '1fvWi7jDch_hxiwYfJPH2aSIGCtFTQbzu', '19SJsCLSLOSwnfT2Zx8zNvclOqCx2UCJOTsYiPfGirMw', '105', '1usz2S7u6jS4YXd__ex3h8veQrwkXCrlpXYNdMxAnN1M');
+(150, '暨南大學馬來西亞同學會', '1zM4lUnWEMaUEcjPX618lOUcRWaOYUVbq', '19SJsCLSLOSwnfT2Zx8zNvclOqCx2UCJOTsYiPfGirMw', '', '1UBGcpujWwIpoQ81Ccank2DLeNK3JI4mcRpmivLjI0oI'),
+(151, '測試測試會', '1fgoBC77fXJ820S58a8zIgnZGqQTosj7J', '1bODk4d6_x5P_I5BBD-YfKCHE8G4xMQzYY_A4FQZTBHk', '', '1gB8VFb7YZFFM-MAnNn2dgXd0DKGcU4Zp3bsM61qEzDA');
 
 -- --------------------------------------------------------
 
@@ -60,14 +61,6 @@ CREATE TABLE `post` (
   `pin` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
---
--- Dumping data for table `post`
---
-
-INSERT INTO `post` (`id`, `time`, `title`, `fileId`, `belong`, `type`, `pin`) VALUES
-(17, '2018-11-06 14:38:46', 'test1', '1TFu_0f1Pl7IsYJSzM8gIgX9lu-WGj-o5Il3g6jPzZdE', '1fvWi7jDch_hxiwYfJPH2aSIGCtFTQbzu', 2, 0),
-(24, '2018-11-08 12:47:58', 'importTant', '1S5P9d3zljvA7BJ7tta3sRzTG6um6p5Xd0dFiYmq7ngg', '1YPIU7jCmaDj8Wt9ZlhwTfO9uTY_eyNeb', 1, 1);
-
 -- --------------------------------------------------------
 
 --
@@ -79,16 +72,6 @@ CREATE TABLE `postattach` (
   `attachId` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
   `postId` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
---
--- Dumping data for table `postattach`
---
-
-INSERT INTO `postattach` (`id`, `attachId`, `postId`) VALUES
-(17, '1TFu_0f1Pl7IsYJSzM8gIgX9lu-WGj-o5Il3g6jPzZdE', 17),
-(18, '1K6tRHHEfgFzrwXWgL1yBIYieaT_DMG8M-m5tbjvHQnQ', 17),
-(19, '1usz2S7u6jS4YXd__ex3h8veQrwkXCrlpXYNdMxAnN1M', 17),
-(35, '1S5P9d3zljvA7BJ7tta3sRzTG6um6p5Xd0dFiYmq7ngg', 24);
 
 -- --------------------------------------------------------
 
@@ -106,13 +89,13 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`id_user_group`, `email`) VALUES
-(52, 'junanyeap@gmail.com'),
-(53, 'junanbackup@gmail.com'),
-(54, 'kanjingterng@gmail.com'),
-(55, 's104213070@mail1.ncnu.edu.tw'),
-(56, 's104213059@mail1.ncnu.edu.tw'),
-(57, 'yranyran19@gmail.com'),
-(58, 's104213071@mail1.ncnu.edu.tw');
+(59, 'yranyran19@gmail.com'),
+(60, 'junanbackup@gmail.com'),
+(61, 'kanjingterng@gmail.com'),
+(62, 's104213070@mail1.ncnu.edu.tw'),
+(63, 's104213059@mail1.ncnu.edu.tw'),
+(64, 'junanyeap@gmail.com'),
+(65, 's104213071@mail1.ncnu.edu.tw');
 
 -- --------------------------------------------------------
 
@@ -133,13 +116,20 @@ CREATE TABLE `useraccessiblegroup` (
 --
 
 INSERT INTO `useraccessiblegroup` (`uAG_id`, `email`, `groupID`, `year`, `role`) VALUES
-(246, 'junanyeap@gmail.com', '1fvWi7jDch_hxiwYfJPH2aSIGCtFTQbzu', '104', 89),
-(247, 'junanbackup@gmail.com', '1fvWi7jDch_hxiwYfJPH2aSIGCtFTQbzu', '105', 89),
-(248, 'kanjingterng@gmail.com', '1fvWi7jDch_hxiwYfJPH2aSIGCtFTQbzu', '105', 88),
-(249, 's104213070@mail1.ncnu.edu.tw', '1fvWi7jDch_hxiwYfJPH2aSIGCtFTQbzu', '105', 88),
-(250, 's104213059@mail1.ncnu.edu.tw', '1fvWi7jDch_hxiwYfJPH2aSIGCtFTQbzu', '104', 88),
-(251, 'yranyran19@gmail.com', '1fvWi7jDch_hxiwYfJPH2aSIGCtFTQbzu', '105', 99),
-(252, 's104213071@mail1.ncnu.edu.tw', '1fvWi7jDch_hxiwYfJPH2aSIGCtFTQbzu', '105', 98);
+(267, 'yranyran19@gmail.com', '1zM4lUnWEMaUEcjPX618lOUcRWaOYUVbq', '104', 89),
+(268, 'junanbackup@gmail.com', '1zM4lUnWEMaUEcjPX618lOUcRWaOYUVbq', '105', 89),
+(269, 'kanjingterng@gmail.com', '1zM4lUnWEMaUEcjPX618lOUcRWaOYUVbq', '105', 88),
+(270, 's104213070@mail1.ncnu.edu.tw', '1zM4lUnWEMaUEcjPX618lOUcRWaOYUVbq', '105', 88),
+(271, 's104213059@mail1.ncnu.edu.tw', '1zM4lUnWEMaUEcjPX618lOUcRWaOYUVbq', '104', 88),
+(272, 'junanyeap@gmail.com', '1zM4lUnWEMaUEcjPX618lOUcRWaOYUVbq', '105', 99),
+(273, 's104213071@mail1.ncnu.edu.tw', '1zM4lUnWEMaUEcjPX618lOUcRWaOYUVbq', '105', 98),
+(274, 'yranyran19@gmail.com', '1fgoBC77fXJ820S58a8zIgnZGqQTosj7J', '104', 89),
+(275, 'junanbackup@gmail.com', '1fgoBC77fXJ820S58a8zIgnZGqQTosj7J', '105', 89),
+(276, 'kanjingterng@gmail.com', '1fgoBC77fXJ820S58a8zIgnZGqQTosj7J', '105', 88),
+(277, 's104213070@mail1.ncnu.edu.tw', '1fgoBC77fXJ820S58a8zIgnZGqQTosj7J', '105', 88),
+(278, 's104213059@mail1.ncnu.edu.tw', '1fgoBC77fXJ820S58a8zIgnZGqQTosj7J', '104', 88),
+(279, 'junanyeap@gmail.com', '1fgoBC77fXJ820S58a8zIgnZGqQTosj7J', '105', 99),
+(280, 's104213071@mail1.ncnu.edu.tw', '1fgoBC77fXJ820S58a8zIgnZGqQTosj7J', '105', 98);
 
 --
 -- Indexes for dumped tables
@@ -183,31 +173,31 @@ ALTER TABLE `useraccessiblegroup`
 -- AUTO_INCREMENT for table `group`
 --
 ALTER TABLE `group`
-  MODIFY `id_group` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=148;
+  MODIFY `id_group` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=152;
 
 --
 -- AUTO_INCREMENT for table `post`
 --
 ALTER TABLE `post`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT for table `postattach`
 --
 ALTER TABLE `postattach`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
 
 --
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id_user_group` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=59;
+  MODIFY `id_user_group` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=66;
 
 --
 -- AUTO_INCREMENT for table `useraccessiblegroup`
 --
 ALTER TABLE `useraccessiblegroup`
-  MODIFY `uAG_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=253;
+  MODIFY `uAG_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=281;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
