@@ -191,8 +191,8 @@ if(isset($_SESSION['notCrew'])){
 echo '
 <form action="control.php" method="post">
   <input type="text" name="newYear" value="106"><br/>
-  <input type="text" name="email" value="yranyran19@gmail.com"><br/>
-  <input type="text" name="groupId" value="1qadFURqSk44BYdgd4jLHxFaVcp0RbQNc"><br/>
+  <input type="text" name="email" value="s104213070@mail1.ncnu.edu.tw"><br/>
+  <input type="text" name="groupId" value="1WQzSml-Yd1X3BPo-LSH5gdpMIcGEKwCh"><br/>
   <input type="submit" name="act" value="handOver"><br/>
 </form>
 ';
@@ -201,4 +201,5 @@ echo '
 	<input type="submit" name="act" value="logout"><br/>
 </form>
 ';
+var_dump(getFolderList("16Y8EK1a0bMjPjMxvVOxitWv3HRL-Olkk",2));
 ?>

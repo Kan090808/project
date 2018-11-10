@@ -513,7 +513,7 @@ function createFolderPermission($parentId, $fileId, $currentYear)
         insertDb($sql);
       }else{
         if($currentYear != $year){
-          echo $userEmail;
+          // echo $userEmail;
           $role = "reader";
         }else{
           $role = "writer";
@@ -1423,45 +1423,52 @@ function getWho()
   return $rt;
 }
 function handOver($groupId,$email,$newYear){
+  $currentEmail = getEmail();
+  $permissionList = getPermissionList($groupId,$currentEmail);
   $client = getClient(0);
   $service = new Google_Service_Drive($client);
-  $role = checkRole($email,$groupId);
-  $userPermission = new Google_Service_Drive_Permission(array(
-                      'type' => 'user',
-                      'role' => 'owner',
-                      'transferOwnership' => 'true',
-                      'emailAddress' => $email
-                  ));
-  $request = $service->permissions->create(
-    $groupId, 
-    $userPermission, 
-    array('fields' => 'id', 'transferOwnership' => 'true'));
+  $role = checkRole($currentEmail,$groupId);
   
-  // for($i=0;$i<count($permissionList);$i++){
-  //   $permission = $service->permissions->get($groupId, $permissionList[$i]);
-  //   $permission->setRole("reader");
-  //   $service->permissions->update($groupId, $permissionList[$i], $permission);  
-  // }
-  // if role > 90, than start the handover process
-  // set the current year to new year
-  // $sql = "update group set currentYear= '$newYear' WHERE groupID = '$groupId';";
-  // getDb($sql,4);
-  // // update  all 105 user permission to reader
-  // for($i = 0 ; $i<count($permissionList);$i++){
-  //   if(getUserId() != $permissionList[$i]){
-  //     $service->permissions->delete($fileId, $permissionList[$i]);  
-  //   }
-  //   $userPermission = new Google_Service_Drive_Permission(array(
-  //     'type' => 'user',
-  //     'role' => 'reader',
-  //     'emailAddress' => $userEmail
-  //   ));
-  //   $request = $service->permissions->create($fileId, $userPermission, array(
-  //     'fields' => 'id'
-  //   ));
-  //   var_dump($request);
-  // }
-  // add new 106 user permission
+  $service_s = new Google_Service_Sheets($client);
+  $range = 'A2:G';
+  // 2 & 4
+  $values = $service_s->spreadsheets_values->get(getGroupCrewSheet($groupId), $range);
+  for($i = 0 ; $i<count($permissionList);$i++){
+    if(getUserId() != $permissionList[$i]){
+      $service->permissions->delete($groupId, $permissionList[$i]);
+    }
+  }
+  // ^^^^^^^^^
+  // 刪舊有權限
+  if (empty($values)) {
+    print "No data found.\n";
+  }
+  else {
+    foreach ($values as $row) {
+      $userEmail = $row[2];
+      if($userEmail!=$email){
+        $userPermission = new Google_Service_Drive_Permission(array(
+          'type' => 'user',
+          'role' => 'reader',
+          'emailAddress' => $userEmail
+        ));
+        $request = $service->permissions->create($groupId, $userPermission, array(
+          'fields' => 'id'
+        )); 
+      }
+    }
+    $userPermission = new Google_Service_Drive_Permission(array(
+      'type' => 'user',
+      'role' => 'owner',
+      'transferOwnership' => 'true',
+      'emailAddress' => $email
+    ));
+    $request = $service->permissions->create($groupId, $userPermission, array('fields' => 'id', 'transferOwnership' => 'true'));
+  }
+  // var_dump($request);
+  createFolderPermission($groupId,getGroupCrewSheet($groupId),"106");
+  createGroupFolderPermissionEditor($groupId);
+  createGroupFolderPermission($groupId,"",getGroupCrewSheet($groupId));
 }
 function ifInFolder($service, $folderId, $fileId)
 {
