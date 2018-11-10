@@ -5,7 +5,7 @@ if(!isset($_SESSION))
 } 
 require __DIR__ . '/vendor/autoload.php';
 
-$GLOBALS['client'] = getClient(0);
+// $GLOBALS['client'] = getClient(0);
 $GLOBALS['rootroot'] = "1gFdoJoNtjlABmjRYim5xEAXbLvnoIBLs";
 if (isset($_POST['verCode'])) { //check if form was submitted
   $input = $_POST['verCode']; //get input text
@@ -721,7 +721,7 @@ function getClient($type)
 {
   $client = new Google_Client();
   $client->setApplicationName('project108 ');
-  $client->setAuthConfig('../html/webclient.json');
+  $client->setAuthConfig('../html/webClient.json');
   $client->addScope("https://www.googleapis.com/auth/drive");
   $client->setAccessType('offline');
   $client->setApprovalPrompt('force');
@@ -763,7 +763,7 @@ function getClientReadOnly()
 {
   $client = new Google_Client();
   $client->setApplicationName('project108 ');
-  $client->setAuthConfig('../html/webclient.json');
+  $client->setAuthConfig('../html/webClient.json');
   $client->addScope("https://www.googleapis.com/auth/drive.readonly");
   $client->setAccessType('offline');
   $client->setApprovalPrompt('force');
@@ -793,7 +793,7 @@ function getClientSheet()
 {
   $client = new Google_Client();
   $client->setApplicationName('project108 ');
-  $client->setAuthConfig('webclient.json');
+  $client->setAuthConfig('webClient.json');
   $client->addScope("https://www.googleapis.com/auth/spreadsheet");
   $client->setAccessType('offline');
   if (isset($_SESSION['access_token']) && $_SESSION['access_token']) {
