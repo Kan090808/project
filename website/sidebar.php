@@ -66,12 +66,20 @@ if ($_SESSION["status"] == "true") {
               <i class="icofont icofont-ui-note"></i>
               幹部名單
             </a>
-          </li>';
+          </li>
+          <li>
+            <a class="waves-effect waves-dark" id="folder">
+              <i class="icofont icofont-speech-comments"></i>
+              幹部討論區
+            </a>
+          </li>
+          ';
+          
     }
     ;
-    echo '<li>
+    echo '<li id="club">
             <a class="waves-effect waves-dark" href="#!">
-              <i class="icon-arrow-right"></i>
+              <i class="icofont icofont-ui-home"></i>
               首頁
             </a>
           </li>

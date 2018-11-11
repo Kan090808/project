@@ -107,6 +107,21 @@
   // $("#checkall").click(function(){
   //   $('.check').not(this).prop('checked', this.checked);
   // });
+  function searchClub() {
+    var input, filter, tb, tr, td, i;
+    input = document.getElementById("searchString");
+    filter = input.value.toUpperCase();
+    tb = document.getElementById("allClub");
+    tr = tb.getElementsByTagName("tr");
+    for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td")[0];
+        if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+            tr[i].style.display = "";
+        } else {
+            tr[i].style.display = "none";
+        }
+    }
+  }
 </script>
 </body>
 
