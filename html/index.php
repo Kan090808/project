@@ -158,6 +158,27 @@ if ($_SESSION["status"] == "false") {
         <input type="hidden" name="groupId" value="'.$groupId[$i].'">
         <input type="submit" name="act" value="refreshGroupPermission">
       </form>'; 
+    echo "<br/>";
+    if($role >90){
+      echo '
+        <form action = "control.php" method="post">
+          <input type="text" name="activityName" value="">
+          <input type="hidden" name="belong" value="'.$groupId[$i].'">
+          <input type="hidden" name="belongYear" value="'.$currentYear[$i].'">
+          <input type="submit" name="act" value="newActivity">
+        </form>';
+      list($activityName,$belong,$belongYear,$crewMemberSheetw) = getActivity($groupId[$i],$currentYear[$i]);
+      for($x =0;$x<count($activityName);$x++){
+        echo $activityName[$x];
+        echo '
+          <form action = "controlAct.php" method="post">
+            <input type="hidden" name="activityName" value="'.$activityName[$x].'"">
+            <input type="hidden" name="belong" value="'.$belong[$x].'">
+            <input type="hidden" name="belongYear" value="'.$belongYear[$x].'">
+            <input type="submit" name="act" value="control">
+          </form>';
+      }
+    }
   }
 
   echo "<br>";
@@ -191,8 +212,8 @@ if(isset($_SESSION['notCrew'])){
 echo '
 <form action="control.php" method="post">
   <input type="text" name="newYear" value="106"><br/>
-  <input type="text" name="email" value="yranyran19@gmail.com"><br/>
-  <input type="text" name="groupId" value="1qadFURqSk44BYdgd4jLHxFaVcp0RbQNc"><br/>
+  <input type="text" name="email" value="s104213070@mail1.ncnu.edu.tw"><br/>
+  <input type="text" name="groupId" value="1WQzSml-Yd1X3BPo-LSH5gdpMIcGEKwCh"><br/>
   <input type="submit" name="act" value="handOver"><br/>
 </form>
 ';
@@ -201,4 +222,5 @@ echo '
 	<input type="submit" name="act" value="logout"><br/>
 </form>
 ';
+// var_dump(getFolderList("16Y8EK1a0bMjPjMxvVOxitWv3HRL-Olkk",2));
 ?>

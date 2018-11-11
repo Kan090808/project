@@ -109,6 +109,9 @@ case 'newPost':
   header('Location: index.php');
   break;
 
+case 'newActivity':
+  newActivity($_REQUEST['activityName'],$_REQUEST['belong'],$_REQUEST['belongYear']);
+  break;
 case 'searchGroup':
   $string = $_REQUEST['searchContent'];
   searchGroup($string);
@@ -178,6 +181,9 @@ case 'chosePathFile':
   echo $rt;
   break;
 
+case 'copyMemberToCrew':
+  copyMemberToCrew($_REQUEST['name'],$_REQUEST['email'],$_REQUEST['phone'],$_REQUEST['position'],$_REQUEST['actCrewSheet']);
+  break;
 case 'addData':
   appendData2($_REQUEST['name'], $_REQUEST['email'], $_REQUEST['phoneNumber'], $_REQUEST['position'], $_REQUEST['group'], $_REQUEST['sheetId']);
   $groupId = getGroupId($_REQUEST['sheetId']);
@@ -198,6 +204,10 @@ case 'appendData':
   $_SESSION['position'] = $_REQUEST['position'];
   $_SESSION['year'] = $_REQUEST['year'];
   $fileId = appendData();
+  break;
+
+case 'appendDataToCrewMemberSheet':
+  appendDataToCrewMemberSheet($_REQUEST['name'],$_REQUEST['email'],$_REQUEST['phone'],$_REQUEST['position'],$_REQUEST['actCrewSheetId']);
   break;
 
 case 'deleteSheetData':
