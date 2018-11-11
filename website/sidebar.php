@@ -47,10 +47,13 @@ if ($_SESSION["status"] == "false") {
       <li>
         <a class="waves-effect waves-dark"><i class="icofont icofont-ui-chat"></i></i><span>討論區</span></a>
       </li>
+      
       <?php
+      
 if ($_SESSION["status"] == "true") {
+  echo '<li class="nav-level">社團</li>';
   for ($i = 0; $i < count($groupName); $i++) {
-    echo '<li class="nav-level">社團</li>
+    echo '
       <li class="treeview"><a class="waves-effect waves-dark" href="#!"><i class="icofont icofont-company"></i><span>' . $groupName[$i] . '</span><i
             class="icon-arrow-down"></i></a>
         <ul class="treeview-menu">';
@@ -107,50 +110,54 @@ if ($_SESSION["status"] == "true") {
           $huodongId = $cfileId[$k];
         }
       }
-      echo '<li class="treeview">
-            <a class="waves-effect waves-dark" href="#!">
-              <i class="icofont icofont-briefcase-alt-2"></i>
-              <span>組別</span>
-              <i class="icon-arrow-down"></i>
-            </a>
-            <ul class="treeview-menu">';
-      $gfolder      = getFolderList($zubieId, 2);
-      $gfileName    = $gfolder[0];
-      $gfileId      = $gfolder[1];
-      $gfileType    = $gfolder[2];
-      $gfileLastMod = $gfolder[3];
-      $gfileSize    = $gfolder[4];
-      for ($j = 0; $j < count($gfileName); $j++) {
-        echo '<li>
-                  <a class="waves-effect waves-dark" href="#!">
-                    <i class="icofont icofont-briefcase-alt-2"></i>
-                    ' . $gfileName[$j] . '
-                  </a>
-                </li>';
+      if($zubieId!=''){
+        echo '<li class="treeview">
+              <a class="waves-effect waves-dark" href="#!">
+                <i class="icofont icofont-briefcase-alt-2"></i>
+                <span>組別</span>
+                <i class="icon-arrow-down"></i>
+              </a>
+              <ul class="treeview-menu">';
+        $gfolder      = getFolderList($zubieId, 2);
+        $gfileName    = $gfolder[0];
+        $gfileId      = $gfolder[1];
+        $gfileType    = $gfolder[2];
+        $gfileLastMod = $gfolder[3];
+        $gfileSize    = $gfolder[4];
+        for ($j = 0; $j < count($gfileName); $j++) {
+          echo '<li>
+                    <a class="waves-effect waves-dark" href="#!">
+                      <i class="icofont icofont-briefcase-alt-2"></i>
+                      ' . $gfileName[$j] . '
+                    </a>
+                  </li>';
+        }
+        echo '</ul></li>';
       }
-      echo '</ul></li>';
-      echo '<li class="treeview">
-            <a class="waves-effect waves-dark" href="#!">
-              <i class="icofont icofont-social-aim"></i>
-              <span>活動</span>
-              <i class="icon-arrow-down"></i>
-            </a>
-            <ul class="treeview-menu">';
-      $efolder      = getFolderList($huodongId, 2);
-      $efileName    = $efolder[0];
-      $efileId      = $efolder[1];
-      $efileType    = $efolder[2];
-      $efileLastMod = $efolder[3];
-      $efileSize    = $efolder[4];
-      for ($j = 0; $j < count($efileName); $j++) {
-        echo '<li>
-                  <a class="waves-effect waves-dark" href="#!">
-                    <i class="icofont icofont-social-aim"></i>
-                    ' . $efileName[$j] . '
-                  </a>
-                </li>';
+      if($huodongId!=''){
+        echo '<li class="treeview">
+              <a class="waves-effect waves-dark" href="#!">
+                <i class="icofont icofont-social-aim"></i>
+                <span>活動</span>
+                <i class="icon-arrow-down"></i>
+              </a>
+              <ul class="treeview-menu">';
+        $efolder      = getFolderList($huodongId, 2);
+        $efileName    = $efolder[0];
+        $efileId      = $efolder[1];
+        $efileType    = $efolder[2];
+        $efileLastMod = $efolder[3];
+        $efileSize    = $efolder[4];
+        for ($j = 0; $j < count($efileName); $j++) {
+          echo '<li>
+                    <a class="waves-effect waves-dark" href="#!">
+                      <i class="icofont icofont-social-aim"></i>
+                      ' . $efileName[$j] . '
+                    </a>
+                  </li>';
+        }
+        echo '</ul></li>';
       }
-      echo '</ul></li>';
     }
     echo '<li class="treeview">
             <a class="waves-effect waves-dark" href="#!">
@@ -185,52 +192,58 @@ if ($_SESSION["status"] == "true") {
             $lhuodongId = $lfileId[$k];
           }
         }
-        echo '<li class="treeview">
-              <a class="waves-effect waves-dark" href="#!">
-                <i class="icofont icofont-briefcase-alt-2"></i>
-                <span>組別</span>
-                <i class="icon-arrow-down"></i>
-              </a>
-              <ul class="treeview-menu">';
-        $lgfolder      = getFolderList($lzubieId, 2);
-        $lgfileName    = $lgfolder[0];
-        $lgfileId      = $lgfolder[1];
-        $lgfileType    = $lgfolder[2];
-        $lgfileLastMod = $lgfolder[3];
-        $lgfileSize    = $lgfolder[4];
-        for ($l = 0; $l < count($lgfileName); $l++) {
-          echo '<li>
-                    <a class="waves-effect waves-dark" href="#!">
-                      <i class="icofont icofont-briefcase-alt-2"></i>
-                      ' . $lgfileName[$l] . '
-                    </a>
-                  </li>';
+        if($lzubieId!=''){
+          echo '<li class="treeview">
+                <a class="waves-effect waves-dark" href="#!">
+                  <i class="icofont icofont-briefcase-alt-2"></i>
+                  <span>組別</span>
+                  <i class="icon-arrow-down"></i>
+                </a>
+                <ul class="treeview-menu">';
+          $lgfolder      = getFolderList($lzubieId, 2);
+          $lgfileName    = $lgfolder[0];
+          $lgfileId      = $lgfolder[1];
+          $lgfileType    = $lgfolder[2];
+          $lgfileLastMod = $lgfolder[3];
+          $lgfileSize    = $lgfolder[4];
+          for ($l = 0; $l < count($lgfileName); $l++) {
+            echo '<li>
+                      <a class="waves-effect waves-dark" href="#!">
+                        <i class="icofont icofont-briefcase-alt-2"></i>
+                        ' . $lgfileName[$l] . '
+                      </a>
+                    </li>';
+          }
+          echo '</ul></li>';
+        }
+        if($lhuodongId!=''){
+          echo '<li class="treeview">
+                <a class="waves-effect waves-dark" href="#!">
+                  <i class="icofont icofont-social-aim"></i>
+                  <span>活動</span>
+                  <i class="icon-arrow-down"></i>
+                </a>
+                <ul class="treeview-menu">';
+          $lefolder      = getFolderList($lhuodongId, 2);
+          $lefileName    = $lefolder[0];
+          $lefileId      = $lefolder[1];
+          $lefileType    = $lefolder[2];
+          $lefileLastMod = $lefolder[3];
+          $lefileSize    = $lefolder[4];
+          for ($l = 0; $l < count($lefileName); $l++) {
+            echo '<li>
+                      <a class="waves-effect waves-dark" href="#!">
+                        <i class="icofont icofont-social-aim"></i>
+                        ' . $lefileName[$l] . '
+                      </a>
+                    </li>';
+          }
+          echo '</ul></li>';
         }
         echo '</ul></li>';
-        echo '<li class="treeview">
-              <a class="waves-effect waves-dark" href="#!">
-                <i class="icofont icofont-social-aim"></i>
-                <span>活動</span>
-                <i class="icon-arrow-down"></i>
-              </a>
-              <ul class="treeview-menu">';
-        $lefolder      = getFolderList($lhuodongId, 2);
-        $lefileName    = $lefolder[0];
-        $lefileId      = $lefolder[1];
-        $lefileType    = $lefolder[2];
-        $lefileLastMod = $lefolder[3];
-        $lefileSize    = $lefolder[4];
-        for ($l = 0; $l < count($lefileName); $l++) {
-          echo '<li>
-                    <a class="waves-effect waves-dark" href="#!">
-                      <i class="icofont icofont-social-aim"></i>
-                      ' . $lefileName[$l] . '
-                    </a>
-                  </li>';
-        }
-        echo '</ul></li></ul></li>';
       }
     }
+    echo '</ul></li></ul></li>';
   }
 }
 ?>
