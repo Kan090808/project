@@ -176,6 +176,17 @@ function appendData2($name, $email, $phone, $position, $year, $fileId)
   $range = 'A2:F';
   $response = $service->spreadsheets_values->append($spreadsheetId, $range, $body, $params);
 }
+function appendDataToCrewMemberSheet($name, $email, $phone, $position, $actCrewSheetId){
+  $client = getClient(0);
+  $service = new Google_Service_Sheets($client);
+  // DATE_RFC28222
+  $time = date(DATE_RFC2822);
+  $values = [[$time, $name, $email, $phone, $position]];
+  $body = new Google_Service_Sheets_ValueRange(['values' => $values]);
+  $params = ['valueInputOption' => 'RAW', 'insertDataOption' => 'INSERT_ROWS'];
+  $range = 'A2:E';
+  $response = $service->spreadsheets_values->append($actCrewSheetId, $range, $body, $params);
+}
 function approvedMember($no, $sheetId)
 {
   // echo $no.$groupId;
@@ -416,7 +427,17 @@ function choseExistsToPost2($title,$fileId,$belong,$posttype){
     header('Location: index.php');
   }
 }
-
+function copyMemberToCrew($name,$email,$phone,$position,$actCrewSheet){
+  $client = getClient(0);
+  $service = new Google_Service_Sheets($client);
+  // DATE_RFC28222
+  $time = date(DATE_RFC2822);
+  $values = [[$time, $name, $email, $phone, $position]];
+  $body = new Google_Service_Sheets_ValueRange(['values' => $values]);
+  $params = ['valueInputOption' => 'RAW', 'insertDataOption' => 'INSERT_ROWS'];
+  $range = 'A2:E';
+  $response = $service->spreadsheets_values->append($actCrewSheet, $range, $body, $params);
+}
 function createFolder($name, $folderId, $isOnRoot, $spreadsheetId)
 {
   $client = getClient(0);
@@ -636,6 +657,15 @@ function createFile($act, $newFileName, $pid)
       'mimeType' => 'application/vnd.google-apps.form'
     ));
   }
+  else if ($act == "folder") {
+    $fileMetadata = new Google_Service_Drive_DriveFile(array(
+      'name' => $newFileName,
+      'parents' => array(
+        $pid
+      ) ,
+      'mimeType' => 'application/vnd.google-apps.folder'
+    ));
+  }
   else {
     return "error";
   }
@@ -716,6 +746,38 @@ function explorerFolderOnly($title,$posttype,$belong){
       echo '<a href="control.php?act=selectItem&type=5&posttype='.$posttype.'&fId='.$fileId.'&title='.$title.'&belong='.$belong.'">'."[folder]".$file->getName().'</a>';
     }
   }
+}
+function getActivity($groupId,$currentYear){
+  $actname = array();
+  $belong = array();
+  $belongYear = array();
+  $crewMemberSheet = array();
+  $sql = "select * from `member`.`activity` where belong='$groupId' and belongYear = '$currentYear'";
+  $rt = getDb($sql,4);
+  while ($row = $rt->fetch_assoc()) {
+    array_push($actname, $row['activityName']);
+    array_push($belong, $row['belong']);
+    array_push($belongYear, $row['belongYear']);
+    array_push($crewMemberSheet, $row['crewMemberSheet']);
+  }
+  return array($actname,$belong,$belongYear,$crewMemberSheet);
+}
+function getActivityCrewMember($activityName,$belong,$belongYear)
+{
+  $sql = "select * from `member`.`activity` where activityName='$activityName' and belong='$belong' and belongYear='$belongYear'";
+  $actCrewSheet = "";
+  // echo $sql;
+  $rt = getDb($sql,4);
+  // var_dump($rt);
+  while ($row = $rt->fetch_assoc()) {
+    $actCrewSheet = $row["crewMemberSheet"];
+  }
+  return $actCrewSheet;
+}
+function getActIdBySheet($actCrewSheet){
+  $sql = "select * from `member`.`activity` where crewMemberSheet='" . $actCrewSheet . "'";
+  $rt = getDb($sql, 4);
+
 }
 function getClient($type)
 {
@@ -1625,7 +1687,24 @@ function newPost($title,$belong,$type,$mime,$newPostAttach,$attach){
   unset($_SESSION['tempTitle']);
   // header('Location: index.php');
 }
-
+function newActivity($name,$belong,$belongYear){
+  $temp = "[活動幹部]".$name;
+  $yearId=getFolderId($belongYear,$belong);
+  $actFolder = getFolderId("活動",$yearId);
+  $driveId = createFile("folder",$name,$actFolder);
+  $crewMemberSheet = createFile("sheet",$temp,$driveId);
+  // insert title to actCrewMember
+  $client = getClient(0);
+  $service = new Google_Service_Sheets($client);
+  $values = [["time","name","email","tel","position"]];
+  $body = new Google_Service_Sheets_ValueRange(['values' => $values]);
+  $params = ['valueInputOption' => 'RAW', 'insertDataOption' => 'INSERT_ROWS'];
+  $range = 'A1:F';
+  $response = $service->spreadsheets_values->append($crewMemberSheet, $range, $body, $params);
+  $sql = "insert into `member`.`activity` (activityName,driveId,belong,belongYear,crewMemberSheet) values ('$name','$driveId','$belong','$belongYear','$crewMemberSheet')";
+  insertDb($sql);
+  header('Location: index.php');
+}
 function printMemberSheetValue($member_sheet_id, $role)
 {
   $name = array();
@@ -1677,6 +1756,35 @@ function printMemberSheetValue($member_sheet_id, $role)
       $skill,
       $prefer,
       $status
+    );
+  }
+}
+function readCrewSheet($actCrewSheet){
+  $name = array();
+  $email = array();
+  $phoneNumber = array();
+  $position = array();
+  $group = array();
+  $client = getClient(0);
+  $service = new Google_Service_Sheets($client);
+  $range = "B:E";
+  $response = $service->spreadsheets_values->get($actCrewSheet, $range);
+  $values = $response->getValues();
+  if (empty($values)) {
+    print "settingGroup : No data found.\n";
+  }
+  else {
+    foreach($values as $row) {
+      array_push($name, $row[0]);
+      array_push($email, $row[1]);
+      array_push($phoneNumber, $row[2]);
+      array_push($position, $row[3]);
+    }
+    return array(
+      $name,
+      $email,
+      $phoneNumber,
+      $position
     );
   }
 }

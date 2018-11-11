@@ -158,6 +158,27 @@ if ($_SESSION["status"] == "false") {
         <input type="hidden" name="groupId" value="'.$groupId[$i].'">
         <input type="submit" name="act" value="refreshGroupPermission">
       </form>'; 
+    echo "<br/>";
+    if($role >90){
+      echo '
+        <form action = "control.php" method="post">
+          <input type="text" name="activityName" value="">
+          <input type="hidden" name="belong" value="'.$groupId[$i].'">
+          <input type="hidden" name="belongYear" value="'.$currentYear[$i].'">
+          <input type="submit" name="act" value="newActivity">
+        </form>';
+      list($activityName,$belong,$belongYear,$crewMemberSheetw) = getActivity($groupId[$i],$currentYear[$i]);
+      for($x =0;$x<count($activityName);$x++){
+        echo $activityName[$x];
+        echo '
+          <form action = "controlAct.php" method="post">
+            <input type="hidden" name="activityName" value="'.$activityName[$x].'"">
+            <input type="hidden" name="belong" value="'.$belong[$x].'">
+            <input type="hidden" name="belongYear" value="'.$belongYear[$x].'">
+            <input type="submit" name="act" value="control">
+          </form>';
+      }
+    }
   }
 
   echo "<br>";
@@ -201,5 +222,5 @@ echo '
 	<input type="submit" name="act" value="logout"><br/>
 </form>
 ';
-var_dump(getFolderList("16Y8EK1a0bMjPjMxvVOxitWv3HRL-Olkk",2));
+// var_dump(getFolderList("16Y8EK1a0bMjPjMxvVOxitWv3HRL-Olkk",2));
 ?>
