@@ -917,6 +917,8 @@ function getDb($sql, $type)
   $username = "kan";
   $password = "15110215";
   $conn = new mysqli($servername, $username, $password);
+  mysqli_set_charset($conn,"utf8");
+
   $temp = array();
   $result = $conn->query($sql);
   if ($type == 1) {
@@ -1079,6 +1081,7 @@ function getFolderList($location, $type)
       editFilePermission($location);
     }
     else if ($type == 2) {
+      //echo "hihihihihihihihih";
       $fileName = array();
       $fileId = array();
       $fileType = array();
