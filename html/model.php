@@ -10,6 +10,19 @@ $GLOBALS['rootroot'] = "1gFdoJoNtjlABmjRYim5xEAXbLvnoIBLs";
 if (isset($_POST['verCode'])) { //check if form was submitted
   $input = $_POST['verCode']; //get input text
 }
+function testCopy(){
+  $service = new Google_Service_Drive(getClient(0));
+  $dest = "1WQzSml-Yd1X3BPo-LSH5gdpMIcGEKwCh";
+  $fileId = "1E3vmOJSFDd4T9AEIXrTqZC6YRNjyyCsiqRIoQEOi9Uw";
+  $fileId2 = "1A8ei5AzBY79eRDNDC2vAHiGXt-NhAn9F17l2Tpdl6Xc";
+  $emptyFileMetadata = new Google_Service_Drive_DriveFile();
+  $file = $service->files->get($fileId, array('fields' => 'parents'));
+  $previousParents = join(',', $file->parents);
+  $file = $service->files->update($fileId, $emptyFileMetadata, array(
+      'addParents' => $dest,
+      'removeParents' => $previousParents,
+      'fields' => 'id, parents'));
+}
 function testtype1($type1id)
 { 
   $title = "";
@@ -454,7 +467,12 @@ function createFolder($name, $folderId, $isOnRoot, $spreadsheetId)
   ));
   $driveId = $results->getId();
   if ($isOnRoot == true) {
+    // change create new membersheetid ->>>
+    // copy template(form,sheet)
     $membersheetId = createFile("sheet", "memberSheet", $driveId);
+    // $membersheetId = copyFile(file,$driveId);
+    // $memberformId = copyFile(file,$driveId);
+    // $sql = "insert into `member`.`group` (groupName, groupID, crew_sheet_id,member_sheet_id,member_form_id) VALUES ('$name','$driveId','$spreadsheetId','$membersheetId','$memberformId')";
     $sql = "insert into `member`.`group` (groupName, groupID, crew_sheet_id,member_sheet_id) 
           VALUES ('$name','$driveId','$spreadsheetId','$membersheetId')";
     insertDb($sql);

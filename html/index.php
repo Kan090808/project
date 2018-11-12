@@ -222,5 +222,6 @@ echo '
 	<input type="submit" name="act" value="logout"><br/>
 </form>
 ';
+// testCopy();
 // var_dump(getFolderList("16Y8EK1a0bMjPjMxvVOxitWv3HRL-Olkk",2));
 ?>
