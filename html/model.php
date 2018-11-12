@@ -1415,6 +1415,7 @@ function getPermissionList($fileId,$email){
   return $permissionList;
 }
 function getPost($belong,$type){
+  $postBy = array();
   $postId = array();
   $postFileId = array();
   $postTitle = array();
@@ -1430,6 +1431,8 @@ function getPost($belong,$type){
     array_push($postFileId,$row["fileId"]);
     array_push($mainAttach,$row["fileId"]);
     array_push($postTitle,$row["title"]);
+    array_push($postBy,$row["postBy"]);
+     
   }
   for($i=0;$i<count($postId);$i++){
     $sql = "select * from `member`.`postattach` where postId = '".$postId[$i]."'";
@@ -1446,7 +1449,7 @@ function getPost($belong,$type){
       array_push($postTitle2,$postTitle[$i]);
     }
   }
-  return array($postId2,$postTitle2,$postAttach2,$isPostMainAttach);
+  return array($postId2,$postTitle2,$postAttach2,$isPostMainAttach,$postBy);
 }
 function getPinPost($belong,$type){
   $postId = array();
@@ -1670,11 +1673,12 @@ function newMemberDetail($name, $id, $email, $gender, $class, $department, $year
   $range = 'A:N';
   $response = $service->spreadsheets_values->append($member_sheet_id, $range, $body, $params);
 }
-function newPost($title,$belong,$type,$mime,$newPostAttach,$attach){
-  $postid;
+function newPost($title,$belong,$type,$mime,$newPostAttach,$attach,$postBy){
+  echo $postBy;
+  $postid = "";
     // 開個屬於帖文內容的doc
   $fileId = createFile($mime,$title,$belong);
-  $sql = "insert into `member`.`post` (title,fileId,belong,type,pin) VALUES ('$title','$fileId','$belong','$type',0)";
+  $sql = "insert into `member`.`post` (title,fileId,belong,type,pin,postBy) VALUES ('$title','$fileId','$belong','$type',0,'$postBy')";
   // 找回剛才創建的文件，加入db
   $checkpostid = "select * from `member`.`post` where title = '".$title."' and fileId = '".$fileId."' and belong = '".$belong."' and type = '".$type."'";
   insertDb($sql);

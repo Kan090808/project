@@ -91,6 +91,7 @@ case 'newPost':
   $belong = $_REQUEST['belong'];
   $type = $_REQUEST['type'];
   $mime = $_REQUEST['mime'];
+  $postBy = $_REQUEST['postBy'];
   $attach = "";
   $newPostAttach = "";
   if($_REQUEST['attach'] != ""){
@@ -105,7 +106,7 @@ case 'newPost':
   // if($attach == ""){
   //   echo "noattach";
   // }
-  newPost($title,$belong,$type,$mime,$newPostAttach,$attach);
+  newPost($title,$belong,$type,$mime,$newPostAttach,$attach,$postBy);
   header('Location: index.php');
   break;
 

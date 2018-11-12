@@ -106,6 +106,7 @@ if ($_SESSION["status"] == "false") {
         <input type="submit" name="act" value="choseExistsToPost">
         <input type="hidden" name="attach" value="'.$attach.'">
         <input type="hidden" name="newPostAttach" value="'.$newPostAttach.'">
+        <input type="hidden" name="postBy" value="'.$initEmail.'">
         <input type="submit" name="act" value="newPost">
       </form>
       ';
@@ -138,11 +139,13 @@ if ($_SESSION["status"] == "false") {
     }else{
       echo "<br/>沒有掛載的文件";
     }
-    list($postId,$postTitle,$postAttach,$isMainAttach)=getPost($groupId[$i],2);
+    echo "<br> show post-------------------";
+    list($postId,$postTitle,$postAttach,$isMainAttach,$postBy)=getPost($groupId[$i],2);
     for($x=0;$x<count($postId);$x++){
       if($isMainAttach[$x] == true){
         // var_dump($postAttach);
-        echo "<br/>".$postTitle[$x]."___".$postAttach[$x];
+        echo "<br/>".$postTitle[$x];
+        echo "<br>PostBy :". $postBy[$x];
         $link = getFileLink($postAttach[$x]);
         $emblink = getEmb($postAttach[$x]);
         echo "<a href='$link'>view/edit in docs</a><br/>";
