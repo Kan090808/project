@@ -224,8 +224,8 @@ if(isset($_SESSION['notCrew'])){
 echo '
 <form action="control.php" method="post">
   <input type="text" name="newYear" value="106"><br/>
-  <input type="text" name="email" value="s104213070@mail1.ncnu.edu.tw"><br/>
-  <input type="text" name="groupId" value="1WQzSml-Yd1X3BPo-LSH5gdpMIcGEKwCh"><br/>
+  <input type="text" name="email" value="yranyran19@gmail.com"><br/>
+  <input type="text" name="groupId" value="1fM-hTXevUnVG09hXABUqvOaVw50w-0Wl"><br/>
   <input type="submit" name="act" value="handOver"><br/>
 </form>
 ';

@@ -1673,7 +1673,9 @@ function handOver($groupId,$email,$newYear){
   createGroupFolderPermissionEditor($groupId);
   createGroupFolderPermission($groupId,"",getGroupCrewSheet($groupId));
   $sql = "update `member`.`group` set currentYear='$newYear' where groupID = '$groupId'";
+  $sql2 = "insert into `member`.`useraccessiblegroup` (email,groupID,year,role) values ('$email','$groupId','$newYear',99)";
   insertDb($sql);
+  insertDb($sql2);
 }
 function ifInFolder($service, $folderId, $fileId)
 {
