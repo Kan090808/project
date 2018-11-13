@@ -154,17 +154,6 @@ function allGroup(){
     // 0 = apply not accept
     // 1 = joined
     array_push($searchResultGroupIfJoined,$status);
-    // echo $row[1]."---".$row[4];
-
-    // if($status == "null"){
-
-    // }else if($status == 0){
-    //   echo "<br/>";
-    //   echo "applying... wait for approve or reject";
-    // }else if($status == 1){
-    //   echo "<br/>";
-    //   echo "joined";
-    // }
   }
   return array($searchResultGroupId,$searchResultGroupName,$searchResultGroupCurrentYear,$searchResultGroupIfJoined);
 }
@@ -1789,6 +1778,7 @@ function initMemberSheet($membersheetId)
 {
   $client = getClient(0);
   $service = new Google_Service_Sheets($client);
+  $service2 = new Google_Service_Drive($client);
   $values = [["time", "name", "id", "gender", "class", "department", "year", "gmail", "tel", "diet", "skill", "prefer", "rank", "status"
   // Cell values ...
   ],
@@ -1798,6 +1788,14 @@ function initMemberSheet($membersheetId)
   $params = ['valueInputOption' => 'RAW', 'insertDataOption' => 'INSERT_ROWS'];
   $range = 'A:N';
   $response = $service->spreadsheets_values->append($membersheetId, $range, $body, $params);
+  $userPermission = new Google_Service_Drive_Permission(array(
+    'type' => 'anyone',
+    'role' => 'reader'
+    // 'emailAddress' => $userEmail
+  ));
+  $service2->permissions->create($membersheetId, $userPermission, array(
+    'fields' => 'id'
+  ));
 }
 function listFolderTree($location)
 {
