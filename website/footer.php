@@ -95,8 +95,10 @@
   $('#calendar').click(function () {
     $('#mainContent').load('calendar.php');
   });
-  $('#folder').click(function () {
-    $('#mainContent').load('folder.php');
+  $('.folder').click(function () {
+    var giveval = this.name;
+    $('#mainContent').load('folder.php?name='+giveval);
+    // alert(this.name);
   });
   $('#searchclub').click(function () {
     $('#mainContent').load('searchclub.php');
