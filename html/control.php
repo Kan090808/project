@@ -12,6 +12,18 @@ case 'allGroup':
   allGroup();
   break;
 
+case 'approveApply':
+  $email = $_REQUEST['email'];
+  $groupName = $_REQUEST['groupName'];
+  approveApply($email,$groupName);
+  break;
+
+case 'refuseApply':
+  $email = $_REQUEST['email'];
+  $groupName = $_REQUEST['groupName'];
+  refuseApply($email,$groupName);
+  break;
+
 case 'approvedMember':
   $no = $_REQUEST['no'];
   $sheetId = $_REQUEST['sheetId'];
@@ -49,6 +61,9 @@ case 'logout':
   getClient(1);
   break;
 
+case 'newApplyGroup':
+  newApplyGroup($_REQUEST['newGroupName'],$_REQUEST['email']);
+  break;
 case 'newGroup':
   $newGroupName = $_REQUEST['newGroupName'];
   newGroup($newGroupName);

@@ -200,6 +200,22 @@ function appendDataToCrewMemberSheet($name, $email, $phone, $position, $actCrewS
   $range = 'A2:E';
   $response = $service->spreadsheets_values->append($actCrewSheetId, $range, $body, $params);
 }
+function approveApply($email,$groupName){
+  $client = getClient(0);
+  $service = new Google_Service_Drive($client);
+  $role = 'writer';
+  $userPermission = new Google_Service_Drive_Permission(array(
+    'type' => 'user',
+    'role' => $role,
+    'emailAddress' => $email
+  ));
+  $sql = "update `member`.`apply` set status = '1' where applyGroupName='$groupName'";
+  insertDb($sql);
+  newGroup($groupName);
+  $request = $service->permissions->create($GLOBALS['rootroot'], $userPermission, array(
+      'fields' => 'id'
+  ));
+}
 function approvedMember($no, $sheetId)
 {
   // echo $no.$groupId;
@@ -854,6 +870,19 @@ function explorerFolderOnly($title,$posttype,$belong){
       echo '<a href="control.php?act=selectItem&type=5&posttype='.$posttype.'&fId='.$fileId.'&title='.$title.'&belong='.$belong.'">'."[folder]".$file->getName().'</a>';
     }
   }
+}
+function getApplyGroup(){
+  $applicantEmail = array();
+  $applyGroupName = array();
+  $status = array();
+  $sql = "select * from `member`.`apply`";
+  $rt = getDb($sql,4);
+  while ($row = $rt->fetch_assoc()) {
+    array_push($applicantEmail,$row["applicantEmail"]);
+    array_push($applyGroupName,$row["applyGroupName"]);
+    array_push($status,$row["status"]);
+  }
+  return array($applicantEmail,$applyGroupName,$status);
 }
 function getActivity($groupId,$currentYear){
   $actname = array();
@@ -1810,6 +1839,10 @@ function inputYear($fileId,$groupId){
   // checkYearFolderExist2($fileId);
   initCrew2($fileId,$groupId);
 }
+function newApplyGroup($groupName,$email){
+  $sql = "insert into `member`.`apply` (applicantEmail,applyGroupName,status) VALUES ('$email','$groupName',0)";
+  insertDb($sql);
+}
 function newGroup($groupName){
   $client = getClient(0);
   $service = new Google_Service_Drive($client);
@@ -1828,6 +1861,7 @@ function newGroup($groupName){
   $membersheetId = createFile("sheet", "memberSheet", $driveId);
   $sql = "insert into `member`.`group` (groupName,groupID,currentYear,member_sheet_id) VALUES ('$groupName','$driveId',105,'$membersheetId')";
   $sql2 = "insert into `member`.`useraccessiblegroup` (email,groupID,year,role) VALUES ('$email','$driveId',105,100)";
+  
   initMemberSheet($membersheetId);
   insertDb($sql);
   insertDb($sql2);
@@ -2008,6 +2042,10 @@ function refreshGroupPermission($groupId){
   createFolderPermission($groupId,$crew_sheet_id,"105");
   createGroupFolderPermissionEditor($groupId);
   createGroupFolderPermission($groupId,"",$crew_sheet_id);
+}
+function refuseApply(){
+  $sql = "update `member`.`apply` set status = '-1' where applyGroupName='$groupName'";
+  insertDb($sql);
 }
 function removeMember($no, $sheetId)
 {
