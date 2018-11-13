@@ -200,7 +200,7 @@ function approveApply($email,$groupName){
   ));
   $sql = "update `member`.`apply` set status = '1' where applyGroupName='$groupName'";
   insertDb($sql);
-  newGroup($groupName);
+  newGroup($groupName,$email);
   $request = $service->permissions->create($GLOBALS['rootroot'], $userPermission, array(
       'fields' => 'id'
   ));
@@ -535,16 +535,16 @@ function choseExistsToPost2($title,$fileId,$belong,$posttype){
     header('Location: index.php');
   }
 }
-function copyMemberToCrew($name,$email,$phone,$position,$actCrewSheet){
+function copyMemberToCrew($name,$email,$phone,$position,$currentYear,$role,$crewSheet){
   $client = getClient(0);
   $service = new Google_Service_Sheets($client);
   // DATE_RFC28222
   $time = date(DATE_RFC2822);
-  $values = [[$time, $name, $email, $phone, $position]];
+  $values = [[$time, $name, $email, $phone, $position, $currentYear,$role]];
   $body = new Google_Service_Sheets_ValueRange(['values' => $values]);
   $params = ['valueInputOption' => 'RAW', 'insertDataOption' => 'INSERT_ROWS'];
   $range = 'A2:E';
-  $response = $service->spreadsheets_values->append($actCrewSheet, $range, $body, $params);
+  $response = $service->spreadsheets_values->append($crewSheet, $range, $body, $params);
 }
 function createFolder($name, $folderId, $isOnRoot, $spreadsheetId)
 {
@@ -1611,6 +1611,15 @@ function getUserId(){
     print "An error occurred: " . $e->getMessage();
   }
 }
+function getCurrentYear($groupId){
+  $sql = "select * from `member`.`group` where groupID='$groupId'";
+  $rt = getDb($sql,4);
+  $currentYear = "";
+  while ($row = $rt->fetch_assoc()) {
+    $currentYear = $row["currentYear"];
+  }
+  return $currentYear;
+}
 function getWho()
 {
   $rt = shell_exec('whoami');
@@ -1709,9 +1718,23 @@ function insertDb($sql)
   $conn->close();
   // $conn->close();
 }
+function initCrewSheet($crewsheetId){
+  $client = getClient(0);
+  $service = new Google_Service_Sheets($client);
+  $values = [["time", "name", "email", "phoneNumber", "position", "year", "role"
+  // Cell values ...
+  ],
+  // Additional rows ...
+  ];
+  $body = new Google_Service_Sheets_ValueRange(['values' => $values]);
+  $params = ['valueInputOption' => 'RAW', 'insertDataOption' => 'INSERT_ROWS'];
+  $range = 'A:G';
+  $response = $service->spreadsheets_values->append($crewsheetId, $range, $body, $params);
+}
 function initCrew($groupId){
   $_SESSION['groupId'] = $groupId;
-  getMemberSheet(1);
+  // getMemberSheet(1);
+  initCrew2(getGroupCrewSheet($groupId));
 }
 function initCrew2($fileId){
   $folderId = $_SESSION['groupId'];
@@ -1841,10 +1864,9 @@ function newApplyGroup($groupName,$email){
   $sql = "insert into `member`.`apply` (applicantEmail,applyGroupName,status) VALUES ('$email','$groupName',0)";
   insertDb($sql);
 }
-function newGroup($groupName){
+function newGroup($groupName,$email){
   $client = getClient(0);
   $service = new Google_Service_Drive($client);
-  $email = getEmail();
   $fileMetadata = new Google_Service_Drive_DriveFile(array(
     'name' => $groupName,
     'mimeType' => 'application/vnd.google-apps.folder',
@@ -1856,11 +1878,20 @@ function newGroup($groupName){
     'fields' => 'id'
   ));
   $driveId = $results->getId();
+  $crewsheetId = createFile("sheet", "crewSheet", $driveId);
   $membersheetId = createFile("sheet", "memberSheet", $driveId);
-  $sql = "insert into `member`.`group` (groupName,groupID,currentYear,member_sheet_id) VALUES ('$groupName','$driveId',105,'$membersheetId')";
+  $userPermission = new Google_Service_Drive_Permission(array(
+      'type' => 'user',
+      'role' => 'owner',
+      'transferOwnership' => 'true',
+      'emailAddress' => $email
+    ));
+    $request = $service->permissions->create($driveId, $userPermission, array('fields' => 'id', 'transferOwnership' => 'true'));
+  $sql = "insert into `member`.`group` (groupName,groupID,crew_sheet_id,currentYear,member_sheet_id) VALUES ('$groupName','$driveId','$crewsheetId',105,'$membersheetId')";
   $sql2 = "insert into `member`.`useraccessiblegroup` (email,groupID,year,role) VALUES ('$email','$driveId',105,100)";
   
   initMemberSheet($membersheetId);
+  initCrewSheet($crewsheetId);
   insertDb($sql);
   insertDb($sql2);
 }

@@ -4,7 +4,9 @@ require("model.php");
 $email = $_REQUEST['email'];
 $groupId = $_REQUEST['groupId'];
 $sheetId = getGroupMemberSheet($groupId);
+$crewSheet = getGroupCrewSheet($groupId);
 $role = checkRole($email,$groupId);
+$currenYear = getCurrentYear($groupId);
 // setting
 // test();
 echo "this test page is for view or edit memberSheet of a group<br/>";
@@ -35,9 +37,16 @@ if($role >= 90){
       ';
       echo '
         <form action = "control.php" method="post">
-          <input type="hidden" name="no" value="'.$i.'">
-          <input type="hidden" name="sheetId" value="'.$sheetId.'">
-          <input type="submit" name="act" value="toCrew">
+          <input type="hidden" name="name" value="'.$name[$i].'">
+          <input type="hidden" name="email" value="'.$gmail[$i].'">
+          <input type="hidden" name="phone" value="'.$tel[$i].'">
+          <input type="hidden" name="currentYear" value="'.$currenYear.'">
+          position
+          <input type="text" name="position" value="">
+          role
+          <input type="text" name="role" value="">
+          <input type="hidden" name="crewSheet" value="'.$crewSheet.'">
+          <input type="submit" name="act" value="copyMemberToCrew">
         </form>
       ';
     }

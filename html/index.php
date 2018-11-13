@@ -40,14 +40,11 @@ if ($_SESSION["status"] == "false") {
     $role = checkRole($initEmail,$groupId[$i]); 
     echo "<br/>";
     echo $groupName[$i].$currentYear[$i];
-    $ifSetCrew = checkIfCrewMemberInit($groupId[$i]);
-    if($ifSetCrew == "false"){
-      echo "
-        <form method='post' action='control.php'>
-          <input type='hidden' name='groupId' value='$groupId[$i]'>
-          <input type='submit' name=act value = 'initCrew'>
-        </form>";
-    }
+    echo "
+      <form method='post' action='control.php'>
+        <input type='hidden' name='groupId' value='$groupId[$i]'>
+        <input type='submit' name=act value = 'initCrew'>
+      </form>";
     echo "
       <form method='post' action='crewMemberSheet.php'>
         <input type='hidden' name='email' value='$initEmail'>
@@ -176,6 +173,7 @@ if ($_SESSION["status"] == "false") {
         <form action = "control.php" method="post">
           <input type="text" name="activityName" value="">
           <input type="hidden" name="belong" value="'.$groupId[$i].'">
+
           <input type="hidden" name="belongYear" value="'.$currentYear[$i].'">
           <input type="submit" name="act" value="newActivity">
         </form>';

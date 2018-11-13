@@ -206,7 +206,7 @@ case 'chosePathFile':
   break;
 
 case 'copyMemberToCrew':
-  copyMemberToCrew($_REQUEST['name'],$_REQUEST['email'],$_REQUEST['phone'],$_REQUEST['position'],$_REQUEST['actCrewSheet']);
+  copyMemberToCrew($_REQUEST['name'],$_REQUEST['email'],$_REQUEST['phone'],$_REQUEST['position'],$_REQUEST['currentYear'],$_REQUEST['role'],$_REQUEST['crewSheet']);
   break;
 case 'addData':
   appendData2($_REQUEST['name'], $_REQUEST['email'], $_REQUEST['phoneNumber'], $_REQUEST['position'], $_REQUEST['group'], $_REQUEST['sheetId']);
