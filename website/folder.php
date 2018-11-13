@@ -1,3 +1,6 @@
+<?php $curfolderId = $_GET["name"];
+// var_dump($curfolderId);
+?>
 <div class="container">
   <div class="row">
     <div class="main-header">

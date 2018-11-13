@@ -71,7 +71,7 @@ if ($_SESSION["status"] == "true") {
             </a>
           </li>
           <li>
-            <a class="waves-effect waves-dark" id="folder">
+            <a class="waves-effect waves-dark folder" id="folder" name='.$groupId[$i].'>
               <i class="icofont icofont-speech-comments"></i>
               幹部討論區
             </a>

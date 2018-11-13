@@ -38,6 +38,10 @@
     <tr><td class="clubName">abcde</td></tr>
     <tr><td class="clubName">aefg</td></tr>
   </table>
+  <ul>
+    <li><a class="giveu"value="test" name="giveu">giveyou</a></li>
+    <li><a class="giveu"value="test" name="giveme">giveme</a></li>
+  </ul>
   <button id="calendar">press</button>
   <a>hello2</a>
   <thead>
@@ -222,6 +226,10 @@
   //     var checkboxes = $(checkthis).closest('tbody').next().find('.check');
   //     checkboxes.prop("checked", checkthis.checked);
   //   });
+  $(".giveu").click(function() {
+    var giveval = this.name;
+    alert(this.name);
+  })
 </script>
 <script>
     function searchClub() {

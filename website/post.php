@@ -1,3 +1,4 @@
+<?php require("../html/model.php");?>
 <div class="row">
   <div class="col-md-12">
     <div class="card">
@@ -112,9 +113,39 @@
               </div>
               <div class="panel-body">
                 <div class="container">
-                  <div class="row">
+                  <?php 
+                list($postId,$postTitle,$postAttach,$isMainAttach)=getPost($curfolderId,2);
+                for($x=0;$x<count($postId);$x++){
+                  if($isMainAttach[$x] == true){
+                    // var_dump($postAttach);
+                    echo "<div class='row'>
+                    <div class='card'>
+                      <div class='card-header'>".$postTitle[$x];
+                    $link = getFileLink($postAttach[$x]);
+                    $emblink = getEmb($postAttach[$x]);
+                    echo "<a href='$link'>編輯貼問內容</a></div>";
+                    echo "<div class='card-body'><iframe src = '$emblink' width='100%' height='300px'></iframe></div>";
+                    echo "<div class='card-block'>
+                    <div class='row'>";
+                  }else{
+                    // $postAttach;
+                    if(strpos(checkMimeType($postAttach[$x]), 'spreadsheet')){
+                      echo "<div class='col-xl-2 col-lg-3 col-sm-1 col-xs-1'><a href=''><img src='assets/images/sheet.png' width='100%'></a></div>";
+                    }
+                    if(strpos(checkMimeType($postAttach[$x]), 'presentation')){
+                      echo "<div class='col-xl-2 col-lg-3 col-sm-1 col-xs-1'><a href=''><img src='assets/images/slide.webp' width='100%'></a></div>";
+                    }
+                    // echo "<br/>帖文附件：".$postTitle[$x]."___".$postAttach[$x];
+                    // echo checkMimeType($postAttach[$x]);
+                  } 
+                }
+                echo "</div></div></div></div>";
+                ?>
+                  <!-- <div class="row">
                     <div class="card">
                       <div class="card-header">
+                      </div>
+                      <div class="card-body">
                         <h5 style="font-weight:bold">貼文內容貼文內容貼文內容貼文內容貼文內容貼文內容貼文內容貼文內容貼文內容貼文內容貼文內容貼文內容貼文內容貼文內容貼文內容貼文內容貼文內容貼文內容貼文內容貼文內容</h5>
                       </div>
                       <div class="card-block">
@@ -142,52 +173,7 @@
                         </div>
                       </div>
                     </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="row" style="margin-top:30px">
-            <div class="panel-default col-sm-10" style="margin:0 auto;float:none">
-              <div class="panel-heading bg-default txt-white">
-                <span class="col-sm-1"><img class="img-circle " src="assets/images/avatar-1.png" style="width:40px;"
-                    alt="User Image"></span>
-                <b>簡靖騰</b>
-                <div class="small txt-white">November 2017</div>
-              </div>
-              <div class="panel-body">
-                <div class="container">
-                  <div class="row">
-                    <div class="card">
-                      <div class="card-header">
-                        <h5 style="font-weight:bold">貼文內容貼文內容貼文內容貼文內容貼文內容貼文內容貼文內容貼文內容貼文內容貼文內容貼文內容貼文內容貼文內容貼文內容貼文內容貼文內容貼文內容貼文內容貼文內容貼文內容</h5>
-                      </div>
-                      <div class="card-block">
-                        <div class="row">
-                          <div class="col-xl-2 col-lg-3 col-sm-3 col-xs-12">
-                            <a href="assets/images/light-box/l1.jpg" data-toggle="lightbox" data-gallery="example-gallery">
-                              <img src="assets/images/light-box/sl1.jpg" class="img-fluid" alt="">
-                            </a>
-                          </div>
-                          <div class="col-xl-2 col-lg-3 col-sm-3 col-xs-12">
-                            <a href="assets/images/light-box/l2.jpg" data-toggle="lightbox" data-gallery="example-gallery">
-                              <img src="assets/images/light-box/sl2.jpg" class="img-fluid" alt="">
-                            </a>
-                          </div>
-                          <div class="col-xl-2 col-lg-3 col-sm-3 col-xs-12">
-                            <a href="assets/images/light-box/l3.jpg" data-toggle="lightbox" data-gallery="example-gallery">
-                              <img src="assets/images/light-box/sl3.jpg" class="img-fluid" alt="">
-                            </a>
-                          </div>
-                          <div class="col-xl-2 col-lg-3 col-sm-3 col-xs-12">
-                            <a href="assets/images/light-box/l4.jpg" data-toggle="lightbox" data-gallery="example-gallery">
-                              <img src="assets/images/light-box/sl4.jpg" class="img-fluid" alt="">
-                            </a>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                  </div> -->
                 </div>
               </div>
             </div>
