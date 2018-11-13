@@ -26,6 +26,7 @@ if ($_SESSION["status"] == "false") {
 		';
 } else {
   // test();
+
   $initEmail = getEmail();
   echo $initEmail;
   echo "<br/>";
@@ -39,6 +40,14 @@ if ($_SESSION["status"] == "false") {
     $role = checkRole($initEmail,$groupId[$i]); 
     echo "<br/>";
     echo $groupName[$i].$currentYear[$i];
+    $ifSetCrew = checkIfCrewMemberInit($groupId[$i]);
+    if($ifSetCrew == "false"){
+      echo "
+        <form method='post' action='control.php'>
+          <input type='hidden' name='groupId' value='$groupId[$i]'>
+          <input type='submit' name=act value = 'initCrew'>
+        </form>";
+    }
     echo "
       <form method='post' action='crewMemberSheet.php'>
         <input type='hidden' name='email' value='$initEmail'>
@@ -182,11 +191,13 @@ if ($_SESSION["status"] == "false") {
           </form>';
       }
     }
+
+  echo "完完完完完完完完完完完完";
   }
 
-  echo "<br>";
-  echo "-------------在某個群組下，開帖文------------------";
-  $type1id = "1YPIU7jCmaDj8Wt9ZlhwTfO9uTY_eyNeb";
+  // echo "<br>";
+  // echo "-------------在某個群組下，開帖文------------------";
+  // $type1id = "1YPIU7jCmaDj8Wt9ZlhwTfO9uTY_eyNeb";
   // 開帖文用的測試寫法，參考testtype
   // testtype1($type1id);
 

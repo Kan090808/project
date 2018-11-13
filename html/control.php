@@ -49,6 +49,11 @@ case 'logout':
   getClient(1);
   break;
 
+case 'newGroup':
+  $newGroupName = $_REQUEST['newGroupName'];
+  newGroup($newGroupName);
+  break;
+
 case 'newMemberDetail':
   $name = $_REQUEST['name'];
   $id = $_REQUEST['id'];
@@ -162,6 +167,9 @@ case 'getMemberList':
   echo $rt;
   break;
 
+case 'initCrew':
+  initCrew($_REQUEST['groupId']);
+  break;
 case 'checkYearFolderExist':
   $rt = checkYearFolderExist();
   echo $rt;

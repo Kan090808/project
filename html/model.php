@@ -282,11 +282,100 @@ function checkIfJoinedThisGroup($groupId, $email)
     }
   }
 }
+function checkIfCrewMemberInit($groupId){
+  $sql = "select * from `member`.`group` where groupID='$groupId'";
+  $rt = getDb($sql,4);
+  $ifSet = "false";
+  while ($row = mysqli_fetch_row($rt)) {
+    if($row[3] != ""){
+      $ifSet = "true";
+    }
+  }
+  return $ifSet;
+}
 function checkYearFolderExist()
 {
   getMemberSheet(1);
 }
-function checkYearFolderExist2($fileId)
+// function checkYearFolderExist2($fileId)
+// {
+//   // this function is called with a sheet file id
+//   // get all year by sheet
+//   // $client = getClient(0);
+//   $service = new Google_Service_Sheets($GLOBALS['client']);
+//   $currentYear = "105";
+//   $secondLevelGroupId = "";
+//   $rootroot = $GLOBALS['rootroot'];
+//   $spreadsheetId = $fileId;
+//   $response_title = $service->spreadsheets->get($spreadsheetId);
+//   $about = json_encode($response_title, true);
+//   $json = json_decode($about, true);
+//   $title = $json['properties']['title'];
+//   // range only include the F2:F year
+//   $range = 'F2:F';
+//   $response = $service->spreadsheets_values->get($spreadsheetId, $range);
+//   $values = $response->getValues();
+//   $year = array();
+//   if (empty($values)) {
+//     print "No data found.\n";
+//   }
+//   else {
+//     foreach($values as $row) {
+//       // judge if repeat
+//       if (!array_key_exists($row[0], $year)) {
+//         $temp = "$row[0]";
+//         array_push($year, "$temp");
+//       }
+//     }
+//     $year = array_unique($year);
+//     $new_year = array_values($year);
+//   }
+//   // now had year data in $position
+//   $notCreateYet = $new_year;
+//   $service = new Google_Service_Drive($GLOBALS['client']);
+//   $parameters['q'] = "mimeType='application/vnd.google-apps.folder' and '$rootroot' in parents and trashed=false";
+//   $results = $service->files->listFiles($parameters);
+//   if (count($results->getFiles()) == 0) {
+//     // print "checkYearFolderExist : No files found.\n";
+//   }
+//   else {
+//     foreach($results->getFiles() as $file) {
+//       $gotDir = false;
+//       // check drive root folder if exist folder with those name
+//       for ($i = 0; $i < count($new_year); $i++) {
+//         // if(strcasecmp($position[$i],$file->getName())==0){
+//         if ($new_year[$i] == $file->getName()) {
+//           $gotDir = true;
+//           $gotDirName = $new_year[$i];
+//           unset($notCreateYet[$i]);
+//         }
+//         // now you had "notCreateYet" array that record which folder have not create
+//       }
+//     }
+//     // var_dump($notCreateYet);
+//   }
+//   // create first level folder
+//   $firstLevelId = createFolder($title, $rootroot, true, $spreadsheetId);
+//   // create folder by $notCreateYet array
+//   $notCreateYet = array_values($notCreateYet);
+//   // create second level folder
+//   if (count($notCreateYet) > 0) {
+//     for ($i = 0; $i < count($notCreateYet); $i++) {
+//       // echo $notCreateYet[$i];
+//       // create 104 105
+//       $folderId = createFolder($notCreateYet[$i], $firstLevelId, false, $spreadsheetId);
+//       // echo "------".$folderId;
+//       // get id of folder you had just create
+//       createGroupFolderPermission($firstLevelId, $folderId, $fileId);
+//       createGroupFolderPermissionEditor($folderId);
+//       // 創立了 xx會-xx年-組別，回傳“組別”文件夾的id
+//       $secondLevelGroupId = createFolder("組別", $folderId, false, $spreadsheetId);
+//     }
+//   }
+//   // 利用xx組別文件夾的id，底下產生職位組別
+//   checkPositionFolderExist2($spreadsheetId,$firstLevelId ,$secondLevelGroupId,$currentYear);
+// }
+function checkYearFolderExist2($fileId,$folderId)
 {
   // this function is called with a sheet file id
   // get all year by sheet
@@ -344,7 +433,8 @@ function checkYearFolderExist2($fileId)
     // var_dump($notCreateYet);
   }
   // create first level folder
-  $firstLevelId = createFolder($title, $rootroot, true, $spreadsheetId);
+  // $firstLevelId = createFolder($title, $rootroot, true, $spreadsheetId);
+  $firstLevelId = $folderId;
   // create folder by $notCreateYet array
   $notCreateYet = array_values($notCreateYet);
   // create second level folder
@@ -1552,9 +1642,11 @@ function handOver($groupId,$email,$newYear){
     $request = $service->permissions->create($groupId, $userPermission, array('fields' => 'id', 'transferOwnership' => 'true'));
   }
   // var_dump($request);
-  createFolderPermission($groupId,getGroupCrewSheet($groupId),"106");
+  createFolderPermission($groupId,getGroupCrewSheet($groupId),$newYear);
   createGroupFolderPermissionEditor($groupId);
   createGroupFolderPermission($groupId,"",getGroupCrewSheet($groupId));
+  $sql = "update `member`.`group` set currentYear='$newYear' where groupID = '$groupId'";
+  insertDb($sql);
 }
 function ifInFolder($service, $folderId, $fileId)
 {
@@ -1599,6 +1691,71 @@ function insertDb($sql)
   $conn->close();
   // $conn->close();
 }
+function initCrew($groupId){
+  $_SESSION['groupId'] = $groupId;
+  getMemberSheet(1);
+}
+function initCrew2($fileId){
+  $folderId = $_SESSION['groupId'];
+  unset($_SESSION['groupId']);
+  $service = new Google_Service_Sheets(getClient(0));
+  $currentYear = "105";
+  $secondLevelGroupId = "";
+  $rootroot = $GLOBALS['rootroot'];
+  $spreadsheetId = $fileId;
+  $range = 'F2:F';
+  $response = $service->spreadsheets_values->get($spreadsheetId, $range);
+  $values = $response->getValues();
+  $year = array();
+  if (empty($values)) {
+    print "No data found.\n";
+  }
+  else {
+    foreach($values as $row) {
+      // judge if repeat
+      if (!array_key_exists($row[0], $year)) {
+        $temp = "$row[0]";
+        array_push($year, "$temp");
+      }
+    }
+    $year = array_unique($year);
+    $new_year = array_values($year);
+  }
+  $notCreateYet = $new_year;
+  $service = new Google_Service_Drive(getClient(0));
+  $parameters['q'] = "mimeType='application/vnd.google-apps.folder' and '$rootroot' in parents and trashed=false";
+  $results = $service->files->listFiles($parameters);
+  if (count($results->getFiles()) == 0) {
+  }
+  else {
+    foreach($results->getFiles() as $file) {
+      $gotDir = false;
+      // check drive root folder if exist folder with those name
+      for ($i = 0; $i < count($new_year); $i++) {
+        // if(strcasecmp($position[$i],$file->getName())==0){
+        if ($new_year[$i] == $file->getName()) {
+          $gotDir = true;
+          $gotDirName = $new_year[$i];
+          unset($notCreateYet[$i]);
+        }
+      }
+    }
+  }
+  $firstLevelId = $folderId;
+  $notCreateYet = array_values($notCreateYet);
+  if (count($notCreateYet) > 0) {
+    for ($i = 0; $i < count($notCreateYet); $i++) {
+      $folderId = createFolder($notCreateYet[$i], $firstLevelId, false, $spreadsheetId);
+      createGroupFolderPermission($firstLevelId, $folderId, $fileId);
+      createGroupFolderPermissionEditor($folderId);
+      $secondLevelGroupId = createFolder("組別", $folderId, false, $spreadsheetId);
+      createFolder("活動", $folderId, false, $spreadsheetId);
+    }
+  }
+  $sql = "update `member`.`group` set crew_sheet_id = '$spreadsheetId' where groupID = '$firstLevelId'";
+  insertDb($sql);
+  checkPositionFolderExist2($spreadsheetId,$firstLevelId ,$secondLevelGroupId,$currentYear);
+}
 function initMemberSheet($membersheetId)
 {
   $client = getClient(0);
@@ -1642,7 +1799,7 @@ function listFolderTree($location)
   // return array($fileName,$fileId);
   return $list;
 }
-function inputYear($fileId){
+function inputYear($fileId,$groupId){
   // echo '
     // <form action = "control.php" method="post">
       // <input type="hidden" name="fileId" value="'.$fileId.'">
@@ -1650,7 +1807,30 @@ function inputYear($fileId){
       // <input type="submit" name="act" value="inputYear">
     // </form>
   // ';
-  checkYearFolderExist2($fileId);
+  // checkYearFolderExist2($fileId);
+  initCrew2($fileId,$groupId);
+}
+function newGroup($groupName){
+  $client = getClient(0);
+  $service = new Google_Service_Drive($client);
+  $email = getEmail();
+  $fileMetadata = new Google_Service_Drive_DriveFile(array(
+    'name' => $groupName,
+    'mimeType' => 'application/vnd.google-apps.folder',
+    'parents' => array(
+      $GLOBALS['rootroot']
+    )
+  ));
+  $results = $service->files->create($fileMetadata, array(
+    'fields' => 'id'
+  ));
+  $driveId = $results->getId();
+  $membersheetId = createFile("sheet", "memberSheet", $driveId);
+  $sql = "insert into `member`.`group` (groupName,groupID,currentYear,member_sheet_id) VALUES ('$groupName','$driveId',105,'$membersheetId')";
+  $sql2 = "insert into `member`.`useraccessiblegroup` (email,groupID,year,role) VALUES ('$email','$driveId',105,100)";
+  initMemberSheet($membersheetId);
+  insertDb($sql);
+  insertDb($sql2);
 }
 function newMemberDetail($name, $id, $email, $gender, $class, $department, $year, $tel, $diet, $skill, $prefer, $groupId, $status)
 {
@@ -1862,7 +2042,7 @@ function selectFirstSheet($fileId, $type)
     getMemberList($fileId);
   }
   if ($type == 1) {
-    inputYear($fileId);
+    initCrew2($fileId);
     // checkYearFolderExist2($fileId);
   }
   if ($type == 2) {
