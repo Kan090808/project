@@ -12,6 +12,18 @@ case 'allGroup':
   allGroup();
   break;
 
+case 'approveApply':
+  $email = $_REQUEST['email'];
+  $groupName = $_REQUEST['groupName'];
+  approveApply($email,$groupName);
+  break;
+
+case 'refuseApply':
+  $email = $_REQUEST['email'];
+  $groupName = $_REQUEST['groupName'];
+  refuseApply($email,$groupName);
+  break;
+
 case 'approvedMember':
   $no = $_REQUEST['no'];
   $sheetId = $_REQUEST['sheetId'];
@@ -47,6 +59,14 @@ case 'logout':
   // logout();
 
   getClient(1);
+  break;
+
+case 'newApplyGroup':
+  newApplyGroup($_REQUEST['newGroupName'],$_REQUEST['email']);
+  break;
+case 'newGroup':
+  $newGroupName = $_REQUEST['newGroupName'];
+  newGroup($newGroupName);
   break;
 
 case 'newMemberDetail':
@@ -91,6 +111,7 @@ case 'newPost':
   $belong = $_REQUEST['belong'];
   $type = $_REQUEST['type'];
   $mime = $_REQUEST['mime'];
+  $postBy = $_REQUEST['postBy'];
   $attach = "";
   $newPostAttach = "";
   if($_REQUEST['attach'] != ""){
@@ -105,7 +126,7 @@ case 'newPost':
   // if($attach == ""){
   //   echo "noattach";
   // }
-  newPost($title,$belong,$type,$mime,$newPostAttach,$attach);
+  newPost($title,$belong,$type,$mime,$newPostAttach,$attach,$postBy);
   header('Location: index.php');
   break;
 
@@ -161,6 +182,9 @@ case 'getMemberList':
   echo $rt;
   break;
 
+case 'initCrew':
+  initCrew($_REQUEST['groupId']);
+  break;
 case 'checkYearFolderExist':
   $rt = checkYearFolderExist();
   echo $rt;

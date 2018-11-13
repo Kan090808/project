@@ -26,6 +26,7 @@ if ($_SESSION["status"] == "false") {
 		';
 } else {
   // test();
+
   $initEmail = getEmail();
   echo $initEmail;
   echo "<br/>";
@@ -39,6 +40,14 @@ if ($_SESSION["status"] == "false") {
     $role = checkRole($initEmail,$groupId[$i]); 
     echo "<br/>";
     echo $groupName[$i].$currentYear[$i];
+    $ifSetCrew = checkIfCrewMemberInit($groupId[$i]);
+    if($ifSetCrew == "false"){
+      echo "
+        <form method='post' action='control.php'>
+          <input type='hidden' name='groupId' value='$groupId[$i]'>
+          <input type='submit' name=act value = 'initCrew'>
+        </form>";
+    }
     echo "
       <form method='post' action='crewMemberSheet.php'>
         <input type='hidden' name='email' value='$initEmail'>
@@ -106,6 +115,7 @@ if ($_SESSION["status"] == "false") {
         <input type="submit" name="act" value="choseExistsToPost">
         <input type="hidden" name="attach" value="'.$attach.'">
         <input type="hidden" name="newPostAttach" value="'.$newPostAttach.'">
+        <input type="hidden" name="postBy" value="'.$initEmail.'">
         <input type="submit" name="act" value="newPost">
       </form>
       ';
@@ -138,11 +148,13 @@ if ($_SESSION["status"] == "false") {
     }else{
       echo "<br/>沒有掛載的文件";
     }
-    list($postId,$postTitle,$postAttach,$isMainAttach)=getPost($groupId[$i],2);
+    echo "<br> show post-------------------";
+    list($postId,$postTitle,$postAttach,$isMainAttach,$postBy)=getPost($groupId[$i],2);
     for($x=0;$x<count($postId);$x++){
       if($isMainAttach[$x] == true){
         // var_dump($postAttach);
-        echo "<br/>".$postTitle[$x]."___".$postAttach[$x];
+        echo "<br/>".$postTitle[$x];
+        echo "<br>PostBy :". $postBy[$x];
         $link = getFileLink($postAttach[$x]);
         $emblink = getEmb($postAttach[$x]);
         echo "<a href='$link'>view/edit in docs</a><br/>";
@@ -179,11 +191,13 @@ if ($_SESSION["status"] == "false") {
           </form>';
       }
     }
+
+  echo "完完完完完完完完完完完完";
   }
 
-  echo "<br>";
-  echo "-------------在某個群組下，開帖文------------------";
-  $type1id = "1YPIU7jCmaDj8Wt9ZlhwTfO9uTY_eyNeb";
+  // echo "<br>";
+  // echo "-------------在某個群組下，開帖文------------------";
+  // $type1id = "1YPIU7jCmaDj8Wt9ZlhwTfO9uTY_eyNeb";
   // 開帖文用的測試寫法，參考testtype
   // testtype1($type1id);
 
@@ -222,5 +236,6 @@ echo '
 	<input type="submit" name="act" value="logout"><br/>
 </form>
 ';
+// testCopy();
 // var_dump(getFolderList("16Y8EK1a0bMjPjMxvVOxitWv3HRL-Olkk",2));
 ?>

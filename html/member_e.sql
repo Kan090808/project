@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 11, 2018 at 05:11 PM
+-- Generation Time: Nov 12, 2018 at 04:22 AM
 -- Server version: 10.1.35-MariaDB
 -- PHP Version: 7.2.9
 
@@ -56,16 +56,17 @@ CREATE TABLE `group` (
   `groupID` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
   `crew_sheet_id` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
   `currentYear` varchar(10) COLLATE utf8_unicode_ci NOT NULL,
-  `member_sheet_id` varchar(45) COLLATE utf8_unicode_ci NOT NULL
+  `member_sheet_id` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
+  `member_form_id` varchar(45) COLLATE utf8_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `group`
 --
 
-INSERT INTO `group` (`id_group`, `groupName`, `groupID`, `crew_sheet_id`, `currentYear`, `member_sheet_id`) VALUES
-(150, '暨南大學馬來西亞同學會', '1zM4lUnWEMaUEcjPX618lOUcRWaOYUVbq', '19SJsCLSLOSwnfT2Zx8zNvclOqCx2UCJOTsYiPfGirMw', '105', '1UBGcpujWwIpoQ81Ccank2DLeNK3JI4mcRpmivLjI0oI'),
-(157, '測試測試會', '1WQzSml-Yd1X3BPo-LSH5gdpMIcGEKwCh', '1bODk4d6_x5P_I5BBD-YfKCHE8G4xMQzYY_A4FQZTBHk', '105', '1z94fE0UQnOTnpUXUlBiICphiFO3MQ2yloEJlTCe3_Lg');
+INSERT INTO `group` (`id_group`, `groupName`, `groupID`, `crew_sheet_id`, `currentYear`, `member_sheet_id`, `member_form_id`) VALUES
+(150, '暨南大學馬來西亞同學會', '1zM4lUnWEMaUEcjPX618lOUcRWaOYUVbq', '19SJsCLSLOSwnfT2Zx8zNvclOqCx2UCJOTsYiPfGirMw', '105', '1UBGcpujWwIpoQ81Ccank2DLeNK3JI4mcRpmivLjI0oI', ''),
+(157, '測試測試會', '1WQzSml-Yd1X3BPo-LSH5gdpMIcGEKwCh', '1bODk4d6_x5P_I5BBD-YfKCHE8G4xMQzYY_A4FQZTBHk', '105', '1z94fE0UQnOTnpUXUlBiICphiFO3MQ2yloEJlTCe3_Lg', '');
 
 -- --------------------------------------------------------
 
@@ -80,8 +81,16 @@ CREATE TABLE `post` (
   `fileId` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
   `belong` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
   `type` int(11) NOT NULL,
-  `pin` tinyint(1) NOT NULL
+  `pin` tinyint(1) NOT NULL,
+  `postBy` varchar(45) COLLATE utf8_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Dumping data for table `post`
+--
+
+INSERT INTO `post` (`id`, `time`, `title`, `fileId`, `belong`, `type`, `pin`, `postBy`) VALUES
+(26, '2018-11-12 02:54:04', 'RURURURU', '1DVyprJiZ3KXzLaIw5E4rf4fFRAGM1lw0nl8Dh_tNBYE', '1WQzSml-Yd1X3BPo-LSH5gdpMIcGEKwCh', 2, 0, 'junanyeap@gmail.com');
 
 -- --------------------------------------------------------
 
@@ -94,6 +103,13 @@ CREATE TABLE `postattach` (
   `attachId` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
   `postId` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Dumping data for table `postattach`
+--
+
+INSERT INTO `postattach` (`id`, `attachId`, `postId`) VALUES
+(39, '1DVyprJiZ3KXzLaIw5E4rf4fFRAGM1lw0nl8Dh_tNBYE', 26);
 
 -- --------------------------------------------------------
 
@@ -211,13 +227,13 @@ ALTER TABLE `group`
 -- AUTO_INCREMENT for table `post`
 --
 ALTER TABLE `post`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- AUTO_INCREMENT for table `postattach`
 --
 ALTER TABLE `postattach`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
 
 --
 -- AUTO_INCREMENT for table `user`
