@@ -1051,7 +1051,7 @@ function getDb($sql, $type)
       reset($temp);
     }
     else {
-      echo "0 results";
+      //echo "0 results";
     }
   }
   else if ($type == 2) {
@@ -1073,7 +1073,7 @@ function getDb($sql, $type)
       );
     }
     else {
-      echo "0 results";
+      //echo "0 results";
     }
   }
   else if ($type == 3) {
@@ -1088,7 +1088,7 @@ function getDb($sql, $type)
       }
     }
     else {
-      echo "0 results or more that one result";
+      //echo "0 results or more that one result";
     }
   }
   else if ($type == 4) {

@@ -69,7 +69,7 @@
         <div class="navbar-custom-menu f-right">
           <ul class="top-nav">
             <!--Notification Menu-->
-            <li class="dropdown notification-menu">
+            <!-- <li class="dropdown notification-menu">
               <a href="#!" data-toggle="dropdown" aria-expanded="false" class="dropdown-toggle">
                 <i class="icon-bell"></i>
                 <span class="badge badge-danger header-badge">9</span>
@@ -109,15 +109,15 @@
                   <a href="#!">See all notifications.</a>
                 </li>
               </ul>
-            </li>
+            </li> -->
             <!-- chat dropdown -->
-            <li class="pc-rheader-submenu ">
+            <!-- <li class="pc-rheader-submenu ">
               <a href="#!" class="drop icon-circle displayChatbox">
                 <i class="icon-bubbles"></i>
                 <span class="badge badge-danger header-badge blink">5</span>
               </a>
 
-            </li>
+            </li> -->
             <!-- User Menu-->
             <li class="dropdown">
               <a href="#!" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" class="dropdown-toggle drop icon-circle drop-image">
