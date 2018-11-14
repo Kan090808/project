@@ -1761,7 +1761,9 @@ function initCrew2($fileId){
         array_push($year, "$temp");
       }
     }
+    // 過濾重複值
     $year = array_unique($year);
+    // 重新排列array的key
     $new_year = array_values($year);
   }
   $notCreateYet = $new_year;
