@@ -58,8 +58,10 @@ if ($_SESSION["status"] == "true") {
       <li class="treeview"><a class="waves-effect waves-dark" href="#!"><i class="icofont icofont-company"></i><span>' . $groupName[$i] . '</span><i
             class="icon-arrow-down"></i></a>
         <ul class="treeview-menu">';
+        echo checkRole($initEmail,$groupName[$i]);
     if (!isset($_SESSION['notCrew'])) {
       if(checkRole($initEmail,$groupName[$i])>90||checkRole($initEmail,$groupName[$i])==79){
+        echo"hahahahhahaahahahahahahahahahahahahahahahahhahahaahhahaahhahaa";
       echo '<li id="join">
             <a class="waves-effect waves-dark txt-success">
               <i class="icofont icofont-ui-note"></i>
