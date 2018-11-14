@@ -17,14 +17,14 @@ if ($_SESSION["status"] == "false") {
     <!-- sidebar profile Menu-->
     <ul class="nav sidebar-menu extra-profile-list">
       <li>
-        <a class="waves-effect waves-dark" href="profile.html">
+        <a class="waves-effect waves-dark" >
           <i class="icon-user"></i>
           <span class="menu-text">個人資料</span>
           <span class="selected"></span>
         </a>
       </li>
       <li>
-        <a class="waves-effect waves-dark" href="javascript:void(0)">
+        <a class="waves-effect waves-dark">
           <i class="icon-settings"></i>
           <span class="menu-text">設定</span>
           <span class="selected"></span>
@@ -51,13 +51,15 @@ if ($_SESSION["status"] == "false") {
       <?php
       
 if ($_SESSION["status"] == "true") {
-  echo '<li class="nav-level">社團</li>';
+  if(count($groupName)!=0)
+    echo '<li class="nav-level">社團</li>';
   for ($i = 0; $i < count($groupName); $i++) {
     echo '
       <li class="treeview"><a class="waves-effect waves-dark" href="#!"><i class="icofont icofont-company"></i><span>' . $groupName[$i] . '</span><i
             class="icon-arrow-down"></i></a>
         <ul class="treeview-menu">';
     if (!isset($_SESSION['notCrew'])) {
+      if(checkRole($initEmail,$groupName[$i])>90||checkRole($initEmail,$groupName[$i])==79){
       echo '<li id="join">
             <a class="waves-effect waves-dark txt-success">
               <i class="icofont icofont-ui-note"></i>
@@ -69,15 +71,8 @@ if ($_SESSION["status"] == "true") {
               <i class="icofont icofont-ui-note"></i>
               幹部名單
             </a>
-          </li>
-          <li>
-            <a class="waves-effect waves-dark folder" id="folder" name='.$groupId[$i].'>
-              <i class="icofont icofont-speech-comments"></i>
-              幹部討論區
-            </a>
-          </li>
-          ';
-          
+          </li>';
+      }    
     }
     ;
     echo '<li id="club">
@@ -91,7 +86,12 @@ if ($_SESSION["status"] == "true") {
               <i class="icofont icofont-calendar"></i>
               日曆
             </a>
-          </li>';
+          </li><li>
+          <a class="waves-effect waves-dark folder" id="folder" name='.$groupId[$i].'>
+            <i class="icofont icofont-speech-comments"></i>
+            幹部討論區
+          </a>
+        </li>';
     if (!isset($_SESSION['notCrew'])) {
       $currentFolderId = getCurrentYearGroup($groupId[$i], $currentYear[$i]);
       $cfolder         = getFolderList($currentFolderId, 2);
@@ -244,7 +244,12 @@ if ($_SESSION["status"] == "true") {
       }
     }
     echo '</ul></li></ul></li>';
+    $zubieId         = '';
+    $huodongId       = '';
+    $lzubieId   = '';
+    $lhuodongId = '';
   }
+  
 }
 ?>
     </ul>

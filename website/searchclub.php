@@ -141,17 +141,25 @@
     <div class="modal-dialog" style="transform: translate(0, -50%);top: 50%;margin: 0 auto;">
       <div class="modal-content">
         <div class="modal-header">
-          <b class="modal-title col-sm-10">申請加入--暨馬同學會</b>
+          <b class="modal-title col-sm-10">申請建立社團</b>
           <button type="button" class="close" data-dismiss="modal">&times;</button>
 
         </div>
         <div class="modal-body">
           <div class="container">
             <div class="row">
-              <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSfPB8WRtxptXI8uU8eGEvKp2QvwUOHrzQpO_WY_ffgz9dQTBg/viewform?embedded=true"
-                width="100%" height="400px" frameborder="0" marginheight="0" marginwidth="0">正在加载...</iframe>
-            </div>
+              <div class="form">
+                <div class="col-sm-12">
+                  <div class="form-group">
+                    <label for="newclubName" class="col-sm-12">Text<label>
+                    <!-- <div class="col-sm-10"> -->
+                      <input class="form-control" type="text" id="newclubName">
+                    <!-- </div> -->
+                  </div>
+                </div>
+              </div>
             <!--form-->
+            </div>
           </div>
         </div>
 
@@ -163,28 +171,4 @@
 
     </div>
   </div>
-  <!-- <div class="modal fade" id="createclub">
-    <div class="modal-dialog" style="transform: translate(0, -50%);top: 50%;margin: 0 auto;">
-      <div class="modal-content">
-        <div class="modal-header">
-          <b class="modal-title col-sm-10">申請加入--暨馬同學會</b>
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-
-        </div>
-        <div class="modal-body">
-          <div class="container">
-            <div class="row">
-            <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSfPB8WRtxptXI8uU8eGEvKp2QvwUOHrzQpO_WY_ffgz9dQTBg/viewform?embedded=true" width="100%" height="400px" frameborder="0" marginheight="0" marginwidth="0">正在加载...</iframe>
-            </div>
-          </div>
-        </div>
-
-        <div class="modal-footer">
-          <button type="button" class="btn btn-success">發佈</button>
-          <button type="button" class="btn btn-warning">取消</button>
-        </div>
-      </div>
-
-    </div>
-  </div> -->
 </div>
