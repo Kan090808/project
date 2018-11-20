@@ -1531,6 +1531,7 @@ function getPost($belong,$type){
   $mainAttach = array();
   $postAttach2 = array();
   $postId2 = array();
+  $postBy2 = array();
   $isPostMainAttach = array();
   $sql = "select * from `member`.`post` where belong = '".$belong."' and type = '".$type."'";
   $rt = getDb($sql,4);
@@ -1555,9 +1556,10 @@ function getPost($belong,$type){
       array_push($postAttach2,$row2["attachId"]);
       array_push($postId2,$row2["postId"]);
       array_push($postTitle2,$postTitle[$i]);
+      array_push($postBy2,$postBy[$i]);
     }
   }
-  return array($postId2,$postTitle2,$postAttach2,$isPostMainAttach,$postBy);
+  return array($postId2,$postTitle2,$postAttach2,$isPostMainAttach,$postBy2);
 }
 function getPinPost($belong,$type){
   $postId = array();

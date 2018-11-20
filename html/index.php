@@ -150,13 +150,13 @@ if ($_SESSION["status"] == "false") {
     echo $groupId[$i];
     echo "<br> show post-------------------";
     list($postId,$postTitle,$postAttach,$isMainAttach,$postBy)=getPost($groupId[$i],2);
-    var_dump($postBy);
+    // $ht = getPost($groupId[$i],2);
+    // print("<pre>".print_r($ht,true)."</pre>");
     for($x=0;$x<count($postId);$x++){
       if($isMainAttach[$x] == true){
         // var_dump($postAttach);
         echo "<br/>".$postTitle[$x];
         echo "<br />".$x."<br />";
-        var_dump($postBy[$x]);
         echo "<br>PostBy :". $postBy[$x];
         $link = getFileLink($postAttach[$x]);
         $emblink = getEmb($postAttach[$x]);
