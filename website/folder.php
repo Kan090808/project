@@ -1,17 +1,26 @@
-<?php $curfolderId = $_GET["name"];
+<?php 
+$curfolderId = $_GET["id"];
+$curfolderName = $_GET["name"];
+$curfolderPage = $_GET["data-page"];
 // var_dump($curfolderId);
+// var_dump($curfolderName);
+// var_dump($curfolderPage);
+// echo $curfolderId;
+// echo $curfolderName;
+// echo $curfolderPage;
 ?>
 <div class="container">
   <div class="row">
     <div class="main-header">
-      <ol class="breadcrumb breadcrumb-title breadcrumb-arrow col-sm-8">
+      <!-- <ol class="breadcrumb breadcrumb-title breadcrumb-arrow col-sm-8">
         <li class="breadcrumb-item"><a href="#">暨馬同學會</a>
         </li>
         <li class="breadcrumb-item"><a href="#!">107</a>
         </li>
         <li class="breadcrumb-item"><b>資訊組</b>
         </li>
-      </ol>
+      </ol> -->
+      <h3><?php echo $curfolderName;echo ' -- ';echo $curfolderPage?></h3>
     </div>
   </div>
   <div class="row" style="margin-top:25px">

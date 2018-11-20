@@ -45,6 +45,11 @@
   <link rel="stylesheet" type="text/css" href="assets/css/color/color-1.min.css" id="color" />
 
   <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+  <style>
+    .modal-backdrop.show:nth-of-type(even) {
+        z-index: 1051 !important;
+    }
+  </style>
 </head>
 
 <body class="sidebar-mini fixed">

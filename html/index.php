@@ -37,6 +37,8 @@ if ($_SESSION["status"] == "false") {
   echo "<br/>";
 
   for($i=0;$i<count($groupName);$i++){
+    echo checkRole($initEmail,$groupId[$i]);
+
     $role = checkRole($initEmail,$groupId[$i]); 
     echo "<br/>";
     echo $groupName[$i].$currentYear[$i];
@@ -145,12 +147,16 @@ if ($_SESSION["status"] == "false") {
     }else{
       echo "<br/>沒有掛載的文件";
     }
+    echo $groupId[$i];
     echo "<br> show post-------------------";
     list($postId,$postTitle,$postAttach,$isMainAttach,$postBy)=getPost($groupId[$i],2);
+    var_dump($postBy);
     for($x=0;$x<count($postId);$x++){
       if($isMainAttach[$x] == true){
         // var_dump($postAttach);
         echo "<br/>".$postTitle[$x];
+        echo "<br />".$x."<br />";
+        var_dump($postBy[$x]);
         echo "<br>PostBy :". $postBy[$x];
         $link = getFileLink($postAttach[$x]);
         $emblink = getEmb($postAttach[$x]);

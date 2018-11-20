@@ -5,10 +5,135 @@
 <head>
   <title>Get File Details</title>
   <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
-  
+  <script>
+    function SubmitFormData() {
+      var title = $("#title").val();
+      var title2 = $("#title2").val();
+      var belong = $("#belong").val();
+      var type = $("#type").val();
+      var mime = $("#mime").val();
+      var newFileMime = $("input[type=radio]:checked").val();
+      $.post("../html/control.php?act=newPostAttach", { title: title, title2: title2, belong: belong, type: type, mime: mime , newFileMime: newFileMime },
+      function() {
+        $('#results').load(location.href+' #results');
+        $('#newattach')[0].reset();
+      });
+    }
+    function clearAttach() {
+      $.post("../html/control.php?act=clearChoseSession",
+      function() {
+        $('#results').load(location.href+' #results');
+      });
+    }
+    function createPost(){
+      var title = $('#title').val();
+      var belong = $('#belong').val();
+      var type = $("#type").val();
+      var mime = $("#mime").val();
+      var postBy = $("#postBy").val();
+      var attach = $('#attach').val();
+      var newPostAttach = $('#newPostAttach').val();
+      // alert("i am in");
+      // alert(title);
+      // alert(belong);
+      // alert(type);
+      // alert(mime);
+      // alert(postBy);
+      // alert(attach);
+      // alert(newPostAttach);
+      $.post("../html/control.php?act=newPost", {title,belong,type,mime,postBy,attach,postBy,attach,newPostAttach},
+      function() {
+        $('#results').load(location.href+' #results');
+        $('#allPost').load(location.href+' #allPost');
+        $('#newattach')[0].reset();
+      });
+      // alert("success");
+    }
+  </script>
 </head>
 
 <body style="font:15px Calibri;">
+  <?php
+    require("../html/model.php");
+    $initEmail = getEmail();
+    $name = getName();
+    
+    list($groupName,$groupId,$currentYear) = getJoinedGroup($initEmail);
+    $currentFolderId = getCurrentYearGroup($groupId[0], $currentYear[0]);
+    echo $currentFolderId;
+    $title = "";
+    $attach = "";
+    if(isset($_SESSION['tempTitle'])){
+      $title = $_SESSION['tempTitle'];
+    }
+    echo "<br/>-------------post-------";
+    $attach = "";
+    $newPostAttach = "";
+    if(isset($_SESSION['attach'])){
+      $attach = base64_encode(serialize($_SESSION['attach']));
+      // $attach = $_SESSION['attach'];
+    }
+    if(isset($_SESSION['newPostAttach'])){
+      $newPostAttach = base64_encode(serialize($_SESSION['newPostAttach']));
+      // $newPostAttach = $_SESSION['newPostAttach'];
+    }
+    echo '<form id="newattach" method="post">
+    po 文標題
+    <input type="text" id="title" value="'.$title.'"><br/>
+    新開文件
+    <input type="text" id="title2" value="">
+    <input type="hidden" id="belong" value="'.$groupId[0].'">
+    <input type="hidden" id="type" value="2">
+    <input type="hidden" id="mime" value="doc">
+    <input type="radio" name="newFileMime" value="doc"> doc
+    <input type="radio" name="newFileMime" value="sheet"> sheet
+    <input type="radio" name="newFileMime" value="slide"> slide
+    <br>
+    <input type="hidden" name="newPostAttach" value="'.$newPostAttach.'">
+    <input type="hidden" name="postBy" value="'.$initEmail.'">
+        
+    <input type="button" id="submitattach" onclick="SubmitFormData();" value="Submit">
+    <input type="button" id="createpost" value="newPost" onclick="createPost();">   
+    <input type="button" id="clearattach" onclick="clearAttach();" value="Clear">
+  </form>';
+  
+  ?>
+  
+  <div id="results">
+    <?php 
+    if(isset($_SESSION['newPostAttach'])){
+      echo "<br/>要新開的文件";
+      $temp = $_SESSION['newPostAttach'];
+      for($x=0;$x<count($temp);$x++){
+        list($newPostAttachTitle,$newPostAttachBelong,$newPostType,$newPostAttachMime)=$temp[$x];
+        // echo '<pre>' . var_export($temp[$x], true) . '</pre>';
+        echo "<br/>".$newPostAttachTitle."_".$newPostAttachBelong."_".$newPostType."_".$newPostAttachMime;
+      }
+    }else{
+      echo "<br/>沒有要新開的文件";
+    }
+    ?>
+  </div>
+  <div id="allPost">
+  <?php 
+  
+  echo "<br> show post-------------------";
+  list($postId,$postTitle,$postAttach,$isMainAttach,$postBy)=getPost($groupId[0],2);
+  for($x=0;$x<count($postId);$x++){
+    if($isMainAttach[$x] == true){
+      // var_dump($postAttach);
+      echo "<br/>".$postTitle[$x];
+      echo "<br>PostBy :". $postBy[$x];
+      $link = getFileLink($postAttach[$x]);
+      $emblink = getEmb($postAttach[$x]);
+      echo "<a href='$link'>view/edit in docs</a><br/>";
+      echo "<iframe src = '$emblink'></iframe>";
+    }else{
+      echo "<br/>帖文附件：".$postTitle[$x]."___".$postAttach[$x];
+    } 
+  }
+  ?>
+  </div>
   <!--ADD INPUT OF TYPE FILE WITH THE MULTIPLE OPTION-->
   <p>
     <input type="file" id="file" onchange="FileDetails()" multiple />
@@ -183,6 +308,9 @@
     } else {
       alert('Please select a file.')
     }
+  }
+  function attachGoogle() {
+
   }
 </script>
 <script>

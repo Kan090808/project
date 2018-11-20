@@ -1,5 +1,5 @@
 <?php
-error_reporting(E_ERROR | E_PARSE);
+error_reporting(E_ALL ^ E_WARNING);
 
 require("../html/model.php");
 header("Content-Type:text/html; charset=utf-8");

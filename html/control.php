@@ -46,7 +46,7 @@ case 'clearChoseSession':
   unset($_SESSION['attach']);
   unset($_SESSION['newPostAttach']);
   unset($_SESSION['tempTitle']);
-  header('Location: index.php');
+  // header('Location: index.php');
   break;
 case 'removeMember':
   $no = $_REQUEST['no'];
@@ -88,21 +88,19 @@ case 'newMemberDetail':
   break;
 
 case 'newPostAttach':
-  if($title != ""){
-    $_SESSION['tempTitle'] = $title;
-  }
-  $title = $_REQUEST['title2'];
+  $title2 = $_REQUEST['title2'];
   $belong = $_REQUEST['belong'];
   $type = $_REQUEST['type'];
   $mime = $_REQUEST['newFileMime'];
-  $array = array($title,$belong,$type,$mime);
+  $array = array($title2,$belong,$type,$mime);
   if(isset($_SESSION['newPostAttach'])){
     array_push($_SESSION['newPostAttach'], $array);
-    header('Location: index.php');
+    // header('Location: ../website/test.php#results');
+    
   }else{
     $_SESSION['newPostAttach'] = array();
     array_push($_SESSION['newPostAttach'], $array);
-    header('Location: index.php');
+    // header('Location: ../website/test.php#results');
   }
   break;
 
@@ -126,6 +124,9 @@ case 'newPost':
   // if($attach == ""){
   //   echo "noattach";
   // }
+  // echo "<script type='text/javascript'>alert('$postBy')</script>";
+  // alert(var_dump($postBy));
+  // var_dump($newPostAttach);
   newPost($title,$belong,$type,$mime,$newPostAttach,$attach,$postBy);
   header('Location: index.php');
   break;

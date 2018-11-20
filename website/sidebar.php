@@ -58,11 +58,10 @@ if ($_SESSION["status"] == "true") {
       <li class="treeview"><a class="waves-effect waves-dark" href="#!"><i class="icofont icofont-company"></i><span>' . $groupName[$i] . '</span><i
             class="icon-arrow-down"></i></a>
         <ul class="treeview-menu">';
-        echo checkRole($initEmail,$groupName[$i]);
+        // echo checkRole($initEmail,$groupId[$i]);
     if (!isset($_SESSION['notCrew'])) {
-      if(checkRole($initEmail,$groupName[$i])>90||checkRole($initEmail,$groupName[$i])==79){
-        echo"hahahahhahaahahahahahahahahahahahahahahahahhahahaahhahaahhahaa";
-      echo '<li id="join">
+      if(checkRole($initEmail,$groupId[$i])>90||checkRole($initEmail,$groupId[$i])==79){
+        echo '<li id="join">
             <a class="waves-effect waves-dark txt-success">
               <i class="icofont icofont-ui-note"></i>
               加入社團申請
@@ -88,14 +87,16 @@ if ($_SESSION["status"] == "true") {
               <i class="icofont icofont-calendar"></i>
               日曆
             </a>
-          </li><li>
-          <a class="waves-effect waves-dark folder" id="folder" name='.$groupId[$i].'>
-            <i class="icofont icofont-speech-comments"></i>
-            幹部討論區
-          </a>
-        </li>';
+          </li>';
     if (!isset($_SESSION['notCrew'])) {
       $currentFolderId = getCurrentYearGroup($groupId[$i], $currentYear[$i]);
+      // echo $currentFolderId;
+      echo '<li>
+      <a class="waves-effect waves-dark folder" id='.$currentFolderId.' name='.$currentYear[$i].' data-page="幹部討論區">
+        <i class="icofont icofont-speech-comments"></i>
+        幹部討論區
+      </a>
+    </li>';
       $cfolder         = getFolderList($currentFolderId, 2);
       $cfileName       = $cfolder[0];
       $cfileId         = $cfolder[1];
@@ -174,8 +175,15 @@ if ($_SESSION["status"] == "true") {
     $ayfileType    = $allYears[2];
     $ayfileLastMod = $allYears[3];
     $ayfileSize    = $allYears[4];
+
     for ($j = 0; $j < count($ayfileName); $j++) {
       if (strpos($ayfileType[$j], "folder") && $ayfileId[$j] != $currentFolderId) {
+        echo '<li>
+                <a class="waves-effect waves-dark folder" id='.$ayfileId[$j].' name='.$ayfileName[$j].' data-page="幹部討論區">
+                  <i class="icofont icofont-speech-comments"></i>
+                  幹部討論區
+                </a>
+              </li>';
         $lfolder      = getFolderList($ayfileId[$j], 2);
         $lfileName    = $lfolder[0];
         $lfileId      = $lfolder[1];

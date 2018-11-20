@@ -96,8 +96,13 @@
     $('#mainContent').load('calendar.php');
   });
   $('.folder').click(function () {
-    var giveval = this.name;
-    $('#mainContent').load('folder.php?name='+giveval);
+    var giveid = this.id;
+    var givename = this.name;
+    // var givepage = this.page;
+    // var givepage = $(a[name=givename]).attr('page');
+    var givepage = $('#'+giveid).data('page');
+    // alert(giveid);
+    $('#mainContent').load('folder.php?id='+giveid+'&name='+givename+'&data-page='+givepage);
     // alert(this.name);
   });
   $('#searchclub').click(function () {
@@ -123,6 +128,38 @@
             tr[i].style.display = "none";
         }
     }
+  }
+  function SubmitFormData() {
+    var title = $("#title").val();
+    var title2 = $("#title2").val();
+    var belong = $("#belong").val();
+    var type = $("#type").val();
+    var mime = $("#mime").val();
+    var newFileMime = $("input[type=radio]:checked").val();
+    $.post("../html/control.php?act=newPostAttach", { title: title, title2: title2, belong: belong, type: type, mime: mime , newFileMime: newFileMime },
+    function() {
+      $('#cgAttach').load('post.php #cgAttach');
+      $('#createGattach')[0].reset();
+      $('#newGattach').modal('hide');
+      
+    });
+  }
+  // function clearnewpost() {
+  //   $.post("../html/control.php?act=clearChoseSession",
+  //   function() {
+  //     $('#cgAttach').load('post.php #cgAttach');
+  //     $('#createGattach')[0].reset();
+  //     $('#newpost #formtitle').val("");
+  //     $('#newpost #file').val("");
+  //   });
+  // }
+  function clearnewpost(){
+    $('#newpost form').get(0).reset();
+    // $('#file').val();
+    // document.getElementById("file").value = "";
+  }  
+  function clearnewg(){
+    $('#createGattach').get(0).reset();
   }
 </script>
 </body>
