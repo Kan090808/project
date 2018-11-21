@@ -85,8 +85,7 @@
                       <div class="form-group row">
                         <label for="formtitle" class="col-sm-4">貼文標題</label>
                         <div class="col-sm-8">
-                          <input type="text" class="form-control form-control-sm" id="formtitle" value=<?php echo
-                            $title?>>
+                          <input type="text" class="form-control form-control-sm" id="title" value="">
                         </div>
                       </div>
                       <div class="row">
