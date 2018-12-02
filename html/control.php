@@ -48,6 +48,11 @@ case 'clearChoseSession':
   unset($_SESSION['tempTitle']);
   // header('Location: index.php');
   break;
+
+case 'deletePost':
+  deletePost($_REQUEST['postId']);
+  break;
+
 case 'removeMember':
   $no = $_REQUEST['no'];
   $sheetId = $_REQUEST['sheetId'];
@@ -352,8 +357,15 @@ case 'settingGroup':
   settingGroup($gId);
   break;
 
+case 'uploadFile':
+  // var_dump($_FILES['myfile']);
+  // [name],[type],[tmp_name],[error],[size]
+  // $file = $_REQUEST['fileToUpload'];
+  uploadFile($_FILES['myfile']);
+  break;
+  
 default:
-  $rt = "nothing";
+  $rt = "control.php : nothing";
   echo $rt;
   break;
 }

@@ -1,6 +1,13 @@
 <?php
 require("model.php");
 $_SESSION["status"] = checkLogin();
+echo '
+  <form action="control.php" method="post" enctype="multipart/form-data">
+        Upload a File:
+        <input type="file" name="myfile" id="fileToUpload">
+        <input type="submit" name="act" value="uploadFile" >
+    </form>
+';
 echo "Search Group";
 echo '
   <form action = "control.php" method="post">
@@ -149,15 +156,22 @@ if ($_SESSION["status"] == "false") {
     }
     echo $groupId[$i];
     echo "<br> show post-------------------";
-    list($postId,$postTitle,$postAttach,$isMainAttach,$postBy)=getPost($groupId[$i],2);
+    list($postId,$postTitle,$postAttach,$isMainAttach,$postBy,$userName)=getPost($groupId[$i],2);
     // $ht = getPost($groupId[$i],2);
     // print("<pre>".print_r($ht,true)."</pre>");
     for($x=0;$x<count($postId);$x++){
       if($isMainAttach[$x] == true){
         // var_dump($postAttach);
-        echo "<br/>".$postTitle[$x];
-        echo "<br />".$x."<br />";
-        echo "<br>PostBy :". $postBy[$x];
+        echo "<br/><br/>".$postTitle[$x];
+        if($postBy[$x] == $initEmail){
+          echo '
+            <form action = "control.php" method="post">
+              <input type="hidden" name="postId" value="'.$postId[$i].'">
+              <input type="submit" name="act" value="deletePost">
+            </form>
+          ';
+        }
+        echo "<br>PostBy :". $userName[$x];
         $link = getFileLink($postAttach[$x]);
         $emblink = getEmb($postAttach[$x]);
         echo "<a href='$link'>view/edit in docs</a><br/>";
