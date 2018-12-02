@@ -1,13 +1,7 @@
 <?php
 require("model.php");
 $_SESSION["status"] = checkLogin();
-echo '
-  <form action="control.php" method="post" enctype="multipart/form-data">
-        Upload a File:
-        <input type="file" name="myfile" id="fileToUpload">
-        <input type="submit" name="act" value="uploadFile" >
-    </form>
-';
+
 echo "Search Group";
 echo '
   <form action = "control.php" method="post">
@@ -74,6 +68,14 @@ if ($_SESSION["status"] == "false") {
         <input type="hidden" name="type" value="2">
         <input type="submit" name="act" value="getFolderList">
       </form>';
+    echo "
+      <form method='post' action='control.php' enctype='multipart/form-data'>
+        Upload a file to drive:
+        <input type='hidden' name='path' value='$groupId[$i]'>
+        <input type='file' name='myfile' id='fileToUpload'>
+        <input type='submit' name='act' value = 'uploadFile'>
+      </form>";
+
       // 帶1進去，從model裡面echo出來
       // 帶2進去，回傳array
     // getFolderList($currentFolderId,1);

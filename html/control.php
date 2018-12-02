@@ -361,9 +361,9 @@ case 'uploadFile':
   // var_dump($_FILES['myfile']);
   // [name],[type],[tmp_name],[error],[size]
   // $file = $_REQUEST['fileToUpload'];
-  uploadFile($_FILES['myfile']);
+  uploadFile($_FILES['myfile'],$_REQUEST['path']);
   break;
-  
+
 default:
   $rt = "control.php : nothing";
   echo $rt;

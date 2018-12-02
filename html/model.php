@@ -2198,22 +2198,19 @@ function settingGroup($groupId)
     );
   }
 }
-function uploadFile($myfile){
-  var_dump($myfile);
-  $errors = []; // Store all foreseen and unforseen errors here
+function uploadFile($myfile,$path){
   // $fileExtensions = ['jpeg','jpg','png']; // Get all the file extensions
   $fileName = $myfile['name'];
   $fileSize = $myfile['size'];
   $fileTmpName  = $myfile['tmp_name'];
   $fileType = $myfile['type'];
   // $fileExtension = strtolower(end(explode('.',$fileName)));
-  $pid = "1QIIRr4j14AUMZq6-Oerd78gsCQg_cVW8";
   $client = getClient(0);
   $service = new Google_Service_Drive($client);
   $fileMetadata = new Google_Service_Drive_DriveFile(array(
     'name' => $fileName,
     'parents' => array(
-      $pid
+      $path
     )
   ));
   // $fileMetadata = new Google_Service_Drive_DriveFile(array(
