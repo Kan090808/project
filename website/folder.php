@@ -1,13 +1,17 @@
 <?php 
-$curfolderId = $_GET["id"];
-$curfolderName = $_GET["name"];
-$curfolderPage = $_GET["data-page"];
+session_start();
+$_SESSION["curfolderId"] = $_GET["id"];
+$_SESSION["curfolderName"] = $_GET["name"];
+$_SESSION["curfolderPage"] = $_GET["data-page"];
+// $curfolderId = $_GET["id"];
+// $_SESSION["curfolderName"] = $_GET["name"];
+// $_SESSION["curfolderPage"] = $_GET["data-page"];
 // var_dump($curfolderId);
-// var_dump($curfolderName);
-// var_dump($curfolderPage);
+// var_dump($_SESSION["curfolderName"]);
+// var_dump($_SESSION["curfolderPage"]);
 // echo $curfolderId;
-// echo $curfolderName;
-// echo $curfolderPage;
+// echo $_SESSION["curfolderName"];
+// echo $_SESSION["curfolderPage"];
 ?>
 <div class="container">
   <div class="row">
@@ -20,7 +24,7 @@ $curfolderPage = $_GET["data-page"];
         <li class="breadcrumb-item"><b>資訊組</b>
         </li>
       </ol> -->
-      <h3><?php echo $curfolderName;echo ' -- ';echo $curfolderPage?></h3>
+      <h3><?php echo $_SESSION["curfolderName"];echo ' -- ';echo $_SESSION["curfolderPage"]?></h3>
     </div>
   </div>
   <div class="row" style="margin-top:25px">

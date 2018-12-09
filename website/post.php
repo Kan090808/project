@@ -12,29 +12,30 @@
       </div>
       <div class="card-body post-area">
         <div class="container">
-
+          <div id="results">
           <?php 
-                echo $curfolderId;
-                list($postId,$postTitle,$postAttach,$isMainAttach)=getPost($curfolderId,2);
+                // echo $_SESSION["curfolderId"];
+                list($postId,$postTitle,$postAttach,$isMainAttach,$postBy2)=getPost($_SESSION["curfolderId"],2);
                 for($x=0;$x<count($postId);$x++){
                   if($isMainAttach[$x] == true){
                     // var_dump($postAttach);
+                    // echo $postBy2[$x];
                     echo '<div class="row" style="margin-top:30px">
                     <div class="panel-default col-sm-10" style="margin:0 auto;float:none">
                       <div class="panel-heading bg-default txt-white">
                         <span class="col-sm-1"><img class="img-circle " src="assets/images/avatar-1.png" style="width:40px;"
                             alt="User Image"></span>
-                        <b>簡靖騰</b>
+                        <b>'.getName("oldfishstudent108@gmail.com").'</b>
                         <div class="small txt-white">November 2017</div>
                       </div>
                       <div class="panel-body">
                         <div class="container">';
                     echo "<div class='row'>
                     <div class='card'>
-                      <div class='card-header'>".$postTitle[$x];
+                      <div class='card-header '><h3 class='col-sm-10'>".$postTitle[$x]."</h3>";
                     $link = getFileLink($postAttach[$x]);
                     $emblink = getEmb($postAttach[$x]);
-                    echo "<a href='$link'>編輯貼問內容</a></div>";
+                    echo "<a target='_blank' rel='noopener noreferrer'  href='$link' role='button' class='btn btn-info'>編輯</a></div>";
                     echo "<div class='card-body'><iframe src = '$emblink' width='100%' height='300px'></iframe></div>";
                     echo "<div class='card-block'>
                     <div class='row'>";
@@ -59,33 +60,39 @@
                 }
                 
                 ?>
+          </div>
         </div>
       </div>
       <div class="modal fade" id="newpost">
         <div class="modal-dialog modal-lg" style="transform: translate(0, -50%);top: 50%;margin: 0 auto;">
           <div class="modal-content">
-            <div class="modal-header">
-              <b class="modal-title col-sm-10">新增貼文</b>
-              <button type="button" class="close" data-dismiss="modal" onclick="clearnewpost()">&times;</button>
+            <form id="createPost" method="post">
+              <div class="modal-header">
+                <b class="modal-title col-sm-10">新增貼文</b>
+                <button type="button" class="close" data-dismiss="modal" onclick="clearnewpost()">&times;</button>
 
-            </div>
-            <div class="modal-body">
-              <div class="container">
-                <div class="row">
-                  <!-- <div class="form"> -->
-                  <?php 
+              </div>
+              <div class="modal-body">
+                <div class="container">
+                  <div class="row">
+                    <!-- <div class="form"> -->
+                    <?php 
                       $title = "";
                       $attach = "";
                       $attach = "";
                       $newPostAttach = "";
                       
                       ?>
-                  <form id="createPost" method="post">
+
                     <div class="col-sm-6">
                       <div class="form-group row">
                         <label for="formtitle" class="col-sm-4">貼文標題</label>
                         <div class="col-sm-8">
                           <input type="text" class="form-control form-control-sm" id="title" value="">
+                          <input type="hidden" id="type" value="2">
+                          <input type="hidden" id="mime" value="doc">
+                          <input type="hidden" name="postBy" value="<?php $initEmail?>">
+                          <input type="hidden" name="newPostAttach" value="<?php $newPostAttach?>">
                         </div>
                       </div>
                       <div class="row">
@@ -122,7 +129,7 @@
                             <label class="col-sm-4">一般檔案</label>
                             <div id="uploadfile">
                               <div>
-                                <label class="btn btn-file btn-success waves-effect waves-light" type="button">上傳檔案
+                                <label class="btn btn-file btn-success waves-effect waves-light" role="button">上傳檔案
                                   <input type="file" class="form-control-file" id="file" style="display:none" onchange="FileDetails()"
                                     multiple>
 
@@ -150,17 +157,18 @@
                         </div>
                       </div>
                     </div>
-                  </form>
-                  <!-- </div> -->
-                </div>
-                <!--form-->
-              </div>
-            </div>
 
-            <div class="modal-footer">
-              <button type="button" class="btn btn-success">發佈</button>
-              <button type="button" class="btn btn-warning">取消</button>
-            </div>
+                    <!-- </div> -->
+                  </div>
+                  <!--form-->
+                </div>
+              </div>
+
+              <div class="modal-footer">
+                <input type="button" class="btn btn-success" id="createpost" onclick="createPost();" value="發佈">
+                <button type="button" class="btn btn-warning">取消</button>
+              </div>
+            </form>
           </div>
 
         </div>
@@ -181,6 +189,7 @@
                       <input type="text" class="form-control form-control-sm" id="title2" value="">
                     </div>
                   </div>
+                  <?php echo '<input type="hidden" id="belong" value="'.$_SESSION["curfolderId"].'">';?>
                   <label for="googleservice" class="col-sm-4">Google 服務</label>
                   <div class="form-radio col-sm-8" id="googleservice">
                     <div class="radio radio-inline">

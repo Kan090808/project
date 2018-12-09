@@ -133,17 +133,45 @@
     var title = $("#title").val();
     var title2 = $("#title2").val();
     var belong = $("#belong").val();
+    // alert(belong);
     var type = $("#type").val();
     var mime = $("#mime").val();
     var newFileMime = $("input[type=radio]:checked").val();
-    $.post("../html/control.php?act=newPostAttach", { title: title, title2: title2, belong: belong, type: type, mime: mime , newFileMime: newFileMime },
+    $.post("../html/control.php?act=newPostAttach", { title,title2,belong,type,mime,newFileMime },
     function() {
       $('#cgAttach').load('post.php #cgAttach');
       $('#createGattach')[0].reset();
       $('#newGattach').modal('hide');
       
     });
+    
   }
+  function createPost(){
+      var title = $('#title').val();
+      var belong = $('#belong').val();
+      var type = $("#type").val();
+      var mime = $("#mime").val();
+      var postBy = $("#postBy").val();
+      var attach = $('#attach').val();
+      var newPostAttach = $('#newPostAttach').val();
+      // alert("i am in");
+      // alert(title);
+      // alert(belong);
+      // alert(type);
+      // alert(mime);
+      // alert(postBy);
+      // alert(attach);
+      // alert(newPostAttach);
+      $.post("../html/control.php?act=newPost", {title,belong,type,mime,postBy,attach,postBy,attach,newPostAttach},
+      function() {
+        $('#results').load('post.php #results');
+        // $('#mainContent').load(location.href+' #mainContent');
+        $('#createPost')[0].reset();
+        $('#newpost').modal('hide');
+
+      });
+      // alert("success");
+    }
   // function clearnewpost() {
   //   $.post("../html/control.php?act=clearChoseSession",
   //   function() {
