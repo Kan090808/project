@@ -790,6 +790,39 @@ function createFile($act, $newFileName, $pid)
     // printf("File ID: %s\n", $file->id);
   }
 }
+function deletePost($postId){
+  // delete db record [ok] 
+  // delete other user permission []
+  // delete file [ok]
+  $getDeleteFileSql = "select * from `member`.`postAttach` where postId = '$postId' ";
+  $deletePostSql = "delete from `member`.`post` where id = '$postId' ";
+  
+  $fileIdArray = array();
+  $rt = getDb($getDeleteFileSql,4);
+  while ($row = $rt->fetch_assoc()) {
+    array_push($fileIdArray,$row["attachId"]);
+  }
+  // var_dump($fileIdArray);
+  $client = getClient(0);
+  $service = new Google_Service_Drive($client);
+  try {
+    for($i=0;$i<count($fileIdArray);$i++){
+      $deleteFileSql = "delete from `member`.`postAttach` where postId = '$postId' and attachId='$fileIdArray[$i]'";
+      $permissionList = getPermissionList($fileIdArray[$i],getEmail());
+      // var_dump($permissionList);
+      for($j = 0 ; $j<count($permissionList) ; $j++){
+        if(getUserId() != $permissionList[$j]){
+          $service->permissions->delete($fileIdArray[$i], $permissionList[$j]);
+        }
+      }
+      $service->files->delete($fileIdArray[$i]);
+      getDb($deleteFileSql,4);
+    }
+    getDb($deletePostSql,4);
+  } catch (Exception $e) {
+    print "An error occurred: " . $e->getMessage() . getEmail();
+  }
+}
 function deleteSheetData($sheetId, $no)
 {
   $client = getClientSheet();
@@ -1532,6 +1565,8 @@ function getPost($belong,$type){
   $postAttach2 = array();
   $postId2 = array();
   $postBy2 = array();
+  $userName = array();
+  $userName2 = array();
   $isPostMainAttach = array();
   $sql = "select * from `member`.`post` where belong = '".$belong."' and type = '".$type."'";
   $rt = getDb($sql,4);
@@ -1541,7 +1576,7 @@ function getPost($belong,$type){
     array_push($mainAttach,$row["fileId"]);
     array_push($postTitle,$row["title"]);
     array_push($postBy,$row["postBy"]);
-     
+    array_push($userName,$row["userName"]);  
   }
   for($i=0;$i<count($postId);$i++){
     $sql = "select * from `member`.`postattach` where postId = '".$postId[$i]."'";
@@ -1557,9 +1592,10 @@ function getPost($belong,$type){
       array_push($postId2,$row2["postId"]);
       array_push($postTitle2,$postTitle[$i]);
       array_push($postBy2,$postBy[$i]);
+      array_push($userName2,$userName[$i]);
     }
   }
-  return array($postId2,$postTitle2,$postAttach2,$isPostMainAttach,$postBy2);
+  return array($postId2,$postTitle2,$postAttach2,$isPostMainAttach,$postBy2,$userName2);
 }
 function getPinPost($belong,$type){
   $postId = array();
@@ -1923,11 +1959,12 @@ function newMemberDetail($name, $id, $email, $gender, $class, $department, $year
   $response = $service->spreadsheets_values->append($member_sheet_id, $range, $body, $params);
 }
 function newPost($title,$belong,$type,$mime,$newPostAttach,$attach,$postBy){
-  echo $postBy;
+  // echo $postBy;
   $postid = "";
+  $userName = getName();
     // 開個屬於帖文內容的doc
   $fileId = createFile($mime,$title,$belong);
-  $sql = "insert into `member`.`post` (title,fileId,belong,type,pin,postBy) VALUES ('$title','$fileId','$belong','$type',0,'$postBy')";
+  $sql = "insert into `member`.`post` (title,fileId,belong,type,pin,postBy,userName) VALUES ('$title','$fileId','$belong','$type',0,'$postBy','$userName')";
   // 找回剛才創建的文件，加入db
   $checkpostid = "select * from `member`.`post` where title = '".$title."' and fileId = '".$fileId."' and belong = '".$belong."' and type = '".$type."'";
   insertDb($sql);
@@ -2160,5 +2197,32 @@ function settingGroup($groupId)
       $group
     );
   }
+}
+function uploadFile($myfile,$path){
+  // $fileExtensions = ['jpeg','jpg','png']; // Get all the file extensions
+  $fileName = $myfile['name'];
+  $fileSize = $myfile['size'];
+  $fileTmpName  = $myfile['tmp_name'];
+  $fileType = $myfile['type'];
+  // $fileExtension = strtolower(end(explode('.',$fileName)));
+  $client = getClient(0);
+  $service = new Google_Service_Drive($client);
+  $fileMetadata = new Google_Service_Drive_DriveFile(array(
+    'name' => $fileName,
+    'parents' => array(
+      $path
+    )
+  ));
+  // $fileMetadata = new Google_Service_Drive_DriveFile(array(
+  //   'name' => $fileName,
+  //   'parents' => $pid));
+  $content = file_get_contents($fileTmpName);
+  $file = $service->files->create($fileMetadata, array(
+      'data' => $content,
+      'mimeType' => 'image/jpeg',
+      'uploadType' => 'multipart',
+      'fields' => 'id'));
+  // printf("File ID: %s\n", $file->id);
+  // header('Location: index.php');
 }
 ?>
