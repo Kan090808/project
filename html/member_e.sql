@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.3
+-- version 4.8.4
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: Nov 13, 2018 at 07:14 PM
--- Server version: 10.1.35-MariaDB
--- PHP Version: 7.2.9
+-- Host: localhost
+-- Generation Time: Dec 21, 2018 at 07:36 AM
+-- Server version: 10.1.37-MariaDB
+-- PHP Version: 7.3.0
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -86,8 +86,7 @@ CREATE TABLE `group` (
 
 INSERT INTO `group` (`id_group`, `groupName`, `groupID`, `crew_sheet_id`, `currentYear`, `member_sheet_id`, `member_form_id`) VALUES
 (150, '暨南大學馬來西亞同學會', '1zM4lUnWEMaUEcjPX618lOUcRWaOYUVbq', '19SJsCLSLOSwnfT2Zx8zNvclOqCx2UCJOTsYiPfGirMw', '105', '1UBGcpujWwIpoQ81Ccank2DLeNK3JI4mcRpmivLjI0oI', ''),
-(157, '測試測試會', '1WQzSml-Yd1X3BPo-LSH5gdpMIcGEKwCh', '1bODk4d6_x5P_I5BBD-YfKCHE8G4xMQzYY_A4FQZTBHk', '105', '1z94fE0UQnOTnpUXUlBiICphiFO3MQ2yloEJlTCe3_Lg', ''),
-(159, 'tsetenene', '1SStaWgEei2Va6YZ-1C-S-FcRHeNzLb6z', '19SJsCLSLOSwnfT2Zx8zNvclOqCx2UCJOTsYiPfGirMw', '105', '1SUybKktNlRXI-5pYFZc5dAi9jrsVp2oPWWGP8pbzXEk', '');
+(157, '測試測試會', '1WQzSml-Yd1X3BPo-LSH5gdpMIcGEKwCh', '1bODk4d6_x5P_I5BBD-YfKCHE8G4xMQzYY_A4FQZTBHk', '105', '1z94fE0UQnOTnpUXUlBiICphiFO3MQ2yloEJlTCe3_Lg', '');
 
 -- --------------------------------------------------------
 
