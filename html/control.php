@@ -109,6 +109,14 @@ case 'newPostAttach':
   }
   break;
 
+case 'testajax':
+  $title2 = $_REQUEST['title2'];
+  $belong = $_REQUEST['belong'];
+  $type = $_REQUEST['type'];
+  $_SESSION['params'] = array();
+  $array = array($title2, $belong, $type);
+  array_push($_SESSION['params'], $array);
+  break;
 case 'newPost':
   $title = $_REQUEST['title'];
   $belong = $_REQUEST['belong'];

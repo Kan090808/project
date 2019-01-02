@@ -19,6 +19,23 @@
         $('#newattach')[0].reset();
       });
     }
+    var testajax = function(){
+      $.ajax(
+        {
+          url:,
+          type: 'post',
+          dataType: 'json',
+          contentType: 'application/json',
+          data: JSON.stringify(
+            {
+              ID: ,
+              title: "ajax",
+              intro: "example",
+            }
+          )
+        }
+      )
+    }
     function clearAttach() {
       $.post("../html/control.php?act=clearChoseSession",
       function() {

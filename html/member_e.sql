@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 13, 2018 at 07:14 PM
--- Server version: 10.1.35-MariaDB
--- PHP Version: 7.2.9
+-- Generation Time: Dec 09, 2018 at 09:12 AM
+-- Server version: 10.1.37-MariaDB
+-- PHP Version: 7.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -86,8 +86,7 @@ CREATE TABLE `group` (
 
 INSERT INTO `group` (`id_group`, `groupName`, `groupID`, `crew_sheet_id`, `currentYear`, `member_sheet_id`, `member_form_id`) VALUES
 (150, '暨南大學馬來西亞同學會', '1zM4lUnWEMaUEcjPX618lOUcRWaOYUVbq', '19SJsCLSLOSwnfT2Zx8zNvclOqCx2UCJOTsYiPfGirMw', '105', '1UBGcpujWwIpoQ81Ccank2DLeNK3JI4mcRpmivLjI0oI', ''),
-(157, '測試測試會', '1WQzSml-Yd1X3BPo-LSH5gdpMIcGEKwCh', '1bODk4d6_x5P_I5BBD-YfKCHE8G4xMQzYY_A4FQZTBHk', '105', '1z94fE0UQnOTnpUXUlBiICphiFO3MQ2yloEJlTCe3_Lg', ''),
-(159, 'tsetenene', '1SStaWgEei2Va6YZ-1C-S-FcRHeNzLb6z', '19SJsCLSLOSwnfT2Zx8zNvclOqCx2UCJOTsYiPfGirMw', '105', '1SUybKktNlRXI-5pYFZc5dAi9jrsVp2oPWWGP8pbzXEk', '');
+(157, '測試測試會', '1WQzSml-Yd1X3BPo-LSH5gdpMIcGEKwCh', '1bODk4d6_x5P_I5BBD-YfKCHE8G4xMQzYY_A4FQZTBHk', '105', '1z94fE0UQnOTnpUXUlBiICphiFO3MQ2yloEJlTCe3_Lg', '');
 
 -- --------------------------------------------------------
 
@@ -103,15 +102,19 @@ CREATE TABLE `post` (
   `belong` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
   `type` int(11) NOT NULL,
   `pin` tinyint(1) NOT NULL,
-  `postBy` varchar(45) COLLATE utf8_unicode_ci NOT NULL
+  `postBy` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
+  `userName` varchar(45) COLLATE utf8_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `post`
 --
 
-INSERT INTO `post` (`id`, `time`, `title`, `fileId`, `belong`, `type`, `pin`, `postBy`) VALUES
-(26, '2018-11-12 02:54:04', 'RURURURU', '1DVyprJiZ3KXzLaIw5E4rf4fFRAGM1lw0nl8Dh_tNBYE', '1WQzSml-Yd1X3BPo-LSH5gdpMIcGEKwCh', 2, 0, 'junanyeap@gmail.com');
+INSERT INTO `post` (`id`, `time`, `title`, `fileId`, `belong`, `type`, `pin`, `postBy`, `userName`) VALUES
+(26, '2018-11-12 02:54:04', 'RURURURU', '1DVyprJiZ3KXzLaIw5E4rf4fFRAGM1lw0nl8Dh_tNBYE', '1WQzSml-Yd1X3BPo-LSH5gdpMIcGEKwCh', 2, 0, 'junanyeap@gmail.com', ''),
+(29, '2018-11-20 13:12:25', '123', '1rJgS4RWPiSi52micGf6MyL9qHkXH8Gq-VDUSbf67WGc', '1zM4lUnWEMaUEcjPX618lOUcRWaOYUVbq', 2, 0, 'junanyeap@gmail.com', ''),
+(30, '2018-11-20 12:54:49', '11111', '1thaQQrosjH9MKqZXfDT9Mx-lHhq82GeTu88fW95SJqY', '1zM4lUnWEMaUEcjPX618lOUcRWaOYUVbq', 2, 0, 'junanyeap@gmail.com', ''),
+(34, '2018-11-30 13:42:57', 'delete3', '1sQLqk1rRUHjPNhzqEF3KtpYP4KEINW2l1S1lesRWxok', '1zM4lUnWEMaUEcjPX618lOUcRWaOYUVbq', 2, 0, 'junanyeap@gmail.com', 'Junan Yeap');
 
 -- --------------------------------------------------------
 
@@ -130,7 +133,8 @@ CREATE TABLE `postattach` (
 --
 
 INSERT INTO `postattach` (`id`, `attachId`, `postId`) VALUES
-(39, '1DVyprJiZ3KXzLaIw5E4rf4fFRAGM1lw0nl8Dh_tNBYE', 26);
+(39, '1DVyprJiZ3KXzLaIw5E4rf4fFRAGM1lw0nl8Dh_tNBYE', 26),
+(49, '1mKLI9-clOsCJL-ys4nrFiUyJV1c-BVNIpTwyghSmWeI', 32);
 
 -- --------------------------------------------------------
 
@@ -180,7 +184,7 @@ INSERT INTO `useraccessiblegroup` (`uAG_id`, `email`, `groupID`, `year`, `role`)
 (269, 'kanjingterng@gmail.com', '1zM4lUnWEMaUEcjPX618lOUcRWaOYUVbq', '105', 88),
 (270, 's104213070@mail1.ncnu.edu.tw', '1zM4lUnWEMaUEcjPX618lOUcRWaOYUVbq', '105', 88),
 (271, 's104213059@mail1.ncnu.edu.tw', '1zM4lUnWEMaUEcjPX618lOUcRWaOYUVbq', '104', 88),
-(272, 'junanyeap@gmail.com1', '1zM4lUnWEMaUEcjPX618lOUcRWaOYUVbq', '105', 99),
+(272, 'junanyeap@gmail.com', '1zM4lUnWEMaUEcjPX618lOUcRWaOYUVbq', '105', 99),
 (273, 's104213071@mail1.ncnu.edu.tw', '1zM4lUnWEMaUEcjPX618lOUcRWaOYUVbq', '105', 98),
 (316, 'yranyran19@gmail.com', '1WQzSml-Yd1X3BPo-LSH5gdpMIcGEKwCh', '104', 89),
 (317, 's104213059@mail1.ncnu.edu.tw', '1WQzSml-Yd1X3BPo-LSH5gdpMIcGEKwCh', '105', 89),
@@ -256,25 +260,25 @@ ALTER TABLE `activity`
 -- AUTO_INCREMENT for table `apply`
 --
 ALTER TABLE `apply`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `group`
 --
 ALTER TABLE `group`
-  MODIFY `id_group` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=163;
+  MODIFY `id_group` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=158;
 
 --
 -- AUTO_INCREMENT for table `post`
 --
 ALTER TABLE `post`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 
 --
 -- AUTO_INCREMENT for table `postattach`
 --
 ALTER TABLE `postattach`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=50;
 
 --
 -- AUTO_INCREMENT for table `user`
@@ -286,7 +290,7 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `useraccessiblegroup`
 --
 ALTER TABLE `useraccessiblegroup`
-  MODIFY `uAG_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=332;
+  MODIFY `uAG_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=330;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
